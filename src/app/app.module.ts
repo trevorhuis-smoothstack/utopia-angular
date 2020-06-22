@@ -11,6 +11,8 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { AgentAuthService } from "../common/h/service/AgentAuthService";
 import { AgentAuthInterceptor } from "../common/h/service/AgentAuthInterceptor";
 import { AgentDashboardComponent } from './agent/agent-dashboard/agent-dashboard.component';
+import { FormsModule } from '@angular/forms'; 
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap'; 
 
 @NgModule({
   declarations: [AppComponent, AgentLoginComponent, AgentDashboardComponent],
@@ -19,6 +21,8 @@ import { AgentDashboardComponent } from './agent/agent-dashboard/agent-dashboard
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
+    NgbModule,
+    FormsModule
   ],
   providers: [AgentAuthService, {
     provide: HTTP_INTERCEPTORS,
