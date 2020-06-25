@@ -5,7 +5,7 @@ import { AgentDashboardComponent } from './agent/agent-dashboard/agent-dashboard
 
 const routes: Routes = [
   { path: 'agent/login', component: AgentLoginComponent },
-  { path: 'agent/flights', component: AgentDashboardComponent}
+  { path: 'agent/dashboard', component: AgentDashboardComponent }
 ];
 
 @NgModule({

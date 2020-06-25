@@ -1,18 +1,36 @@
-<form [formGroup]="form">
-  <fieldset>
-      <legend>Login</legend>
-      <div class="form-field">
-          <label>Username:</label>
-          <input name="email" formControlName="username">
-      </div>
-      <div class="form-field">
+<!-- <div id="agent-sidebar" class="active">
+  <ul>
+    <li>Logout</li>
+    <li>Book Flight</li>
+    <li>Cancel Flight</li>
+  </ul>
+</div> -->
+
+<div class="agent-login">
+  <div class="login-form">
+    <form [formGroup]="form">
+      <fieldset>
+        <legend>Agent Login</legend>
+        <div class="form-group">
+          <label>Username</label>
+          <input name="email" class="form-control" formControlName="username" />
+        </div>
+        <div class="form-group">
           <label>Password:</label>
-          <input name="password" formControlName="password" 
-                 type="password">
+          <input
+            name="password"
+            class="form-control"
+            formControlName="password"
+            type="password"
+          />
+        </div>
+      </fieldset>
+      <div class="form-requirement" *ngIf="invalidLogin">
+        Username and password not found.
       </div>
-  </fieldset>
-  <div class="form-buttons">
-      <button class="button button-primary" 
-              (click)="login()">Login</button>
+      <div class="form-buttons">
+        <button class="btn btn-primary btn-block" (click)="login()">Login</button>
+      </div>
+    </form>
   </div>
-</form>
+</div>

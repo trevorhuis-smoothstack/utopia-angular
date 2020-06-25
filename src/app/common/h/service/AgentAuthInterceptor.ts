@@ -8,7 +8,7 @@ export class AgentAuthInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>,
               next: HttpHandler): Observable<HttpEvent<any>> {
 
-        const idToken = localStorage.getItem("id_token");
+        const idToken = localStorage.getItem("id_token_agent");
 
         if (idToken) {
             const cloned = req.clone({
