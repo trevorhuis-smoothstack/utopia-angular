@@ -3,7 +3,17 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  agentBackendUrl: "http://127.0.0.1:8083/agent",
+  userIdUri: "/user/id",
+  usernameUri: "/user/username",
+  airportUri: "/airport",
+  flightUri: "/flight",
+  bookingsUri: "/bookings",
+  flightsUri: "/flights",
+  airportsUri: "/airports",
+  bookingUri: "/booking"
+  
 };
 
 /*

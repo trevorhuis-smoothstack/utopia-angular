@@ -1,12 +1,81 @@
 <div id="agent-sidebar" class="active">
-  <ul *ngIf="user">
-    <li class="agent-data">Agent:<br>{{user.name}}</li>
+  <ul *ngIf="agent">
+    <li class="agent-data"><h5><strong>Agent:</strong><br>{{agent.name}}</h5></li>
     <li class="agent-logout"><button type="button" class="btn btn-primary" (click)="logout()">Logout</button></li>
-    <li class="side-link" (click)="openBookFlight()">Book Flight</li>
-    <li class="side-link" (click)="openCancelFlight()">Cancel Flight</li>
+    <li id="agent-book-flight" class="side-link side-link-active" (click)="openBookFlight()">Book Flight</li>
+    <li id="agent-cancel-flight" class="side-link" (click)="openCancelFlight()">Cancel Flight</li>
   </ul>
 </div>
 
+<div class="container agent-container" *ngIf="bookFlightPage">
+  <p>Book Flight</p>
+
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Departure Airport</th>
+        <th scope="col">Arrive Airport</th>
+        <th scope="col">Depart Time</th>
+        <th scope="col">Price</th>
+        <th scope="col">Book</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let f of flights">
+        <th scope="row">{{ f.airportDepart }}</th>
+        <td>{{ f.airportArrive }}</td>
+        <td>{{ f.departTime }}</td>
+        <td>{{ f.price }}</td>
+        <td>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="bookFlight(f)"
+          >
+            Book Flight
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="container agent-container" *ngIf="cancelFlightPage">
+  <h1 class="text-center">Cancel Traveler's Flights</h1>
+
+  <table class="table table-hover cancel-flight-table">
+    <thead>
+      <tr>
+        <th scope="col">Flight ID</th>
+        <th scope="col">Traveler</th>
+        <th scope="col">Departure Airport</th>
+        <th scope="col">Arrive Airport</th>
+        <th scope="col">Departure Time</th>
+        <th scope="col">Cancel Flight</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let b of bookings">
+        <th scope="row">{{ b.flightId }}</th>
+        <td>{{ b.name }}</td>
+        <td>{{ b.departAirport }}</td>
+        <td>{{ b.arriveAirport }}</td>
+        <td>{{ b.flight.departTime }}</td>
+        <td>
+          <button
+            *ngIf="b.active"  
+            type="button"
+            class="btn btn-secondary"
+            (click)="cancelFlight(b)"
+          >
+            Cancel Flight
+          </button>
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 <!-- <div class="container" style="height: 100px"></div>
 <div class="container">
@@ -27,34 +96,7 @@
 </div>
 
 <div class="container">
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th scope="col">Depart ID</th>
-        <th scope="col">Arrive ID</th>
-        <th scope="col">Depart Time</th>
-        <th scope="col">Price</th>
-        <th scope="col">Book</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let f of flights">
-        <th scope="row">{{ f.departId }}</th>
-        <td>{{ f.arriveId }}</td>
-        <td>{{ f.departTime }}</td>
-        <td>{{ f.price }}</td>
-        <td>
-          <button
-            type="button"
-            class="btn btn-secondary"
-            (click)="bookFlight(f)"
-          >
-            Book Flight
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  
 </div>
 
 <div class="container" style="height: 200px"></div>
