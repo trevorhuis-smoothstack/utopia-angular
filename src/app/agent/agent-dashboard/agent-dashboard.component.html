@@ -1,0 +1,89 @@
+<div id="agent-sidebar" class="active">
+  <ul *ngIf="user">
+    <li class="agent-data">Agent:<br>{{user.name}}</li>
+    <li class="agent-logout"><button type="button" class="btn btn-primary" (click)="logout()">Logout</button></li>
+    <li class="side-link" (click)="openBookFlight()">Book Flight</li>
+    <li class="side-link" (click)="openCancelBooking()">Cancel Bookings</li>
+  </ul>
+</div>
+
+
+<!-- <div class="container" style="height: 100px"></div>
+<div class="container">
+  <form>
+    <div class="col-sm-10">
+      <input type="text" placeholder="Credit Card #" name="cardNumber" />
+    </div>
+    <div class="col-sm-10">
+      <input type="text" placeholder="Expiration Month" name="expMonth" />
+    </div>
+    <div class="col-sm-10">
+      <input type="text" placeholder="Expiration Year" name="expYear" />
+    </div>
+    <div class="col-sm-10">
+      <input type="text" placeholder="CVC" name="cvc" />
+    </div>
+  </form>
+</div>
+
+<div class="container">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Depart ID</th>
+        <th scope="col">Arrive ID</th>
+        <th scope="col">Depart Time</th>
+        <th scope="col">Price</th>
+        <th scope="col">Book</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let f of flights">
+        <th scope="row">{{ f.departId }}</th>
+        <td>{{ f.arriveId }}</td>
+        <td>{{ f.departTime }}</td>
+        <td>{{ f.price }}</td>
+        <td>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="bookFlight(f)"
+          >
+            Book Flight
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="container" style="height: 200px"></div>
+
+<div class="container">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Flight ID</th>
+          <th scope="col">Traveler ID</th>
+          <th scope="col">Cancel Flight</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let b of bookings">
+          <th scope="row">{{ b.flightId }}</th>
+          <td>{{ b.travelerId }}</td>
+          <td>
+            <button
+              *ngIf="b.active"  
+              type="button"
+              class="btn btn-secondary"
+              (click)="cancelFlight(b)"
+            >
+              Cancel Flight
+            </button>
+            
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div> -->
