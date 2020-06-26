@@ -237,7 +237,7 @@ export class AgentDashboardComponent implements OnInit {
 
   // Cancel flight
 
-  openCancelFlight() {
+  openCancelBooking() {
     // Change sidebar classes
     if (
       document
