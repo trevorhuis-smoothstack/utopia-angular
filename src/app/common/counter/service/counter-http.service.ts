@@ -7,12 +7,16 @@ import { HttpClient } from "@angular/common/http";
 export class CounterHttpService {
   constructor(private http: HttpClient) {}
 
+  head(url: string) {
+    return this.http.head(url);
+  }
+
   get(url: string) {
     return this.http.get(url);
   }
 
   post(url: string, body: any) {
-    return this.http.post(url, body, {observe:"response"});
+    return this.http.post(url, body, { observe: "response" });
   }
 
   put(url: string, body: any) {
