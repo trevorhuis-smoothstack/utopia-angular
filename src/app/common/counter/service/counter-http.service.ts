@@ -4,7 +4,7 @@ import { HttpClient } from "@angular/common/http";
 @Injectable({
   providedIn: "root",
 })
-export class CounterServiceService {
+export class CounterHttpService {
   constructor(private http: HttpClient) {}
 
   get(url: string) {

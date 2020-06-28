@@ -15,6 +15,7 @@ import { FormsModule } from "@angular/forms";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { AgentUtopiaService } from "./common/h/agent-utopia.service";
 import { CounterLoginComponent } from './counter-login/counter-login.component';
+import { CounterHttpService } from './common/counter/service/counter-http.service';
 
 @NgModule({
   declarations: [AppComponent, AgentLoginComponent, AgentDashboardComponent, CounterLoginComponent],
@@ -34,6 +35,7 @@ import { CounterLoginComponent } from './counter-login/counter-login.component';
       multi: true,
     },
     AgentUtopiaService,
+    CounterHttpService
   ],
   bootstrap: [AppComponent],
 })
