@@ -14,9 +14,10 @@ import { AgentDashboardComponent } from "./agent/agent-dashboard/agent-dashboard
 import { FormsModule } from "@angular/forms";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { AgentUtopiaService } from "./common/h/agent-utopia.service";
+import { CounterLoginComponent } from './counter-login/counter-login.component';
 
 @NgModule({
-  declarations: [AppComponent, AgentLoginComponent, AgentDashboardComponent],
+  declarations: [AppComponent, AgentLoginComponent, AgentDashboardComponent, CounterLoginComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
