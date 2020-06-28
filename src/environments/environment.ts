@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   counterUrl: "http://localhost:8080/counter",
-  loginUri: "/login",
+  loginUrl: "http://localhost:8080/login",
   counterGetUserUri: "/users/",
   counterTravelerUri: "/traveler/",
   counterAirportUri: "/airports",
