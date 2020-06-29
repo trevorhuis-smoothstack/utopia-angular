@@ -25,4 +25,8 @@ export class CounterDashboardComponent implements OnInit {
         this.router.navigate(["/counter/login"]);
       });
   }
+
+  logOut(){
+    
+  }
 }

@@ -1,6 +1,10 @@
-<p>
-  counter-dashboard works!
-</p>
-<div>
-  {{this.name}}
+<h1>What would you like to do?</h1>
+<div class="form-buttons">
+  <button class="btn btn-primary btn-block" routerLink="/counter/traveler">Book Ticket</button>
+</div>
+<div class="form-buttons">
+  <button class="btn btn-primary btn-block" routerLink="counter/traveler/existing">Cancel Ticket</button>
+</div>
+<div class="form-buttons">
+  <button class="btn btn-primary btn-block" (click)="logOut()">Log Out</button>
 </div>
