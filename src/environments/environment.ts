@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   counterUrl: "http://localhost:8080/counter",
   loginUrl: "http://localhost:8080/login",
+  counterCheckAuthUri: "/authorized",
   counterGetUserUri: "/users/",
   counterTravelerUri: "/traveler/",
   counterAirportUri: "/airports",
