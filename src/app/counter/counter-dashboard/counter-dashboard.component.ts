@@ -10,6 +10,7 @@ import { Router } from "@angular/router";
 })
 export class CounterDashboardComponent implements OnInit {
   name: string = localStorage.getItem("name");
+  authorized: boolean = false;
 
   constructor(
     private httpService: CounterHttpService,
@@ -19,14 +20,17 @@ export class CounterDashboardComponent implements OnInit {
   ngOnInit() {
     this.httpService
       .get(environment.counterUrl + environment.counterCheckAuthUri)
-      .subscribe(null, (error) => {
-        if (![401, 403].includes(error.error.status))
-          alert("Error checking authorization: Status " + error.error.status);
-        this.router.navigate(["/counter/login"]);
-      });
+      .subscribe(
+        () => (this.authorized = true),
+        (error) => {
+          if (![401, 403].includes(error.error.status))
+            alert("Error checking authorization: Status " + error.error.status);
+          this.router.navigate(["/counter/login"]);
+        }
+      );
   }
 
-  logOut(){
+  logOut() {
     localStorage.removeItem("token");
     this.router.navigate(["/counter/login"]);
   }
