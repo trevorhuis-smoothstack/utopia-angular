@@ -15,7 +15,6 @@ export class CounterDashboardComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private httpService: CounterHttpService,
     private authService: CounterAuthService
   ) {}
 
