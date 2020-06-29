@@ -9,7 +9,6 @@ import { Router } from "@angular/router";
 export class CounterAuthService {
   constructor(
     private httpService: CounterHttpService,
-    private router: Router
   ) {}
 
   checkAuth() {
