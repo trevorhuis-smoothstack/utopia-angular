@@ -1,11 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { TravelerComponent } from './traveler/traveler.component';
+
+import { AgentLoginComponent } from './agent/agent-login/agent-login.component';
+import { AgentDashboardComponent } from './agent/agent-dashboard/agent-dashboard.component';
+
 const routes: Routes = [
-  {
-    path: '',
-    component: TravelerComponent,
-  }
+  { path: 'agent/login', component: AgentLoginComponent },
+  { path: 'agent/dashboard', component: AgentDashboardComponent },
+  { path: 'traveler/dashboard', component: TravelerComponent},
 ];
 
 @NgModule({

@@ -1,0 +1,50 @@
+#agent-sidebar {
+  position: fixed;
+  width: 200px;
+  height: 100%;
+  background-color: #18bc9c;
+  left: -200px;
+  transition: all 400ms linear;
+  padding-top: 1rem;
+}
+
+#agent-sidebar.active {
+  left: 0px;
+}
+
+#agent-sidebar ul {
+  padding-inline-start: 0;
+}
+
+#agent-sidebar .toggle-btn {
+  position: absolute;
+  left: 230px;
+  top: 20px;
+  cursor: pointer;
+}
+
+.agent-logout {
+  padding: 15px 10px;
+}
+
+.agent-data {
+  padding: 5px 10px;
+}
+
+.agent-logout,
+.side-link {
+  border-bottom: 1px solid #ffffff;
+}
+
+.side-link {
+  color: #ffffff;
+  list-style: none;
+  padding: 15px 10px;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.side-link-active {
+  background-color: #ffffff;
+  color: #18bc9c;
+}
