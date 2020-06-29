@@ -1,0 +1,52 @@
+<div>
+  <h1>User Dashboard</h1>
+  <div>
+    <!-- let's add the dropdowns here.  -->
+    <form [formGroup]="pickDepartureForm">
+      <ng-multiselect-dropdown [placeholder]="'Select Departure'" [data]="airports" formControlName="departure"
+      [settings]="dropdownSettings" (onSelect)="onItemSelect($event)">
+    </ng-multiselect-dropdown>
+    </form>
+    <ng-multiselect-dropdown [placeholder]="'Select Arrival'" [data]="airports" formControlName="arrival"
+    [settings]="dropdownSettings" (onSelect)="onItemSelect($event)">
+  </ng-multiselect-dropdown>
+  <button (click)="showArrivalDeparture()">show</button>
+  </div>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">City</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let a of airports; let i = index">
+      <th>{{ i + 1 }}</th>
+      <td>{{ a.name }}</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<!--  THE PAGE 
+      1. We have buttons that load different information
+        -Button that loads currently booked flights
+        -Button that loads passed flights
+        -Button that loads purchased flights????
+        -Button that shows the screen to purchase a flight
+      2. We have user information such as name or username shown on the screen
+         and text on the screen that askes the user what they would like to do
+         or where they would like to go. 
+      3. There will be a profile button?
+        -The profile button will show (as a dropdown maybe)the user's details, and 
+         have a button that they can press to edit, or logout. 
+        -The "edit" button will allow them to change their name and password, but not username.
+        -The logout button will return them to the login screen.-->
+
+
+<!-- FOR PURCHASING FLIGHT -->
+<!-- Dropdown to choose airport to depart from -->
+<!-- Dropdown to choose airport to arrive from -->
+<!-- List of flights based on departId, arriveId, and travelerId -->
+
+
