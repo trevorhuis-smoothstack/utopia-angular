@@ -26,7 +26,7 @@ export class CounterLoginComponent implements OnInit {
 
   ngOnInit() {}
 
-  login() {
+  logIn() {
     const creds = this.form.value;
     this.httpService
       .post(environment.loginUrl, {
