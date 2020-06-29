@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  travelerBackendUrl: '/traveler',
-  readTravelerAirports: '/airports',
+  travelerBackendUrl: 'http://localhost:8083/traveler',
+  readTravelerAirports: '/airports'
 };
 
 /*
