@@ -3,6 +3,7 @@ import { FormBuilder, Validators, FormGroup } from "@angular/forms";
 import { CounterHttpService } from "../../common/counter/service/counter-http.service";
 import { environment } from "src/environments/environment";
 import { Router } from "@angular/router";
+import { CounterAuthService } from "src/app/common/counter/service/counter-auth.service";
 
 @Component({
   selector: "app-counter-login",
@@ -11,12 +12,14 @@ import { Router } from "@angular/router";
 })
 export class CounterLoginComponent implements OnInit {
   form: FormGroup;
+  authorized: boolean = true;
   badCreds: boolean = false;
 
   constructor(
     private fb: FormBuilder,
+    private router: Router,
     private httpService: CounterHttpService,
-    private router: Router
+    private authService: CounterAuthService
   ) {
     this.form = this.fb.group({
       username: ["", Validators.required],
@@ -24,7 +27,16 @@ export class CounterLoginComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.authService.checkAuth().subscribe(
+      () => this.router.navigate(["/counter"]),
+      (error) => {
+        if (![401, 403].includes(error.error.status))
+          alert("Error checking authorization: Status " + error.error.status);
+        this.authorized = false;
+      }
+    );
+  }
 
   logIn() {
     const creds = this.form.value;
