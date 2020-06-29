@@ -27,6 +27,7 @@ export class CounterDashboardComponent implements OnInit {
   }
 
   logOut(){
-    
+    localStorage.removeItem("token");
+    this.router.navigate(["/counter/login"]);
   }
 }
