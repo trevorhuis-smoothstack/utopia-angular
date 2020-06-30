@@ -4,9 +4,11 @@
 
 export const environment = {
   production: false,
-  agentBackendUrl: "http://127.0.0.1:8083/agent",
+  agentBackendUrl: "http://127.0.0.1:8080/agent",
   userIdUri: "/user/id",
   usernameUri: "/user/username",
+  userUri: "/user",
+  agentTravelerUri: "/traveler",
   airportUri: "/airport",
   flightUri: "/flight",
   bookingsUri: "/bookings",

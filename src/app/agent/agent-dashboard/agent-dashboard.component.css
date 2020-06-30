@@ -4,8 +4,10 @@
   height: 100%;
   background-color: #18bc9c;
   left: -200px;
+  z-index: 1; /* Stay on top */
+  top: 0px; /* Stay at the top */
   transition: all 400ms linear;
-  padding-top: 1rem;
+  overflow: hidden;
 }
 
 #agent-sidebar.active {
@@ -16,22 +18,24 @@
   padding-inline-start: 0;
 }
 
-#agent-sidebar .toggle-btn {
-  position: absolute;
-  left: 230px;
-  top: 20px;
-  cursor: pointer;
-}
-
 .agent-logout {
   padding: 0px 10px 15px 10px;
 }
 
 .agent-data {
   padding: 5px 10px;
+  padding: 1rem;
 }
 
-.side-link {
+#agent-side-top {
+  padding-top: 100px;
+}
+
+.agent-data h5 {
+  line-height: 1.5rem;
+}
+
+.side-link, .agent-features {
   border-bottom: 1px solid #ffffff;
 }
 
@@ -41,6 +45,11 @@
   padding: 15px 10px;
   cursor: pointer;
   margin-left: auto;
+}
+
+.agent-features {
+  padding: 15px 10px;
+  color: #ffffff;
 }
 
 .side-link-active {
@@ -56,4 +65,89 @@
 
 .agent-container > .cancel-flight-table {
   margin-top: 2rem;
+}
+
+.select-existing-traveler {
+  margin-top: 2rem;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 500px;
+}
+
+.select-traveler .select-existing-traveler {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 2rem 3rem;
+  background-color: #ecf0f1;
+  border-radius: 10%;
+}
+
+.select-traveler legend {
+    color: rgba(44, 62, 80);
+    text-align: center;
+    padding-bottom: 1rem;
+} 
+
+.flight-filters {
+  display: grid;
+}
+
+.arrive-select, .departure-select {
+  margin: 0px 10px;
+  margin-bottom: 15px;
+  grid-row: 2;
+}
+
+.departure-select {
+  grid-column: 1;
+}
+
+.arrive-select {
+  grid-column: 2;
+}
+
+.price-slider {
+  margin: 10px;
+  grid-row: 3;
+}
+
+.date-picker {
+  margin: 0px 10px;
+  grid-row: 1;
+  display: block;
+}
+
+/* Date picker */
+
+.form-group.hidden {
+  width: 0;
+  margin: 0;
+  border: none;
+  padding: 0;
+}
+.custom-day {
+  text-align: center;
+  padding: 0.185rem 0.25rem;
+  display: inline-block;
+  height: 2rem;
+  width: 2rem;
+}
+.custom-day.focused {
+  background-color: #ecf0f1;
+}
+.custom-day.range, .custom-day:hover {
+  background-color: #18bc9c;
+  color: white;
+}
+.custom-day.faded {
+  background-color: rgba(24,188,156, 0.5);
+}
+
+.reset-date {
+  margin-left: 10px;
+}
+
+.credit-info {
+  margin: 5px;
 }

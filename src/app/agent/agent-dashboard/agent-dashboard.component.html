@@ -1,47 +1,292 @@
 <div id="agent-sidebar" class="active">
   <ul *ngIf="agent">
-    <li class="agent-data"><h5><strong>Agent:</strong><br>{{agent.name}}</h5></li>
-    <li class="agent-logout"><button type="button" class="btn btn-primary" (click)="logout()">Logout</button></li>
-    <li id="agent-book-flight" class="side-link side-link-active" (click)="openBookFlight()">Book Flight</li>
-    <li id="agent-cancel-flight" class="side-link" (click)="openCancelBooking()">Cancel Bookings</li>
+    <li class="agent-data" id="agent-side-top">
+      <h5><strong>Agent:</strong><br />{{ agent.name }}</h5>
+    </li>
+    <li class="agent-logout">
+      <button type="button" class="btn btn-primary" (click)="logout()">
+        Logout
+      </button>
+    </li>
+    <li class="agent-data" *ngIf="traveler">
+      <h5><strong>Traveler:</strong><br />{{ traveler.name }}</h5>
+    </li>
+    <li class="agent-logout" *ngIf="traveler">
+      <button type="button" class="btn btn-primary" (click)="newTraveler()">
+        Pick New Traveler
+      </button>
+    </li>
+    <li class="agent-features">
+      <h4><strong>Features</strong></h4>
+    </li>
+    <li
+      id="agent-book-flight"
+      class="side-link side-link-active"
+      (click)="openBookFlight()"
+    >
+      Book Flight
+    </li>
+    <li
+      id="agent-cancel-flight"
+      class="side-link"
+      (click)="openCancelBooking()"
+    >
+      Cancel Bookings
+    </li>
   </ul>
 </div>
 
 <div class="container agent-container" *ngIf="bookFlightPage">
-  <p>Book Flight</p>
+  <h2 class="text-center">Book Flights</h2>
+  <div class="select-traveler" *ngIf="!traveler">
+    <div class="select-existing-traveler">
+      <form [formGroup]="selectTravelerForm" *ngIf="!createTraveler">
+        <fieldset>
+          <legend>Select a Traveler</legend>
+          <p>
+            You can book flights for a traveler with their username and
+            password.
+          </p>
+          <div class="form-group">
+            <label>Username</label>
+            <input
+              name="email"
+              class="form-control"
+              formControlName="username"
+            />
 
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th scope="col">Departure Airport</th>
-        <th scope="col">Arrive Airport</th>
-        <th scope="col">Depart Time</th>
-        <th scope="col">Price</th>
-        <th scope="col">Book</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let f of flights">
-        <th scope="row">{{ f.airportDepart }}</th>
-        <td>{{ f.airportArrive }}</td>
-        <td>{{ f.departTime }}</td>
-        <td>{{ f.price }}</td>
-        <td>
+            <div class="form-requirement" *ngIf="invalidLogin">
+              Username not found.
+            </div>
+          </div>
+        </fieldset>
+        <div class="form-buttons">
+          <button class="btn btn-primary btn-block" (click)="checkTraveler()">
+            Get Traveler
+          </button>
+        </div>
+        <hr />
+        <legend>Need a new traveler?</legend>
+        <div class="form-buttons">
+          <button
+            class="btn btn-success btn-block"
+            (click)="setupCreateTraveler()"
+          >
+            Create New Traveler
+          </button>
+        </div>
+      </form>
+
+      <form [formGroup]="createTravelerForm" *ngIf="createTraveler">
+        <fieldset>
+          <legend>Create a Traveler</legend>
+          <p>
+            Create a new account for your traveller. Save their username and
+            password to book flights for them
+          </p>
+          <div class="form-group">
+            <label>Traveler Name</label>
+            <input name="email" class="form-control" formControlName="name" />
+          </div>
+          <div class="form-group">
+            <label>Account Username</label>
+            <input
+              name="email"
+              class="form-control"
+              formControlName="username"
+            />
+            <div class="form-requirement" *ngIf="usernameTaken">
+              Username already taken.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Password</label>
+            <input
+              name="password"
+              class="form-control"
+              formControlName="password"
+              type="password"
+            />
+          </div>
+          <div class="form-group">
+            <label>Re-Type Password</label>
+            <input name="password" class="form-control" type="password" />
+          </div>
+        </fieldset>
+        <div class="form-buttons">
+          <button
+            class="btn btn-primary btn-block"
+            (click)="createNewTraveler()"
+          >
+            Create Traveler
+          </button>
+        </div>
+        <hr />
+        <legend>Do you have your traveler's login?</legend>
+        <div class="form-buttons">
+          <button
+            class="btn btn-success btn-block"
+            (click)="createTraveler = false"
+          >
+            Select Existing Traveler
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div *ngIf="traveler">
+    <div class="flight-filters">
+      <div class="date-picker">
+        <label class="col-form-label" for="inputDefault">
+          Pick a Departure Date
+        </label>
+        <form class="form-inline">
+          <div class="form-group">
+            <div class="input-group">
+              <input
+                class="form-control"
+                placeholder="yyyy-mm-dd"
+                name="dp"
+                [(ngModel)]="date"
+                ngbDatepicker
+                #d="ngbDatepicker"
+              />
+              <div class="input-group-append">
+                <button
+                  class="btn btn-outline-secondary calendar"
+                  (click)="d.toggle(); date = null"
+                  type="button"
+                >
+                  <svg
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 16 16"
+                    class="bi bi-calendar3"
+                    fill="currentColor"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857V3.857z"
+                    />
+                    <path
+                      fill-rule="evenodd"
+                      d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
           <button
             type="button"
-            class="btn btn-secondary"
-            (click)="bookFlight(f)"
+            class="btn btn-outline-secondary reset-date"
+            (click)="date = null"
           >
-            Book Flight
+            Reset Date
           </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+        </form>
+      </div>
+      <div class="departure-select">
+        <label class="col-form-label" for="inputDefault">
+          Filter by Departure Airport
+        </label>
+        <select
+          class="custom-select"
+          [(ngModel)]="selectedDeparture"
+          (change)="page = 1"
+        >
+          <option selected="All Branches">All Airports</option>
+          <option *ngFor="let airport of airports" value="{{ airport.name }}">
+            {{ airport.name }}
+          </option>
+        </select>
+      </div>
+      <div class="arrive-select">
+        <label class="col-form-label" for="inputDefault">
+          Filter by Arrival Airport
+        </label>
+        <select
+          class="custom-select"
+          [(ngModel)]="selectedArrival"
+          (change)="page = 1"
+        >
+          <option selected="All Branches">All Airports</option>
+          <option *ngFor="let airport of airports" value="{{ airport.name }}">
+            {{ airport.name }}
+          </option>
+        </select>
+      </div>
+      <div class="price-slider">
+        <fieldset class="form-group">
+          <label for="customRange1"
+            >Filter By Price<br />Max Price - ${{ customPrice }}</label
+          >
+          <input
+            type="range"
+            class="custom-range"
+            id="custom-price"
+            value="50"
+            [min]="minValue"
+            [max]="maxValue"
+            data-show-value="true"
+            data-popup-enabled="true"
+            [(ngModel)]="customPrice"
+          />
+        </fieldset>
+      </div>
+    </div>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Departure Airport</th>
+          <th scope="col">Arrive Airport</th>
+          <th scope="col">Depart Time</th>
+          <th scope="col">Price</th>
+          <th scope="col">Book</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let f of flights
+              | sortFlightsByDepartureAirport: selectedDeparture:filterMetadata
+              | sortFlightsByArrivalAirport: selectedArrival:filterMetadata
+              | sortByFlightPrice: customPrice:filterMetadata
+              | sortByDepartureDate: date:filterMetadata
+              | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize
+          "
+        >
+          <th scope="row">{{ f.airportDepart }}</th>
+          <td>{{ f.airportArrive }}</td>
+          <td>{{ f.departTimeFormatted }}</td>
+          <td>$ {{ f.price }}</td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="openBookFlightModal(bookFlightModal, f)"
+            >
+              Book Flight
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <ngb-pagination
+      *ngIf="flights"
+      [collectionSize]="filterMetadata.count"
+      [(page)]="page"
+      aria-label="Default pagination"
+    >
+    </ngb-pagination>
+  </div>
 </div>
 
 <div class="container agent-container" *ngIf="cancelFlightPage">
-  <h1 class="text-center">Cancel Traveler's Flights</h1>
+  <h2 class="text-center">Cancel Traveler's Flights</h2>
 
   <table class="table table-hover cancel-flight-table">
     <thead>
@@ -60,72 +305,110 @@
         <td>{{ b.name }}</td>
         <td>{{ b.departAirport }}</td>
         <td>{{ b.arriveAirport }}</td>
-        <td>{{ b.flight.departTime }}</td>
+        <td>{{ b.flight.departTimeFormatted }}</td>
         <td>
           <button
-            *ngIf="b.active"  
+            *ngIf="b.active"
             type="button"
             class="btn btn-secondary"
             (click)="cancelFlight(b)"
           >
             Cancel Flight
           </button>
-          
         </td>
       </tr>
     </tbody>
   </table>
 </div>
 
-<!-- <div class="container" style="height: 100px"></div>
-<div class="container">
-  <form>
-    <div class="col-sm-10">
-      <input type="text" placeholder="Credit Card #" name="cardNumber" />
-    </div>
-    <div class="col-sm-10">
-      <input type="text" placeholder="Expiration Month" name="expMonth" />
-    </div>
-    <div class="col-sm-10">
-      <input type="text" placeholder="Expiration Year" name="expYear" />
-    </div>
-    <div class="col-sm-10">
-      <input type="text" placeholder="CVC" name="cvc" />
-    </div>
-  </form>
-</div>
+<ng-template #bookFlightModal let-close="close">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4>Book a Flight</h4>
+        <button type="button" class="btn btn-primary" (click)="close()">
+          <span>&#215;</span>
+        </button>
+      </div>
 
-<div class="container">
-  
-</div>
+      <div class="modal-body">
+        <div class="form-group">
+          <h5 class="text-center">Confirm the flight information</h5>
+          <table class="table table-hover">
+            <tr class="table-dark">
+              <th scope="row">Traveler Name:</th>
+              <td>{{ traveler.name }}</td>
+            </tr>
+            <tr class="table-dark">
+              <th scope="row">Flight Id:</th>
+              <td>{{ selectedFlight.flightId }}</td>
+            </tr>
+            <tr class="table-dark">
+              <th scope="row">Departure Airport:</th>
+              <td>{{ selectedFlight.airportDepart }}</td>
+            </tr>
+            <tr class="table-dark">
+              <th scope="row">Arrival Airport:</th>
+              <td>{{ selectedFlight.airportArrive }}</td>
+            </tr>
+            <tr class="table-dark">
+              <th scope="row">Flight Time:</th>
+              <td>{{ selectedFlight.departTimeFormatted }}</td>
+            </tr>
+            <tr class="table-dark">
+              <th scope="row">Price:</th>
+              <td>$ {{ selectedFlight.price }}</td>
+            </tr>
+          </table>
 
-<div class="container" style="height: 200px"></div>
+          <h5 class="text-center">Enter credit or debit card</h5>
+          <form [formGroup]="creditCardForm">
+            <input
+              type="text"
+              class="form-control credit-info"
+              placeholder="Credit Card #"
+              formControlName="cardNumber"
+            />
 
-<div class="container">
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th scope="col">Flight ID</th>
-          <th scope="col">Traveler ID</th>
-          <th scope="col">Cancel Flight</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let b of bookings">
-          <th scope="row">{{ b.flightId }}</th>
-          <td>{{ b.travelerId }}</td>
-          <td>
-            <button
-              *ngIf="b.active"  
-              type="button"
-              class="btn btn-secondary"
-              (click)="cancelFlight(b)"
-            >
-              Cancel Flight
-            </button>
-            
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div> -->
+            <input
+              type="text"
+              class="form-control credit-info"
+              placeholder="Expiration Month"
+              formControlName="expMonth"
+            />
+
+            <input
+              type="text"
+              class="form-control credit-info"
+              placeholder="Expiration Year"
+              formControlName="expYear"
+            />
+
+            <input
+              type="text"
+              class="form-control credit-info"
+              placeholder="CVC"
+              formControlName="cvc"
+            />
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn-secondary"
+            type="button"
+            (click)="close()"
+          >
+            Cancel
+          </button>
+          <button
+            class="btn btn-success"
+            type="button"
+            (click)="bookFlight(); close()"
+          >
+            Book Flight
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

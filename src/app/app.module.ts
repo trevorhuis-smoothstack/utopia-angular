@@ -14,9 +14,24 @@ import { AgentDashboardComponent } from "./agent/agent-dashboard/agent-dashboard
 import { FormsModule } from "@angular/forms";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { AgentUtopiaService } from "./common/h/agent-utopia.service";
+import {
+  SortFlightsByDepartureAirport,
+  SortFlightsByArrivalAirport,
+  SortByFlightPrice,SortByDepartureDate
+} from "./common/h/sort-flights-airports";
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
-  declarations: [AppComponent, AgentLoginComponent, AgentDashboardComponent],
+  declarations: [
+    AppComponent,
+    AgentLoginComponent,
+    AgentDashboardComponent,
+    SortFlightsByDepartureAirport,
+    SortFlightsByArrivalAirport,
+    SortByFlightPrice,
+    SortByDepartureDate
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -24,6 +39,8 @@ import { AgentUtopiaService } from "./common/h/agent-utopia.service";
     ReactiveFormsModule,
     NgbModule,
     FormsModule,
+    BrowserAnimationsModule,
+    MatDatepickerModule
   ],
   providers: [
     AgentAuthService,
@@ -34,6 +51,6 @@ import { AgentUtopiaService } from "./common/h/agent-utopia.service";
     },
     AgentUtopiaService,
   ],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}

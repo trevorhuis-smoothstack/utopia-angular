@@ -1,11 +1,3 @@
-<!-- <div id="agent-sidebar" class="active">
-  <ul>
-    <li>Logout</li>
-    <li>Book Flight</li>
-    <li>Cancel Flight</li>
-  </ul>
-</div> -->
-
 <div class="agent-login">
   <div class="login-form">
     <form [formGroup]="form">
@@ -16,7 +8,7 @@
           <input name="email" class="form-control" formControlName="username" />
         </div>
         <div class="form-group">
-          <label>Password:</label>
+          <label>Password</label>
           <input
             name="password"
             class="form-control"
@@ -26,7 +18,7 @@
         </div>
       </fieldset>
       <div class="form-requirement" *ngIf="invalidLogin">
-        Username and password not found.
+        Username or password not found.
       </div>
       <div class="form-buttons">
         <button class="btn btn-primary btn-block" (click)="login()">Login</button>

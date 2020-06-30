@@ -36,6 +36,7 @@ export class AgentLoginComponent implements OnInit {
     if (val.username && val.password) {
       this.authService.login(val.username, val.password).then(
         (response: any) => {
+          console.log(response);
           const expiresAt = moment().add(response.headers.get('expires'), "second");
   
           localStorage.setItem("username", val.username);
