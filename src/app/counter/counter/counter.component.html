@@ -1,4 +1,4 @@
-<div id="sidebar" class="active">
+<div id="sidebar" class="active" *ngIf="this.authorized">
   <ul>
     <li class="counter-data">
       <h5><strong>Employee:</strong><br />(name goes here)</h5>
@@ -31,6 +31,6 @@
     </li>
   </ul>
 </div>
-<div class="container counter-container">
+<div class="container counter-container" *ngIf="this.authorized">
   <router-outlet></router-outlet>
 </div>
