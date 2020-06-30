@@ -1,11 +1,15 @@
-<div *ngIf="!this.authorized">
-  <div >
+<div *ngIf="!this.authorized" class="login">
+  <div class="login-form">
     <form [formGroup]="form">
       <fieldset>
         <legend>Counter Attendant Login</legend>
         <div class="form-group">
           <label>Username</label>
-          <input name="username" class="form-control" formControlName="username" />
+          <input
+            name="username"
+            class="form-control"
+            formControlName="username"
+          />
         </div>
         <div class="form-group">
           <label>Password</label>
@@ -21,7 +25,9 @@
         Invalid username/password combination
       </div>
       <div class="form-buttons">
-        <button class="btn btn-primary btn-block" (click)="logIn()">Log In</button>
+        <button class="btn btn-primary btn-block" (click)="logIn()">
+          Log In
+        </button>
       </div>
     </form>
   </div>
