@@ -10,6 +10,7 @@ import { environment } from "src/environments/environment";
 import { FormGroup, FormControl, FormBuilder, Validators, NgForm } from '@angular/forms';
 import { NgbDateStruct, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { Agent } from '../entities/Agent';
+import { Traveler } from '../entities/Traveler';
 
 @Component({
   selector: "app-agent-dashboard",
@@ -17,20 +18,6 @@ import { Agent } from '../entities/Agent';
   styleUrls: ["./agent-dashboard.component.css"],
 })
 export class AgentDashboardComponent implements OnInit {
-  selectTravelerForm = new FormGroup({
-    username: new FormControl('', [<any>Validators.required, <any>Validators.minLength(5)]),
-    password: new FormControl('', [<any>Validators.required, <any>Validators.minLength(5)]),
-  });
-
-  createTravelerForm = new FormGroup({
-    name: new FormControl('', [<any>Validators.required, <any>Validators.minLength(5)]),
-    username: new FormControl('', [<any>Validators.required, <any>Validators.minLength(5)]),
-    password: new FormControl('', [<any>Validators.required, <any>Validators.minLength(5)]),
-    passwordCheck: new FormControl('', [<any>Validators.required, <any>Validators.minLength(5)]),
-  });
-
-  createTraveler: any;
-  usernameTaken: any;
   traveler: any;
   airports: any;
   airportsMap: Map<Number, String>;
@@ -38,15 +25,13 @@ export class AgentDashboardComponent implements OnInit {
   cancelFlightPage: any;
   agent: any;
   username: any;
-  invalidLogin: any;
 
   constructor(
     private service: AgentUtopiaService,
     private authService: AgentAuthService,
     private router: Router,
-    private formBuilder: FormBuilder,
   ) {
-    this.createSelectTravelerForm;
+    
   }
 
   ngOnInit() {
@@ -67,12 +52,20 @@ export class AgentDashboardComponent implements OnInit {
     
     this.bookFlightPage = true;
     this.cancelFlightPage = false;
-
-    this.createTraveler = false;
   }
-  // *************************
-  // INITIALIZE THE DASHBOARD
-  // *************************
+  
+  logout() {
+    this.authService.logout();
+    this.router.navigate(["/agent/login"]);
+  }
+
+  newTraveler() {
+    this.traveler = null;
+  }
+
+  onTravelerChange(traveler: Traveler) {
+    this.traveler = traveler;
+  }
 
   loadAgent() {
     this.service
@@ -98,89 +91,7 @@ export class AgentDashboardComponent implements OnInit {
     })
   }
 
-  // *************************
-  // END INITIALIZE THE DASHBOARD
-  // *************************
-
-  // *************************
-  // SELECT A TRAVELER
-  // *************************
-
-  createSelectTravelerForm() {
-    this.selectTravelerForm = this.formBuilder.group({
-      username: '',
-      password: ''
-    });
-  }
-
-  checkTraveler() {
-    let travelerBody = {
-      name: " ",
-      username: this.selectTravelerForm.value.username,
-      password: " ",
-      role: "TRAVELER"
-    }
-
-    this.service.get(`${environment.agentBackendUrl}${environment.usernameUri}/${travelerBody.username}`).subscribe(
-      (result: any) => {
-        if (result != null) {
-          this.traveler = result;
-          return;
-        } 
-
-        this.invalidLogin = true;
-
-        },(error) => {
-          alert(error)
-        });
-  }
-
-  setupCreateTraveler() {
-    this.createTraveler = true;
-
-    this.createTravelerForm = this.formBuilder.group({
-      name: '',
-      username: '',
-      password: ''
-    })
-  }
-
-  createNewTraveler() {
-    let travelerBody = {
-      name: this.createTravelerForm.value.name,
-      username: this.createTravelerForm.value.username,
-      password: this.createTravelerForm.value.password,
-      role: "TRAVELER"
-    };
-
-    this.service.get(`${environment.agentBackendUrl}${environment.usernameUri}/${travelerBody.username}`).subscribe(
-      (result: any) => {
-        if (result != null) {
-          this.usernameTaken = true;
-          return;
-        };
-
-        this.service.post(`${environment.agentBackendUrl}${environment.userUri}`, travelerBody).subscribe(
-          (result: any) => {
-            this.traveler = result;
-            this.createTraveler = false;
-          }, (error => {
-            alert(error);
-          })
-        )
-      },
-      (error) => {
-        alert(error);
-      }
-    )
-  }
-
-  // *************************
-  // END SELECT A TRAVELER
-  // *************************
-
   openBookFlight() {
-    // Change sidebar classes
     if (
       document
         .getElementById("agent-book-flight")
@@ -197,7 +108,6 @@ export class AgentDashboardComponent implements OnInit {
   }
 
   openCancelBooking() {
-    // Change sidebar classes
     if (
       document
         .getElementById("agent-cancel-flight")
@@ -213,18 +123,7 @@ export class AgentDashboardComponent implements OnInit {
     this.changeCancelFlightClass();
     
   }
-  // Logout
 
-  logout() {
-    this.authService.logout();
-    this.router.navigate(["/agent/login"]);
-  }
-
-  newTraveler() {
-    this.traveler = null;
-  }
-
-  // Aesthetics
   changeCancelFlightClass() {
     document
       .getElementById("agent-cancel-flight")

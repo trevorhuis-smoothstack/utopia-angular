@@ -85,3 +85,13 @@
     padding-bottom: 1rem;
 } 
 
+@media (max-width: 600px) {
+  #agent-sidebar {
+    display: none;
+  }
+
+  .agent-container {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
