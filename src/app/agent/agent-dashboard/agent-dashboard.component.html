@@ -38,7 +38,7 @@
 
 <div class="container agent-container" *ngIf="bookFlightPage">
   <h2 class="text-center">Book Flights</h2>
-  <div class="select-traveler" *ngIf="!traveler">
+  <div class="traveler-container" *ngIf="!traveler">
     <app-agent-select-traveler (travelerChanged)="onTravelerChange($event)"></app-agent-select-traveler>
   </div>
 
