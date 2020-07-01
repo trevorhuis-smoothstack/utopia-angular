@@ -22,6 +22,7 @@ import {
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CancelBookingComponent } from './agent/agent-dashboard/cancel-booking/cancel-booking.component';
+import { CreateBookingComponent } from './agent/agent-dashboard/create-booking/create-booking.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { CancelBookingComponent } from './agent/agent-dashboard/cancel-booking/c
     SortFlightsByArrivalAirport,
     SortByFlightPrice,
     SortByDepartureDate,
-    CancelBookingComponent
+    CancelBookingComponent,
+    CreateBookingComponent
   ],
   imports: [
     BrowserModule,

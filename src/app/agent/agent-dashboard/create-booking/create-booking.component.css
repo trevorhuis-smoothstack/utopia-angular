@@ -1,0 +1,64 @@
+/* Flight Filters */
+
+.form-group.hidden {
+    width: 0;
+    margin: 0;
+    border: none;
+    padding: 0;
+  }
+  .custom-day {
+    text-align: center;
+    padding: 0.185rem 0.25rem;
+    display: inline-block;
+    height: 2rem;
+    width: 2rem;
+  }
+  .custom-day.focused {
+    background-color: #ecf0f1;
+  }
+  .custom-day.range, .custom-day:hover {
+    background-color: #18bc9c;
+    color: white;
+  }
+  .custom-day.faded {
+    background-color: rgba(24,188,156, 0.5);
+  }
+  
+  .reset-date {
+    margin-left: 10px;
+  }
+  
+  .credit-info {
+    margin: 5px;
+  }
+
+  .flight-filters {
+    display: grid;
+  }
+  
+  .arrive-select, .departure-select {
+    margin: 0px 10px;
+    margin-bottom: 15px;
+    grid-row: 2;
+  }
+  
+  .departure-select {
+    grid-column: 1;
+  }
+  
+  .arrive-select {
+    grid-column: 2;
+  }
+  
+  .price-slider {
+    margin: 10px;
+    grid-row: 3;
+  }
+  
+  .date-picker {
+    margin: 0px 10px;
+    grid-row: 1;
+    display: block;
+  }
+  
+  

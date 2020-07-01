@@ -29,44 +29,22 @@ export class AgentDashboardComponent implements OnInit {
     passwordCheck: new FormControl('', [<any>Validators.required, <any>Validators.minLength(5)]),
   });
 
-  creditCardForm = new FormGroup({
-    cardNumber: new FormControl('', [<any>Validators.required]),
-    expMonth: new FormControl('', [<any>Validators.required]),
-    expYear: new FormControl('', [<any>Validators.required]),
-    cvc: new FormControl('', [<any>Validators.required]),
-  });
-
   createTraveler: any;
   usernameTaken: any;
   traveler: any;
-  flights: any;
   airports: any;
   airportsMap: Map<Number, String>;
-  bookings: any;
   bookFlightPage: any;
   cancelFlightPage: any;
   agent: any;
   username: any;
   invalidLogin: any;
-  customPrice: number;
-  minValue: number;
-  maxValue: number;
-  selectedFlight: any;
-
-  // Date Picker
-  date: NgbDateStruct;
-  
-  // Pagination
-  page = 1;
-  pageSize = 10;
-  filterMetadata = { count: 0 };
 
   constructor(
     private service: AgentUtopiaService,
     private authService: AgentAuthService,
     private router: Router,
     private formBuilder: FormBuilder,
-    private modalService: NgbModal
   ) {
     this.createSelectTravelerForm;
   }
@@ -81,30 +59,16 @@ export class AgentDashboardComponent implements OnInit {
       this.router.navigate(["/agent/login"]);
       return;
     }
-  
+
     this.airportsMap = new Map();
 
     this.loadAirports();
-    this.loadFlights();
     this.loadAgent();
     
     this.bookFlightPage = true;
     this.cancelFlightPage = false;
 
     this.createTraveler = false;
-
-    //slider
-    this.customPrice = 100;
-    this.minValue = 1;
-    this.maxValue = 100;
-
-    this.creditCardForm = this.formBuilder.group({
-      cardNumber: '',
-      expMonth: '',
-      expYear: '',
-      cvc: ''
-    })
-
   }
   // *************************
   // INITIALIZE THE DASHBOARD
@@ -116,71 +80,9 @@ export class AgentDashboardComponent implements OnInit {
         `${environment.agentBackendUrl}${environment.usernameUri}/${this.agent.username}`
       )
       .subscribe((result: Agent) => {
-        this.agent = result;
-        this.service
-          .get(
-            `${environment.agentBackendUrl}${environment.bookingsUri}/${this.agent.userId}`
-          )
-          .subscribe(
-            (result) => {
-              this.bookings = result;
-
-              this.bookings.forEach((element) => {
-                element = this.processBooking(element);
-              });
-            },
-            (error) => {
-              alert(error);
-            }
-          );
+        this.agent.name = result.name;
+        this.agent.userId = result.userId;
       });
-  }
-
-  processBooking(booking) {
-    booking.name = this.setTravelerName(booking);
-    booking.flight = this.setFlight(booking);
-  }
-
-  setTravelerName(input: any) {
-    this.service
-      .get(
-        `${environment.agentBackendUrl}${environment.userIdUri}/${input.travelerId}`
-      )
-      .subscribe(
-        (result: any) => {
-          input.name = result.name;
-        },
-        (error: any) => {
-          input.name = "(error retrieving traveler name)";
-          // do something with logger here
-        }
-      );
-  }
-
-  setAirports(input: any) {
-    input.arriveAirport = this.airportsMap.get(input.flight.arriveId);
-    input.departAirport = this.airportsMap.get(input.flight.departId);
-  }
-
-  setFlight(input: any) {
-    this.service
-      .get(
-        `${environment.agentBackendUrl}${environment.flightUri}/${input.flightId}`
-      )
-      .subscribe(
-        (result: any) => {
-          input.flight = result;
-
-          this.setAirports(input);
-          input.flight.departTimeFormatted = moment(input.flight.departTime).format(
-            "MMMM Do YYYY, h:mm a"
-          )
-        },
-        (error: any) => {
-          input.flight = "(error retrieving arrive airport name)";
-          // do something with logger here
-        }
-      );
   }
 
   loadAirports() {
@@ -194,37 +96,6 @@ export class AgentDashboardComponent implements OnInit {
     (error => {
       alert(error);
     })
-  }
-
-  loadFlights() {
-    this.service
-      .get(`${environment.agentBackendUrl}${environment.flightsUri}`)
-      .subscribe(
-        (res) => {
-          this.flights = res;
-
-          this.formatFlights();
-          this.changePaginationCount()
-    
-        },
-        (error) => {
-          alert(error);
-        }
-      )
-  }
-
-  formatFlights() {
-    this.flights.forEach((element) => {
-      element.departTimeFormatted = moment(element.departTime).format(
-        "MMMM Do YYYY, h:mm a"
-      );
-      element.airportDepart = this.airports.find(
-        (record) => record.airportId === element.departId
-      ).name;
-      element.airportArrive = this.airports.find(
-        (record) => record.airportId === element.arriveId
-      ).name;
-    });
   }
 
   // *************************
@@ -322,55 +193,8 @@ export class AgentDashboardComponent implements OnInit {
         .classList.contains("side-link-active")
     )
       this.changeCancelFlightClass();
-    this.loadFlights();
     this.changeBookFlightClass();
   }
-
-  bookFlight() {
-    
-    let booking = {
-      active: true,
-      flightId: this.selectedFlight.flightId,
-      bookerId: this.agent.userId,
-      travelerId: this.traveler.userId,
-      stripeId: null,
-    };
-
-
-    (<any>window).Stripe.card.createToken(
-      {
-        number: this.creditCardForm.value.cardNumber,
-        exp_month: this.creditCardForm.value.expMonth,
-        exp_year: this.creditCardForm.value.expYear,
-        cvc: this.creditCardForm.value.cvc,
-      },
-      (status: number, response: any) => {
-        if (status === 200) {
-          let token = response.id;
-          booking.stripeId = token;
-
-          console.log(booking);
-          this.service
-            .post(
-              `${environment.agentBackendUrl}${environment.bookingUri}`,
-              booking
-            )
-            .subscribe(
-              (res) => {
-                console.log(res);
-              },
-              (error) => {
-                alert(error);
-              }
-            );
-        } else {
-          console.log(response.error.message);
-        }
-      }
-    );
-  }
-
-  // Cancel flight
 
   openCancelBooking() {
     // Change sidebar classes
@@ -386,24 +210,9 @@ export class AgentDashboardComponent implements OnInit {
         .classList.contains("side-link-active")
     )
       this.changeBookFlightClass();
-    this.loadAgent();  
     this.changeCancelFlightClass();
     
   }
-
-  cancelFlight(booking) {
-    this.service
-      .put(`${environment.agentBackendUrl}${environment.bookingUri}`, booking)
-      .subscribe(
-        (res) => {
-          console.log(res);
-        },
-        (error) => {
-          alert(error);
-        }
-      );
-  }
-
   // Logout
 
   logout() {
@@ -438,30 +247,4 @@ export class AgentDashboardComponent implements OnInit {
       this.bookFlightPage = true;
     }
   }
-
-  changePaginationCount() {
-    this.filterMetadata.count = this.flights.length;
-  }
-
-  // **********************************************
-  // Book flight modal
-  // **********************************************
-
-  initializeBookFlightForm(flight: any) {
-    let booking = {
-      active: true,
-      flightId: flight.flightId,
-      bookerId: this.traveler.bookerId,
-      travelerId: this.traveler.travelerId,
-      stripeId: null,
-    };
-
-  }
-
-  openBookFlightModal(modal: any, flight: any) {
-    this.selectedFlight = flight;
-    this.initializeBookFlightForm(flight);
-    this.modalService.open(modal);
-  }
-
 }

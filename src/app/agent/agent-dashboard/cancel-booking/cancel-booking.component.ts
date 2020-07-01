@@ -84,4 +84,18 @@ export class CancelBookingComponent implements OnInit {
         });
       });
   }
+
+  
+  cancelFlight(booking) {
+    this.service
+      .put(`${environment.agentBackendUrl}${environment.bookingUri}`, booking)
+      .subscribe(
+        (res) => {
+          console.log(res);
+        },
+        (error) => {
+          alert(error);
+        }
+      );
+  }
 }
