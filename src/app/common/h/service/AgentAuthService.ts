@@ -17,7 +17,7 @@ export class AgentAuthService {
   }
 
   logout() {
-    localStorage.removeItem("id_token_agent");
+    localStorage.removeItem("token");
     localStorage.removeItem("expires_at");
     localStorage.removeItem("username");
   }

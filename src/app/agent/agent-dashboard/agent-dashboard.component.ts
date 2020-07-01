@@ -9,6 +9,7 @@ import * as moment from "moment";
 import { environment } from "src/environments/environment";
 import { FormGroup, FormControl, FormBuilder, Validators, NgForm } from '@angular/forms';
 import { NgbDateStruct, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import { Agent } from '../entities/Agent';
 
 @Component({
   selector: "app-agent-dashboard",
@@ -42,10 +43,10 @@ export class AgentDashboardComponent implements OnInit {
   airports: any;
   airportsMap: Map<Number, String>;
   bookings: any;
-  username: any;
   bookFlightPage: any;
   cancelFlightPage: any;
   agent: any;
+  username: any;
   invalidLogin: any;
   customPrice: number;
   minValue: number;
@@ -72,9 +73,11 @@ export class AgentDashboardComponent implements OnInit {
 
   ngOnInit() {
     document.getElementById("nav-agent").classList.add("active");
-    this.username = localStorage.getItem("username");
+    this.agent = {
+      username: localStorage.getItem("username"),
+    }
 
-    if (this.username == null) {
+    if (this.agent.username == null) {
       this.router.navigate(["/agent/login"]);
       return;
     }
@@ -110,9 +113,9 @@ export class AgentDashboardComponent implements OnInit {
   loadAgent() {
     this.service
       .get(
-        `${environment.agentBackendUrl}${environment.usernameUri}/${this.username}`
+        `${environment.agentBackendUrl}${environment.usernameUri}/${this.agent.username}`
       )
-      .subscribe((result) => {
+      .subscribe((result: Agent) => {
         this.agent = result;
         this.service
           .get(

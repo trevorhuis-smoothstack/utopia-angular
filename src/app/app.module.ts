@@ -21,6 +21,7 @@ import {
 } from "./common/h/sort-flights-airports";
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CancelBookingComponent } from './agent/agent-dashboard/cancel-booking/cancel-booking.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     SortFlightsByDepartureAirport,
     SortFlightsByArrivalAirport,
     SortByFlightPrice,
-    SortByDepartureDate
+    SortByDepartureDate,
+    CancelBookingComponent
   ],
   imports: [
     BrowserModule,

@@ -40,7 +40,7 @@ export class AgentLoginComponent implements OnInit {
           const expiresAt = moment().add(response.headers.get('expires'), "second");
   
           localStorage.setItem("username", val.username);
-          localStorage.setItem("id_token_agent", response.headers.get('Authorization'));
+          localStorage.setItem("token", response.headers.get('Authorization'));
           localStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()));
           
           this.router.navigate(['/agent/dashboard']);

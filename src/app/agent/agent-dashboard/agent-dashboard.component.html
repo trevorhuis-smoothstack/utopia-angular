@@ -286,39 +286,7 @@
 </div>
 
 <div class="container agent-container" *ngIf="cancelFlightPage">
-  <h2 class="text-center">Cancel Traveler's Flights</h2>
-
-  <table class="table table-hover cancel-flight-table">
-    <thead>
-      <tr>
-        <th scope="col">Flight ID</th>
-        <th scope="col">Traveler</th>
-        <th scope="col">Departure Airport</th>
-        <th scope="col">Arrive Airport</th>
-        <th scope="col">Departure Time</th>
-        <th scope="col">Cancel Flight</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let b of bookings">
-        <th scope="row">{{ b.flightId }}</th>
-        <td>{{ b.name }}</td>
-        <td>{{ b.departAirport }}</td>
-        <td>{{ b.arriveAirport }}</td>
-        <td>{{ b.flight.departTimeFormatted }}</td>
-        <td>
-          <button
-            *ngIf="b.active"
-            type="button"
-            class="btn btn-secondary"
-            (click)="cancelFlight(b)"
-          >
-            Cancel Flight
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <app-agent-cancel-booking [agent]="agent" [airports]="airports"></app-agent-cancel-booking>
 </div>
 
 <ng-template #bookFlightModal let-close="close">
