@@ -1,3 +1,58 @@
-<p>
-  counter-booking works!
-</p>
+<div class="airport-selectors">
+  <div class="depart-select">
+    <label class="col-form-label" for="inputDefault">
+      Select Departure Airport
+    </label>
+    <select
+      class="custom-select"
+      [(ngModel)]="departAirport"
+      (change)="getFlightsIf(arriveAirport)"
+    >
+      <option *ngFor="let airport of airports" value="{{ airport }}">
+        {{ airport.name }}
+      </option>
+    </select>
+  </div>
+  <div class="arrive-select">
+    <label class="col-form-label" for="inputDefault">
+      Select Arrival Airport
+    </label>
+    <select
+      class="custom-select"
+      [(ngModel)]="arriveAirport"
+      (change)="getFlightsIf(departAirport)"
+    >
+      <option *ngFor="let airport of airports" value="{{ airport }}">
+        {{ airport.name }}
+      </option>
+    </select>
+  </div>
+  <table class="table table-hover" *ngIf="departAirport && arriveAirport">
+    <thead>
+      <tr>
+        <th scope="col">Departure Airport</th>
+        <th scope="col">Arrive Airport</th>
+        <th scope="col">Depart Time</th>
+        <th scope="col">Price</th>
+        <th scope="col">Book</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let flight of flights">
+        <th scope="row">{{ getAirportName(flight.departAirport) }}</th>
+        <td>{{ getAirportName(flight.arriveAirport) }}</td>
+        <td>{{ flight.departTime }}</td>
+        <td>$ {{ flight.price }}</td>
+        <td>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="openBookFlightModal(bookFlightModal, flight)"
+          >
+            Book Flight
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -43,7 +43,17 @@ export class CounterBookingComponent implements OnInit {
       )
       .subscribe(
         (result: any[]) => (this.flights = result),
-        (error: any) => alert("Error getting flights: Status " + error.error.status)
+        (error: any) =>
+          alert("Error getting flights: Status " + error.error.status)
       );
+  }
+
+  getFlightsIf(condition: any) {
+    if (condition) this.getFlights();
+  }
+
+  getAirportName(airportId: number) {
+    return this.airports.find((airport) => airport.airportId === airportId)
+      .name;
   }
 }
