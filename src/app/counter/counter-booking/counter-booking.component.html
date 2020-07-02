@@ -8,7 +8,7 @@
       [(ngModel)]="departAirport"
       (change)="getFlightsIf(arriveAirport)"
     >
-      <option *ngFor="let airport of airports" value="{{ airport }}">
+      <option *ngFor="let airport of airports" [ngValue]="airport">
         {{ airport.name }}
       </option>
     </select>
@@ -22,37 +22,37 @@
       [(ngModel)]="arriveAirport"
       (change)="getFlightsIf(departAirport)"
     >
-      <option *ngFor="let airport of airports" value="{{ airport }}">
+      <option *ngFor="let airport of airports" [ngValue]="airport">
         {{ airport.name }}
       </option>
     </select>
   </div>
-  <table class="table table-hover" *ngIf="departAirport && arriveAirport">
-    <thead>
-      <tr>
-        <th scope="col">Departure Airport</th>
-        <th scope="col">Arrive Airport</th>
-        <th scope="col">Depart Time</th>
-        <th scope="col">Price</th>
-        <th scope="col">Book</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let flight of flights">
-        <th scope="row">{{ getAirportName(flight.departAirport) }}</th>
-        <td>{{ getAirportName(flight.arriveAirport) }}</td>
-        <td>{{ flight.departTime }}</td>
-        <td>$ {{ flight.price }}</td>
-        <td>
-          <button
-            type="button"
-            class="btn btn-secondary"
-            (click)="openBookFlightModal(bookFlightModal, flight)"
-          >
-            Book Flight
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
 </div>
+<table class="table table-hover" *ngIf="departAirport && arriveAirport">
+  <thead>
+    <tr>
+      <th scope="col">Departure Airport</th>
+      <th scope="col">Arrive Airport</th>
+      <th scope="col">Depart Time</th>
+      <th scope="col">Price</th>
+      <th scope="col">Book</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let flight of flights">
+      <th scope="row">{{ getAirportName(flight.departId) }}</th>
+      <td>{{ getAirportName(flight.arriveId) }}</td>
+      <td>{{ flight.departTime }}</td>
+      <td>${{ flight.price }}</td>
+      <td>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="openBookFlightModal(bookFlightModal, flight)"
+        >
+          Book Flight
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
