@@ -42,7 +42,7 @@
     <tr *ngFor="let flight of flights">
       <th scope="row">{{ getAirportName(flight.departId) }}</th>
       <td>{{ getAirportName(flight.arriveId) }}</td>
-      <td>{{ flight.departTime }}</td>
+      <td>{{ flight.departTime | date: "mediumTime" }}</td>
       <td>{{ flight.price | currency: "USD" }}</td>
       <td>
         <button
