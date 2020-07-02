@@ -2,6 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { CounterHttpService } from "src/app/common/counter/service/counter-http.service";
 import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { environment } from "src/environments/environment";
+import { error } from "protractor";
 
 @Component({
   selector: "app-counter-create-traveler",
@@ -22,5 +24,17 @@ export class CounterCreateTravelerComponent implements OnInit {
 
   ngOnInit() {}
 
-  createTraveler() {}
+  createTraveler() {
+    const traveler = {
+      name: this.form.value.name,
+      username: this.form.value.username,
+      password: this.form.value.password,
+      role: "TRAVELER",
+    };
+    this.httpService
+      .post(environment.counterUrl + environment.counterCreateUserUri, traveler)
+      .subscribe(null, (error) =>
+        alert("Error creating traveler: Status " + error.error.status)
+      );
+  }
 }
