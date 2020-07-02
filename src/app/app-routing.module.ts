@@ -3,10 +3,8 @@ import { Routes, RouterModule } from "@angular/router";
 import { AgentLoginComponent } from "./agent/agent-login/agent-login.component";
 import { AgentDashboardComponent } from "./agent/agent-dashboard/agent-dashboard.component";
 import { CounterLoginComponent } from "./counter/counter-login/counter-login.component";
-import { CounterDashboardComponent } from "./counter/counter-dashboard/counter-dashboard.component";
-import { CounterTravelerTypeComponent } from "./counter/booking/counter-traveler-type/counter-traveler-type.component";
-import { CounterSelectTravelerComponent } from "./counter/counter-select-traveler/counter-select-traveler.component";
 import { CounterComponent } from "./counter/counter/counter.component";
+import { CounterTravelerComponent } from "./counter/counter-traveler/counter-traveler.component";
 
 const routes: Routes = [
   { path: "agent/login", component: AgentLoginComponent },
@@ -15,13 +13,7 @@ const routes: Routes = [
   {
     path: "counter",
     component: CounterComponent,
-    children: [
-      { path: "traveler", component: CounterTravelerTypeComponent },
-      {
-        path: "traveler/existing",
-        component: CounterSelectTravelerComponent,
-      },
-    ],
+    children: [{ path: "traveler", component: CounterTravelerComponent }],
   },
 ];
 
