@@ -33,8 +33,10 @@ export class CounterCreateTravelerComponent implements OnInit {
     };
     this.httpService
       .post(environment.counterUrl + environment.counterCreateUserUri, traveler)
-      .subscribe(null, (error) =>
-        alert("Error creating traveler: Status " + error.error.status)
+      .subscribe(
+        (result) => this.dataService.newTraveler(result.body),
+        (error) =>
+          alert("Error creating traveler: Status " + error.error.status)
       );
   }
 }
