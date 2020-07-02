@@ -1,7 +1,7 @@
 <div id="sidebar" class="active" *ngIf="this.authorized">
   <ul>
     <li class="counter-data">
-      <h5><strong>Employee:</strong><br />(name goes here)</h5>
+      <h5><strong>Employee:</strong><br />{{this.counter.name}}</h5>
     </li>
     <li class="logout-button">
       <button
