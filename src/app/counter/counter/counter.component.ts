@@ -21,6 +21,7 @@ export class CounterComponent implements OnInit {
 
   ngOnInit() {
     this.counter = this.dataService.getCounter();
+    this.traveler = this.dataService.getTraveler();
     this.authService.checkAuth().subscribe(
       () => (this.authorized = true),
       (error) => {

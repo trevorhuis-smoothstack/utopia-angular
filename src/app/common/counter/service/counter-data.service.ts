@@ -5,6 +5,7 @@ import { Injectable } from "@angular/core";
 })
 export class CounterDataService {
   counter: any;
+  traveler: any;
 
   constructor() {}
 
@@ -14,5 +15,13 @@ export class CounterDataService {
 
   getCounter() {
     return this.counter;
+  }
+
+  setTraveler(traveler: any) {
+    this.traveler = traveler;
+  }
+
+  getTraveler() {
+    return this.traveler;
   }
 }
