@@ -6,11 +6,12 @@ export const environment = {
   production: false,
   counterUrl: "http://localhost:8080/counter",
   loginUrl: "http://localhost:8080/login",
+  counterAirportUri: "/airports",
   counterCheckAuthUri: "/authorized",
   counterCreateUserUri: "/user",
   counterGetUserUri: "/users/",
   counterTravelerUri: "/traveler/",
-  counterAirportUri: "/airports",
+  counterFlightUri: "/flights/bookable/departure/"
 };
 
 /*
