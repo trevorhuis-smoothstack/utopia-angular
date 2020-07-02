@@ -23,7 +23,7 @@ export class CounterSelectTravelerComponent implements OnInit {
 
   ngOnInit() {}
 
-  getTraveler(username) {
+  getTraveler(username: string) {
     this.httpService
       .get(environment.counterUrl + environment.counterGetUserUri + username)
       .subscribe(
