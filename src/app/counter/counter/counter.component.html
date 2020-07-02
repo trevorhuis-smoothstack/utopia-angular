@@ -17,22 +17,24 @@
       <h5><strong>Customer:</strong><br />{{ traveler.name }}</h5>
     </li>
     <li class="utopia-button" *ngIf="traveler">
-      <button type="button" class="btn btn-primary" routerLink="/counter/traveler" (click)="resetLinks()">
+      <button
+        type="button"
+        class="btn btn-primary"
+        routerLink="/counter/traveler"
+        (click)="resetLinks()"
+      >
         Change
       </button>
     </li>
     <li
       id="book"
       class="side-link"
+      routerLink="/counter/booking"
       (click)="startBook()"
     >
       Book Ticket
     </li>
-    <li
-      id="cancel"
-      class="side-link"
-      (click)="startCancel()"
-    >
+    <li id="cancel" class="side-link" (click)="startCancel()">
       Cancel Ticket
     </li>
   </ul>
