@@ -21,7 +21,6 @@ export class CounterComponent implements OnInit {
 
   ngOnInit() {
     this.counter = this.dataService.getCounter();
-    // debugger;
     this.dataService.travelerObservable.subscribe(
       (traveler) => (this.traveler = traveler)
     );
