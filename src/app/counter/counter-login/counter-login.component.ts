@@ -4,6 +4,7 @@ import { CounterHttpService } from "../../common/counter/service/counter-http.se
 import { environment } from "src/environments/environment";
 import { Router } from "@angular/router";
 import { CounterAuthService } from "src/app/common/counter/service/counter-auth.service";
+import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
 
 @Component({
   selector: "app-counter-login",
@@ -19,7 +20,8 @@ export class CounterLoginComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private httpService: CounterHttpService,
-    private authService: CounterAuthService
+    private authService: CounterAuthService,
+    private dataService: CounterDataService
   ) {
     this.form = this.fb.group({
       username: ["", Validators.required],
@@ -61,6 +63,7 @@ export class CounterLoginComponent implements OnInit {
               (response: any) => {
                 localStorage.setItem("name", response.name);
                 localStorage.setItem("userId", response.userId);
+                this.dataService.setCounter(response);
                 this.router.navigate(["/counter"]);
               },
               (getUserError) => {

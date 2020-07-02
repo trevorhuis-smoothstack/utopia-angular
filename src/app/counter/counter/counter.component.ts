@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { CounterAuthService } from "src/app/common/counter/service/counter-auth.service";
 import { Router } from "@angular/router";
+import { CounterDataService } from 'src/app/common/counter/service/counter-data.service';
 
 @Component({
   selector: "app-counter",
@@ -9,13 +10,16 @@ import { Router } from "@angular/router";
 })
 export class CounterComponent implements OnInit {
   authorized: boolean = false;
+  counter: any;
 
   constructor(
     private router: Router,
+    private dataService: CounterDataService,
     private authService: CounterAuthService
   ) {}
 
   ngOnInit() {
+    this.counter = this.dataService.getCounter();
     this.authService.checkAuth().subscribe(
       () => (this.authorized = true),
       (error) => {
