@@ -9,6 +9,12 @@ export const environment = {
   usernameUri: '/users',
   userUri: '/users',
   CheckAuthUri: '/authorized',
+  counterUrl: 'http://localhost:8080/counter',
+  loginUrl: 'http://localhost:8080/login',
+  counterCheckAuthUri: '/authorized',
+  counterGetUserUri: '/users/',
+  counterTravelerUri: '/traveler/',
+  counterAirportUri: '/airports',
 };
 
 /*
