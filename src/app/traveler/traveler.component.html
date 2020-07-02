@@ -1,5 +1,5 @@
 <div>
-  <h1>User Dashboard</h1>
+  <h1>Welcome {{username}}</h1>
   <div>
     <!-- let's add the dropdowns here.  -->
     <form [formGroup]="pickDepartureForm">
@@ -7,10 +7,12 @@
       [settings]="dropdownSettings" (onSelect)="onItemSelect($event)">
     </ng-multiselect-dropdown>
     </form>
+    <form [formGroup]="pickArrivalForm">
     <ng-multiselect-dropdown [placeholder]="'Select Arrival'" [data]="airports" formControlName="arrival"
     [settings]="dropdownSettings" (onSelect)="onItemSelect($event)">
   </ng-multiselect-dropdown>
-  <button (click)="showArrivalDeparture()">show</button>
+  </form>
+  <button (click)="logout()">logout</button>
   </div>
 <table class="table">
   <thead>

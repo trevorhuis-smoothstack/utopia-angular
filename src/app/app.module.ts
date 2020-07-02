@@ -20,7 +20,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { TravelerLoginComponent } from './traveler/traveler-login/traveler-login.component';
 
 @NgModule({
-  declarations: [AppComponent, AgentLoginComponent, AgentDashboardComponent],
+  declarations: [AppComponent, AgentLoginComponent, AgentDashboardComponent, TravelerComponent, TravelerLoginComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

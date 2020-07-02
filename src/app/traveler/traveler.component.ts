@@ -8,6 +8,8 @@ import {
   FormControl,
   Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
+import { TravelerAuthService } from '../common/s/service/traveler-auth-service.service';
 
 @Component({
   selector: 'app-traveler',
@@ -27,9 +29,14 @@ export class TravelerComponent implements OnInit {
   pickArrivalForm: FormGroup;
   arrival: any;
   departure: any;
+  authorized = false;
+  username: string;
+
 
   constructor(
     private travelerService: TravelerService,
+    private travelerAuthService: TravelerAuthService,
+    private router: Router
   ) {
     this.dropdownSettings = {
       singleSelection: true,
@@ -42,6 +49,12 @@ export class TravelerComponent implements OnInit {
   ngOnInit() {
     this.loadAirports();
     this.initializeFormGroup();
+
+    this.username = localStorage.getItem('username');
+    if (!localStorage.getItem('username')) {
+      console.log(localStorage.getItem('username'));
+      this.router.navigate(['/traveler/login']);
+    }
   }
 
   loadCurrentUser() {
@@ -86,5 +99,10 @@ export class TravelerComponent implements OnInit {
 
   loadPreviousFlights() {
 
+  }
+
+  logout() {
+    this.travelerAuthService.logout();
+    this.router.navigate(['/traveler/login']);
   }
 }

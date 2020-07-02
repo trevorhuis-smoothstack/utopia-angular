@@ -1,3 +1,80 @@
-<p>
-  traveler-login works!
-</p>
+<div class="traveler-login">
+  <div class="login-form">
+    <form [formGroup]="travelerLoginForm" *ngIf="!createTraveler">
+      <fieldset>
+        <legend>Traveler Login</legend>
+        <div class="form-group">
+          <label>Username</label>
+          <input name="username" class="form-control" formControlName="username" />
+        </div>
+        <div class="form-group">
+          <label>Password:</label>
+          <input
+            name="password"
+            class="form-control"
+            formControlName="password"
+            type="password"
+          />
+        </div>
+      </fieldset>
+      <div class="form-requirement" *ngIf="invalidLogin">
+        Username and password not found.
+      </div>
+      <div class="form-buttons">
+        <button class="btn btn-primary btn-block" (click)="login()">Login</button>
+      </div>
+      <div class="form-buttons">
+        <button class="btn btn-primary btn-block" (click)="toggleCreateTraveler()">Create Account</button>
+      </div>
+    </form>
+
+    <form [formGroup]="createTravelerForm" *ngIf="createTraveler">
+      <fieldset>
+        <legend>Create a Traveler</legend>
+        <p>
+          Create a new account with username and password of your choice. 
+        </p>
+        <div class="form-group">
+          <label>Name</label>
+          <input name="email" class="form-control" formControlName="name" />
+        </div>
+        <div class="form-group">
+          <label>Username</label>
+          <input name="email" class="form-control" formControlName="username" />
+          <div class="form-requirement" *ngIf="usernameTaken">
+            Username already taken.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Password</label>
+          <input
+            name="password"
+            class="form-control"
+            formControlName="password"
+            type="password"
+          />
+        </div>
+        <div class="form-group">
+          <label>Re-Type Password</label>
+          <input name="password" class="form-control" type="password" />
+        </div>
+      </fieldset>
+      <div class="form-buttons">
+        <button class="btn btn-primary btn-block" (click)="createNewTraveler()">
+          Create Account
+        </button>
+      </div>
+      <hr />
+      <legend>Do you have an account?</legend>
+      <div class="form-buttons">
+        <button
+          class="btn btn-success btn-block"
+          (click)="toggleCreateTraveler()"
+        >
+          Login
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
