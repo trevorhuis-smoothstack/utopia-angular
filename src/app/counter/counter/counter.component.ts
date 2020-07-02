@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { CounterAuthService } from "src/app/common/counter/service/counter-auth.service";
 import { Router } from "@angular/router";
-import { CounterDataService } from 'src/app/common/counter/service/counter-data.service';
+import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
 
 @Component({
   selector: "app-counter",
@@ -21,7 +21,10 @@ export class CounterComponent implements OnInit {
 
   ngOnInit() {
     this.counter = this.dataService.getCounter();
-    this.traveler = this.dataService.getTraveler();
+    // debugger;
+    this.dataService.travelerObservable.subscribe(
+      (traveler) => (this.traveler = traveler)
+    );
     this.authService.checkAuth().subscribe(
       () => (this.authorized = true),
       (error) => {
@@ -47,7 +50,7 @@ export class CounterComponent implements OnInit {
     document.getElementById("cancel").classList.add("side-link-active");
   }
 
-  resetLinks(){
+  resetLinks() {
     document.getElementById("book").classList.remove("side-link-active");
     document.getElementById("cancel").classList.remove("side-link-active");
   }

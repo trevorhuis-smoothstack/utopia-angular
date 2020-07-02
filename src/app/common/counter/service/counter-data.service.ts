@@ -1,13 +1,17 @@
 import { Injectable } from "@angular/core";
+import { Subject } from "rxjs";
 
 @Injectable({
   providedIn: "root",
 })
 export class CounterDataService {
   counter: any;
-  traveler: any;
 
   constructor() {}
+
+  private travelerSource = new Subject<any>();
+
+  travelerObservable = this.travelerSource.asObservable();
 
   setCounter(counter: any) {
     this.counter = counter;
@@ -17,11 +21,7 @@ export class CounterDataService {
     return this.counter;
   }
 
-  setTraveler(traveler: any) {
-    this.traveler = traveler;
-  }
-
-  getTraveler() {
-    return this.traveler;
+  newTraveler(traveler: any) {
+    this.travelerSource.next(traveler);
   }
 }

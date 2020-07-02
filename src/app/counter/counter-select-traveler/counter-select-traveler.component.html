@@ -5,11 +5,11 @@
         <legend>Find Customer by Username</legend>
         <div class="form-group">
           <label>Username</label>
-          <input name="email" class="form-control" formControlName="username" />
+          <input class="form-control" formControlName="username" />
         </div>
       </fieldset>
       <div class="form-buttons">
-        <button class="btn btn-primary btn-block">
+        <button class="btn btn-primary btn-block" (click)="getTraveler(form.value.username)">
           OK
         </button>
       </div>
