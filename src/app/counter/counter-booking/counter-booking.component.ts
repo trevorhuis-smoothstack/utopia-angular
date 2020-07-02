@@ -13,6 +13,8 @@ export class CounterBookingComponent implements OnInit {
   traveler: any;
   airports: any[];
   flights: any[];
+  departAirport: any;
+  arriveAirport: any;
 
   constructor(
     private httpService: CounterHttpService,
@@ -29,7 +31,19 @@ export class CounterBookingComponent implements OnInit {
       .get(environment.counterUrl + environment.counterAirportUri)
       .subscribe(
         (result: any[]) => (this.airports = result),
-        (error: any) => alert("Error getting airports: Status " + error.error.status)
+        (error: any) =>
+          alert("Error getting airports: Status " + error.error.status)
+      );
+  }
+
+  getFlights() {
+    this.httpService
+      .get(
+        `${environment.counterUrl}${environment.counterFlightUri}${this.departAirport.airportId}/arrive/${this.arriveAirport.airportId}/traveler/${this.traveler.travelerId}`
+      )
+      .subscribe(
+        (result: any[]) => (this.flights = result),
+        (error: any) => alert("Error getting flights: Status " + error.error.status)
       );
   }
 }
