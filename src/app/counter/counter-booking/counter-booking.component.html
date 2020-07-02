@@ -43,7 +43,7 @@
       <th scope="row">{{ getAirportName(flight.departId) }}</th>
       <td>{{ getAirportName(flight.arriveId) }}</td>
       <td>{{ flight.departTime }}</td>
-      <td>${{ flight.price }}</td>
+      <td>{{ flight.price | currency: "USD" }}</td>
       <td>
         <button
           type="button"
