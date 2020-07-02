@@ -18,9 +18,11 @@ import { TravelerComponent } from './traveler/traveler.component';
 import { TravelerService } from './common/s/service/traveler.service';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { TravelerLoginComponent } from './traveler/traveler-login/traveler-login.component';
+import { FlightsComponent } from './traveler/flights/flights.component';
+import { BookingsComponent } from './traveler/bookings/bookings.component';
 
 @NgModule({
-  declarations: [AppComponent, AgentLoginComponent, AgentDashboardComponent, TravelerComponent, TravelerLoginComponent],
+  declarations: [AppComponent, AgentLoginComponent, AgentDashboardComponent, TravelerComponent, TravelerLoginComponent, FlightsComponent, BookingsComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
