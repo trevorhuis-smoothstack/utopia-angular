@@ -20,9 +20,10 @@ import { CounterDashboardComponent } from './counter/counter-dashboard/counter-d
 import { CounterInterceptionService } from './common/counter/service/counter-interception.service';
 import { CounterTravelerTypeComponent } from './counter/booking/counter-traveler-type/counter-traveler-type.component';
 import { CounterSelectTravelerComponent } from './counter/counter-select-traveler/counter-select-traveler.component';
+import { CounterComponent } from './counter/counter/counter.component';
 
 @NgModule({
-  declarations: [AppComponent, AgentLoginComponent, AgentDashboardComponent, CounterLoginComponent, CounterDashboardComponent, CounterTravelerTypeComponent, CounterSelectTravelerComponent],
+  declarations: [AppComponent, AgentLoginComponent, AgentDashboardComponent, CounterLoginComponent, CounterDashboardComponent, CounterTravelerTypeComponent, CounterSelectTravelerComponent, CounterComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
