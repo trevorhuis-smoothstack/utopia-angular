@@ -1,3 +1,18 @@
-<p>
-  counter-select-traveler works!
-</p>
+<div class="select-traveler">
+  <div class="select-existing-traveler">
+    <form [formGroup]="form">
+      <fieldset>
+        <legend>Find Customer by Username</legend>
+        <div class="form-group">
+          <label>Username</label>
+          <input name="email" class="form-control" formControlName="username" />
+        </div>
+      </fieldset>
+      <div class="form-buttons">
+        <button class="btn btn-primary btn-block">
+          OK
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
