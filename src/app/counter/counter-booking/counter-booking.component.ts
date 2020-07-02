@@ -63,4 +63,8 @@ export class CounterBookingComponent implements OnInit {
     return this.airports.find((airport) => airport.airportId === airportId)
       .name;
   }
+
+  sayHello() {
+    alert("hello");
+  }
 }

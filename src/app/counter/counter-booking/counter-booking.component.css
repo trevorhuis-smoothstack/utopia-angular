@@ -1,3 +1,7 @@
+tbody tr{
+    cursor: pointer;
+}
+
 .airport-selectors {
   display: grid;
 }

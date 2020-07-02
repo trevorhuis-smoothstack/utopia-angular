@@ -35,24 +35,14 @@
       <th scope="col">Arrive Airport</th>
       <th scope="col">Depart Time</th>
       <th scope="col">Price</th>
-      <th scope="col">Book</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let flight of flights">
-      <th scope="row">{{ getAirportName(flight.departId) }}</th>
+    <tr *ngFor="let flight of flights" (click)="sayHello()">
+      <td>{{ getAirportName(flight.departId) }}</td>
       <td>{{ getAirportName(flight.arriveId) }}</td>
       <td>{{ flight.departTime | date: "mediumTime" }}</td>
       <td>{{ flight.price | currency: "USD" }}</td>
-      <td>
-        <button
-          type="button"
-          class="btn btn-secondary"
-          (click)="openBookFlightModal(bookFlightModal, flight)"
-        >
-          Book Flight
-        </button>
-      </td>
     </tr>
   </tbody>
 </table>
