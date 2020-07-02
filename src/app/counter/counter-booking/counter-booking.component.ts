@@ -39,7 +39,7 @@ export class CounterBookingComponent implements OnInit {
   getFlights() {
     this.httpService
       .get(
-        `${environment.counterUrl}${environment.counterFlightUri}${this.departAirport.airportId}/arrive/${this.arriveAirport.airportId}/traveler/${this.traveler.travelerId}`
+        `${environment.counterUrl}${environment.counterFlightUri}/departure/${this.departAirport.airportId}/arrival/${this.arriveAirport.airportId}/traveler/${this.traveler.travelerId}`
       )
       .subscribe(
         (result: any[]) => (this.flights = result),
