@@ -34,6 +34,7 @@ export class CounterComponent implements OnInit {
 
   logOut() {
     localStorage.removeItem("token");
+    this.dataService.setCounter(null);
   }
 
   startBook() {
