@@ -11,8 +11,8 @@ import { environment } from "src/environments/environment";
 export class CounterBookingComponent implements OnInit {
   counter = this.dataService.getCounter();
   traveler: any;
-  airports: any;
-  flights: any;
+  airports: any[];
+  flights: any[];
 
   constructor(
     private httpService: CounterHttpService,
@@ -20,15 +20,16 @@ export class CounterBookingComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.traveler = this.dataService.getTraveler();
     this.dataService.travelerObservable.subscribe(
-      (traveler) => (this.traveler = traveler),
+      (traveler: any) => (this.traveler = traveler),
       () => alert("Booking: Error getting traveler")
     );
     this.httpService
       .get(environment.counterUrl + environment.counterAirportUri)
       .subscribe(
-        (result) => (this.airports = result),
-        (error) => alert("Error getting airports: Status " + error.error.status)
+        (result: any[]) => (this.airports = result),
+        (error: any) => alert("Error getting airports: Status " + error.error.status)
       );
   }
 }
