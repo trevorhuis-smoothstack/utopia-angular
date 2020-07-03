@@ -4,12 +4,7 @@ import { CounterHttpService } from "src/app/common/counter/service/counter-http.
 import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
 import { environment } from "src/environments/environment";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import {
-  StripeFactoryService,
-  Elements,
-  Element,
-  StripeService,
-} from "ngx-stripe";
+import { Elements, Element, StripeService } from "ngx-stripe";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({
@@ -33,7 +28,6 @@ export class CounterBookingComponent implements OnInit {
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private router: Router,
-    private stripeFactory: StripeFactoryService,
     private stripe: StripeService,
     private httpService: CounterHttpService,
     private dataService: CounterDataService
@@ -48,9 +42,7 @@ export class CounterBookingComponent implements OnInit {
     this.dataService.travelerObservable.subscribe(
       (traveler: any) => (this.traveler = traveler)
     );
-    this.form = this.formBuilder.group({
-      name: ["name", [Validators.required]],
-    });
+    this.form = this.formBuilder.group({});
     this.httpService
       .get(environment.counterUrl + environment.counterAirportUri)
       .subscribe(
