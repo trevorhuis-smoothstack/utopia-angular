@@ -6,7 +6,6 @@ import { environment } from "src/environments/environment";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import {
   StripeFactoryService,
-  StripeInstance,
   Elements,
   Element,
   StripeService,
@@ -20,7 +19,6 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 })
 export class CounterBookingComponent implements OnInit {
   form: FormGroup;
-  // stripe: StripeInstance;
   elements: Elements;
   card: Element;
   counter = this.dataService.getCounter();
@@ -60,15 +58,11 @@ export class CounterBookingComponent implements OnInit {
         (error: any) =>
           alert("Error getting airports: Status " + error.error.status)
       );
-    // this.stripe = this.stripeFactory.create(
-    //   "pk_test_51GwErbJwa8c7tq3ON61IURqOXTi3Lcqlyx7wBTUR0ClnuHPjOMhLZqJhxG0nFwq04Svaxa6p768cb1Mg8IF6NO2n00TlRmCn9i"
-    // );
     this.stripe.setKey(
       "pk_test_51GwErbJwa8c7tq3ON61IURqOXTi3Lcqlyx7wBTUR0ClnuHPjOMhLZqJhxG0nFwq04Svaxa6p768cb1Mg8IF6NO2n00TlRmCn9i"
     );
     this.stripe.elements().subscribe(
       (elements) => {
-        // this.elements = elements;
         this.card = elements.create("card", {});
       },
 
