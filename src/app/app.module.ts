@@ -22,6 +22,7 @@ import { CounterSelectTravelerComponent } from "./counter/counter-select-travele
 import { CounterComponent } from "./counter/counter/counter.component";
 import { CounterTravelerComponent } from "./counter/counter-traveler/counter-traveler.component";
 import { CounterCreateTravelerComponent } from "./counter/counter-create-traveler/counter-create-traveler.component";
+import { CounterCancelComponent } from './counter/counter-cancel/counter-cancel.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { CounterCreateTravelerComponent } from "./counter/counter-create-travele
     CounterComponent,
     CounterTravelerComponent,
     CounterCreateTravelerComponent,
+    CounterCancelComponent,
   ],
   imports: [
     BrowserModule,
