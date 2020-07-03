@@ -3,6 +3,7 @@ import { Router } from "@angular/router";
 import { CounterHttpService } from "src/app/common/counter/service/counter-http.service";
 import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
 import { environment } from "src/environments/environment";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: "app-counter-booking",
@@ -10,14 +11,17 @@ import { environment } from "src/environments/environment";
   styleUrls: ["./counter-booking.component.css"],
 })
 export class CounterBookingComponent implements OnInit {
+  card: any;
   counter = this.dataService.getCounter();
   traveler: any;
   airports: any[];
-  flights: any[];
   departAirport: any;
   arriveAirport: any;
+  flights: any[];
+  flight: any;
 
   constructor(
+    private modalService: NgbModal,
     private router: Router,
     private httpService: CounterHttpService,
     private dataService: CounterDataService
@@ -43,7 +47,6 @@ export class CounterBookingComponent implements OnInit {
   }
 
   getFlights() {
-    debugger;
     this.httpService
       .get(
         `${environment.counterUrl}${environment.counterFlightUri}/departure/${this.departAirport.airportId}/arrival/${this.arriveAirport.airportId}/traveler/${this.traveler.userId}`
@@ -62,5 +65,10 @@ export class CounterBookingComponent implements OnInit {
   getAirportName(airportId: number) {
     return this.airports.find((airport) => airport.airportId === airportId)
       .name;
+  }
+
+  openBookingModal(flight: any, modal: any) {
+    this.flight = flight;
+    this.modalService.open(modal);
   }
 }

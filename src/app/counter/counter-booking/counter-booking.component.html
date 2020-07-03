@@ -38,11 +38,95 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let flight of flights" >
+    <tr
+      *ngFor="let flight of flights"
+      style="cursor: pointer;"
+      (click)="openBookingModal(flight, bookingModal)"
+    >
       <td>{{ getAirportName(flight.departId) }}</td>
       <td>{{ getAirportName(flight.arriveId) }}</td>
-      <td>{{ flight.departTime | date: "mediumTime" }}</td>
+      <td>{{ flight.departTime | date: "medium" }}</td>
       <td>{{ flight.price | currency: "USD" }}</td>
     </tr>
   </tbody>
 </table>
+
+<ng-template #bookingModal let-close="close">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4>Book Ticket</h4>
+        <button type="button" class="btn btn-primary" (click)="close()">
+          <span>&#215;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <table class="table table-hover table-dark">
+            <tr>
+              <th scope="row">Customer:</th>
+              <td>{{ traveler.name }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Flight Number:</th>
+              <td>{{ flight.flightId }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Departure:</th>
+              <td>
+                {{ getAirportName(flight.departId) }},
+                {{ flight.departTime | date: "medium" }}
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Arrival:</th>
+              <td>{{ getAirportName(flight.arriveId) }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Price:</th>
+              <td>{{ flight.price | currency: "USD" }}</td>
+            </tr>
+          </table>
+
+          <h5 class="text-center">Payment Information</h5>
+          <!-- <form>
+            <input
+              type="text"
+              class="form-control credit-info"
+              placeholder="Credit Card #"
+              formControlName="cardNumber"
+            />
+
+            <input
+              type="text"
+              class="form-control credit-info"
+              placeholder="Expiration Month"
+              formControlName="expMonth"
+            />
+
+            <input
+              type="text"
+              class="form-control credit-info"
+              placeholder="Expiration Year"
+              formControlName="expYear"
+            />
+            <input
+              type="text"
+              class="form-control credit-info"
+              placeholder="CVC"
+              formControlName="cvc"
+            />
+          </form> -->
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" (click)="close()">
+            Cancel
+          </button>
+          <button class="btn btn-success" type="button" (click)="close()">
+            Book Ticket
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
