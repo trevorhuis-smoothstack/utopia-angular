@@ -22,7 +22,7 @@ import { CounterSelectTravelerComponent } from "./counter/counter-select-travele
 import { CounterComponent } from "./counter/counter/counter.component";
 import { CounterTravelerComponent } from "./counter/counter-traveler/counter-traveler.component";
 import { CounterCreateTravelerComponent } from "./counter/counter-create-traveler/counter-create-traveler.component";
-import { CounterBookingComponent } from './counter/counter-booking/counter-booking.component';
+import { CounterBookingComponent } from "./counter/counter-booking/counter-booking.component";
 
 @NgModule({
   declarations: [
