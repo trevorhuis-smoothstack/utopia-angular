@@ -63,7 +63,9 @@ export class CounterBookingComponent implements OnInit {
     // this.stripe = this.stripeFactory.create(
     //   "pk_test_51GwErbJwa8c7tq3ON61IURqOXTi3Lcqlyx7wBTUR0ClnuHPjOMhLZqJhxG0nFwq04Svaxa6p768cb1Mg8IF6NO2n00TlRmCn9i"
     // );
-    this.stripe.setKey("pk_test_51GwErbJwa8c7tq3ON61IURqOXTi3Lcqlyx7wBTUR0ClnuHPjOMhLZqJhxG0nFwq04Svaxa6p768cb1Mg8IF6NO2n00TlRmCn9i")
+    this.stripe.setKey(
+      "pk_test_51GwErbJwa8c7tq3ON61IURqOXTi3Lcqlyx7wBTUR0ClnuHPjOMhLZqJhxG0nFwq04Svaxa6p768cb1Mg8IF6NO2n00TlRmCn9i"
+    );
     this.stripe.elements().subscribe(
       (elements) => {
         // this.elements = elements;
@@ -117,11 +119,17 @@ export class CounterBookingComponent implements OnInit {
         this.httpService
           .post(environment.counterUrl + environment.counterBookUri, booking)
           .subscribe(
-            () => alert("Ticket booked"),
-            (error) =>
-              alert("Error booking ticket: Status " + error.error.status)
+            () => {
+              this.modalService.dismissAll();
+              alert("Ticket booked");
+            },
+            (error) => {
+              this.modalService.dismissAll();
+              alert("Error booking ticket: Status " + error.error.status);
+            }
           );
       } else if (result.error) {
+        this.modalService.dismissAll();
         alert("Error processing payment: Token creation failed.");
       }
     });
