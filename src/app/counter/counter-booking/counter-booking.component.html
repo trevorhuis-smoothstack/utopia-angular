@@ -87,42 +87,16 @@
               <td>{{ flight.price | currency: "USD" }}</td>
             </tr>
           </table>
-
           <h5 class="text-center">Payment Information</h5>
-          <!-- <form>
-            <input
-              type="text"
-              class="form-control credit-info"
-              placeholder="Credit Card #"
-              formControlName="cardNumber"
-            />
-
-            <input
-              type="text"
-              class="form-control credit-info"
-              placeholder="Expiration Month"
-              formControlName="expMonth"
-            />
-
-            <input
-              type="text"
-              class="form-control credit-info"
-              placeholder="Expiration Year"
-              formControlName="expYear"
-            />
-            <input
-              type="text"
-              class="form-control credit-info"
-              placeholder="CVC"
-              formControlName="cvc"
-            />
-          </form> -->
+          <form novalidate (ngSubmit)="book()" [formGroup]="form">
+            <div id="card" class="field"></div>
+          </form>
         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" (click)="close()">
             Cancel
           </button>
-          <button class="btn btn-success" type="button" (click)="close()">
+          <button class="btn btn-success" type="button" (click)="book()">
             Book Ticket
           </button>
         </div>

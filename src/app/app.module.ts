@@ -8,6 +8,8 @@ import { AgentLoginComponent } from "./agent/agent-login/agent-login.component";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { ReactiveFormsModule } from "@angular/forms";
 
+import { NgxStripeModule } from 'ngx-stripe';
+
 import { AgentAuthService } from "./common/h/service/AgentAuthService";
 import { AgentAuthInterceptor } from "./common/h/service/AgentAuthInterceptor";
 import { AgentDashboardComponent } from "./agent/agent-dashboard/agent-dashboard.component";
@@ -44,6 +46,7 @@ import { CounterBookingComponent } from "./counter/counter-booking/counter-booki
     ReactiveFormsModule,
     NgbModule,
     FormsModule,
+    NgxStripeModule.forRoot()
   ],
   providers: [
     AgentAuthService,

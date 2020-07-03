@@ -4,6 +4,14 @@ import { CounterHttpService } from "src/app/common/counter/service/counter-http.
 import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
 import { environment } from "src/environments/environment";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import {
+  StripeFactoryService,
+  StripeInstance,
+  Elements,
+  Element,
+  StripeService,
+} from "ngx-stripe";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({
   selector: "app-counter-booking",
@@ -11,7 +19,10 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
   styleUrls: ["./counter-booking.component.css"],
 })
 export class CounterBookingComponent implements OnInit {
-  card: any;
+  form: FormGroup;
+  // stripe: StripeInstance;
+  elements: Elements;
+  card: Element;
   counter = this.dataService.getCounter();
   traveler: any;
   airports: any[];
@@ -21,8 +32,11 @@ export class CounterBookingComponent implements OnInit {
   flight: any;
 
   constructor(
+    private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private router: Router,
+    private stripeFactory: StripeFactoryService,
+    private stripe: StripeService,
     private httpService: CounterHttpService,
     private dataService: CounterDataService
   ) {}
@@ -34,9 +48,11 @@ export class CounterBookingComponent implements OnInit {
       return;
     }
     this.dataService.travelerObservable.subscribe(
-      (traveler: any) => (this.traveler = traveler),
-      () => alert("Booking: Error getting traveler")
+      (traveler: any) => (this.traveler = traveler)
     );
+    this.form = this.formBuilder.group({
+      name: ["name", [Validators.required]],
+    });
     this.httpService
       .get(environment.counterUrl + environment.counterAirportUri)
       .subscribe(
@@ -44,6 +60,20 @@ export class CounterBookingComponent implements OnInit {
         (error: any) =>
           alert("Error getting airports: Status " + error.error.status)
       );
+    // this.stripe = this.stripeFactory.create(
+    //   "pk_test_51GwErbJwa8c7tq3ON61IURqOXTi3Lcqlyx7wBTUR0ClnuHPjOMhLZqJhxG0nFwq04Svaxa6p768cb1Mg8IF6NO2n00TlRmCn9i"
+    // );
+    this.stripe.setKey("pk_test_51GwErbJwa8c7tq3ON61IURqOXTi3Lcqlyx7wBTUR0ClnuHPjOMhLZqJhxG0nFwq04Svaxa6p768cb1Mg8IF6NO2n00TlRmCn9i")
+    this.stripe.elements().subscribe(
+      (elements) => {
+        // this.elements = elements;
+        this.card = elements.create("card", {});
+      },
+
+      (error) => {
+        alert(error);
+      }
+    );
   }
 
   getFlights() {
@@ -70,5 +100,30 @@ export class CounterBookingComponent implements OnInit {
   openBookingModal(flight: any, modal: any) {
     this.flight = flight;
     this.modalService.open(modal);
+    this.card.mount("#card");
+  }
+
+  book() {
+    let booking: any;
+    this.stripe.createToken(this.card, {}).subscribe((result) => {
+      if (result.token) {
+        booking = {
+          travelerId: this.traveler.userId,
+          flightId: this.flight.flightId,
+          bookerId: this.counter.userId,
+          active: true,
+          stripeId: result.token.id,
+        };
+        this.httpService
+          .post(environment.counterUrl + environment.counterBookUri, booking)
+          .subscribe(
+            () => alert("Ticket booked"),
+            (error) =>
+              alert("Error booking ticket: Status " + error.error.status)
+          );
+      } else if (result.error) {
+        alert("Error processing payment: Token creation failed.");
+      }
+    });
   }
 }
