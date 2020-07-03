@@ -5,7 +5,6 @@ import { CounterDataService } from "src/app/common/counter/service/counter-data.
 import { environment } from "src/environments/environment";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Elements, Element, StripeService } from "ngx-stripe";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({
   selector: "app-counter-booking",
@@ -13,7 +12,6 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
   styleUrls: ["./counter-booking.component.css"],
 })
 export class CounterBookingComponent implements OnInit {
-  form: FormGroup;
   elements: Elements;
   card: Element;
   counter = this.dataService.getCounter();
@@ -25,7 +23,6 @@ export class CounterBookingComponent implements OnInit {
   flight: any;
 
   constructor(
-    private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private router: Router,
     private stripe: StripeService,
@@ -42,7 +39,6 @@ export class CounterBookingComponent implements OnInit {
     this.dataService.travelerObservable.subscribe(
       (traveler: any) => (this.traveler = traveler)
     );
-    this.form = this.formBuilder.group({});
     this.httpService
       .get(environment.counterUrl + environment.counterAirportUri)
       .subscribe(
