@@ -104,6 +104,9 @@ export class CounterBookingComponent implements OnInit {
             () => {
               this.modalService.dismissAll();
               alert("Ticket booked");
+              this.flights = this.flights.filter(
+                (flight) => flight !== this.flight
+              );
             },
             (error) => {
               this.modalService.dismissAll();
