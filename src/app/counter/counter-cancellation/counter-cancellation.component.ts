@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Router } from '@angular/router';
-import { CounterHttpService } from 'src/app/common/counter/service/counter-http.service';
-import { CounterDataService } from 'src/app/common/counter/service/counter-data.service';
-import { environment } from 'src/environments/environment';
+import { Component, OnInit } from "@angular/core";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { Router } from "@angular/router";
+import { CounterHttpService } from "src/app/common/counter/service/counter-http.service";
+import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
+import { environment } from "src/environments/environment";
 
 @Component({
-  selector: 'app-counter-cancellation',
-  templateUrl: './counter-cancellation.component.html',
-  styleUrls: ['./counter-cancellation.component.css']
+  selector: "app-counter-cancellation",
+  templateUrl: "./counter-cancellation.component.html",
+  styleUrls: ["./counter-cancellation.component.css"],
 })
 export class CounterCancellationComponent implements OnInit {
   traveler: any;
@@ -39,6 +39,16 @@ export class CounterCancellationComponent implements OnInit {
         (error: any) =>
           alert("Error getting airports: Status " + error.error.status)
       );
+    this.httpService
+      .get(
+        environment.counterUrl +
+          environment.counterCancellablyBookedUri +
+          this.traveler.userId
+      )
+      .subscribe(
+        (result: any[]) => (this.flights = result),
+        (error: any) => alert("Error getting flights: Status " + error.error.status)
+      );
   }
 
   openCancellationModal(flight: any, modal: any) {
@@ -49,7 +59,7 @@ export class CounterCancellationComponent implements OnInit {
   cancel() {
     this.httpService
       .put(
-        `${environment.counterUrl}${environment.counterCancelUri}traveler/${this.traveler.userId}/flight/${this.flight.flightId}`
+        `${environment.counterUrl}${environment.counterCancelUri}/traveler/${this.traveler.userId}/flight/${this.flight.flightId}`
       )
       .subscribe(
         () => {
@@ -62,3 +72,4 @@ export class CounterCancellationComponent implements OnInit {
         }
       );
   }
+}
