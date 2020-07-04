@@ -5,16 +5,20 @@
 export const environment = {
   production: false,
   travelerBackendUrl: 'http://localhost:8080/traveler',
+  counterUrl: 'http://localhost:8080/counter',
+  loginUrl: 'http://localhost:8080/login',
   readTravelerAirports: '/airports',
   usernameUri: '/users',
   userUri: '/users',
   CheckAuthUri: '/authorized',
-  counterUrl: 'http://localhost:8080/counter',
-  loginUrl: 'http://localhost:8080/login',
   counterCheckAuthUri: '/authorized',
   counterGetUserUri: '/users/',
   counterTravelerUri: '/traveler/',
   counterAirportUri: '/airports',
+  bookingsUri: '/bookings',
+  flightsUri: '/flights',
+  travelersUri: '/travelers',
+  bookingUri: '/bookings',
 };
 
 /*

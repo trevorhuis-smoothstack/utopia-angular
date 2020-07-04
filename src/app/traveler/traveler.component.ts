@@ -31,6 +31,7 @@ export class TravelerComponent implements OnInit {
   departure: any;
   authorized = false;
   username: string;
+  showFlights = true;
 
 
   constructor(
@@ -38,6 +39,7 @@ export class TravelerComponent implements OnInit {
     private travelerAuthService: TravelerAuthService,
     private router: Router
   ) {
+    this.loadAirports();
     this.dropdownSettings = {
       singleSelection: true,
       textField: 'name',
@@ -55,10 +57,26 @@ export class TravelerComponent implements OnInit {
       console.log(localStorage.getItem('username'));
       this.router.navigate(['/traveler/login']);
     }
+    // this.currentUser = {
+    //   userId: 1,
+    //   username: 'sean',
+    //   name: 'sean',
+    //   role: 'TRAVELER'
+    // };
+    this.loadCurrentUser();
   }
 
   loadCurrentUser() {
-
+    this.travelerService
+    .get(`${environment.travelerBackendUrl}${environment.usernameUri}/${this.username}`)
+    .subscribe((res) => {
+      this.currentUser = res;
+      console.log(res);
+    },
+    (error) => {
+      alert(error);
+    }
+    );
   }
 
   loadAirports() {
@@ -89,16 +107,8 @@ export class TravelerComponent implements OnInit {
     console.log(this.departure);
   }
 
-  loadFlights() {
-
-  }
-
-  loadActiveFlights() {
-
-  }
-
-  loadPreviousFlights() {
-
+  toggleFlights() {
+    this.showFlights = !this.showFlights;
   }
 
   logout() {

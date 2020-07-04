@@ -28,6 +28,12 @@ import { TravelerLoginComponent } from './traveler/traveler-login/traveler-login
 import { FlightsComponent } from './traveler/flights/flights.component';
 import { BookingsComponent } from './traveler/bookings/bookings.component';
 import { TravelerAuthInterceptor } from './common/s/service/TravelerAuthInterceptor';
+import {
+  SortFlightsByDepartureAirport,
+  SortFlightsByArrivalAirport,
+  SortByDepartureDate,
+  SortByFlightPrice
+} from './common/h/sort-flights-airports';
 
 @NgModule({
   declarations: [
@@ -42,7 +48,12 @@ import { TravelerAuthInterceptor } from './common/s/service/TravelerAuthIntercep
     TravelerComponent,
     TravelerLoginComponent,
     FlightsComponent,
-    BookingsComponent],
+    BookingsComponent,
+    SortFlightsByDepartureAirport,
+    SortFlightsByArrivalAirport,
+    SortByDepartureDate,
+    SortByFlightPrice
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
