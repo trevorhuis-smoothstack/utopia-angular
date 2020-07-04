@@ -4,6 +4,7 @@ import { CounterHttpService } from "src/app/common/counter/service/counter-http.
 import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
 import { environment } from "src/environments/environment";
 import { Router } from "@angular/router";
+import { CounterValidationService } from "src/app/common/counter/service/counter-validation.service";
 
 @Component({
   selector: "app-counter-select-traveler",
@@ -18,7 +19,8 @@ export class CounterSelectTravelerComponent implements OnInit {
   constructor(
     private router: Router,
     private httpService: CounterHttpService,
-    private dataService: CounterDataService
+    private dataService: CounterDataService,
+    private validationService: CounterValidationService
   ) {}
 
   ngOnInit() {}
