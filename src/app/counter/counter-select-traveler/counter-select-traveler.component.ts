@@ -4,7 +4,6 @@ import { CounterHttpService } from "src/app/common/counter/service/counter-http.
 import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
 import { environment } from "src/environments/environment";
 import { Router } from "@angular/router";
-import { CounterValidationService } from "src/app/common/counter/service/counter-validation.service";
 import { maxLength } from "src/app/common/counter/counter-globals";
 
 @Component({
@@ -24,7 +23,6 @@ export class CounterSelectTravelerComponent implements OnInit {
     private router: Router,
     private httpService: CounterHttpService,
     private dataService: CounterDataService,
-    private validationService: CounterValidationService
   ) {}
 
   ngOnInit() {}
@@ -39,5 +37,9 @@ export class CounterSelectTravelerComponent implements OnInit {
         },
         (error) => alert("Error getting traveler: Status " + error.error.status)
       );
+  }
+
+  errorsDirty(field: string) {
+    return this.form.controls[field].errors && this.form.controls[field].dirty;
   }
 }

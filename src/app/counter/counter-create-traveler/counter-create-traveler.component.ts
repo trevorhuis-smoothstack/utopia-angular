@@ -3,7 +3,6 @@ import { CounterHttpService } from "src/app/common/counter/service/counter-http.
 import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { environment } from "src/environments/environment";
-import { CounterValidationService } from "src/app/common/counter/service/counter-validation.service";
 import { maxLength } from "src/app/common/counter/counter-globals";
 
 @Component({
@@ -27,7 +26,6 @@ export class CounterCreateTravelerComponent implements OnInit {
   constructor(
     private httpService: CounterHttpService,
     private dataService: CounterDataService,
-    private validationService: CounterValidationService
   ) {}
 
   ngOnInit() {}
