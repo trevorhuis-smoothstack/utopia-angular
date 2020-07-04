@@ -1,16 +1,16 @@
-import { Component, OnInit } from "@angular/core";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { Router } from "@angular/router";
-import { CounterHttpService } from "src/app/common/counter/service/counter-http.service";
-import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
-import { environment } from "src/environments/environment";
+import { Component, OnInit } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Router } from '@angular/router';
+import { CounterHttpService } from 'src/app/common/counter/service/counter-http.service';
+import { CounterDataService } from 'src/app/common/counter/service/counter-data.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: "app-counter-cancel",
-  templateUrl: "./counter-cancel.component.html",
-  styleUrls: ["./counter-cancel.component.css"],
+  selector: 'app-counter-cancellation',
+  templateUrl: './counter-cancellation.component.html',
+  styleUrls: ['./counter-cancellation.component.css']
 })
-export class CounterCancelComponent implements OnInit {
+export class CounterCancellationComponent implements OnInit {
   traveler: any;
   airports: any[];
   flights: any[];
@@ -62,4 +62,3 @@ export class CounterCancelComponent implements OnInit {
         }
       );
   }
-}
