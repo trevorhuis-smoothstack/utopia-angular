@@ -9,7 +9,11 @@
         </div>
       </fieldset>
       <div class="form-buttons">
-        <button class="btn btn-primary btn-block" (click)="getTraveler(form.value.username)">
+        <button
+          class="btn btn-primary btn-block"
+          (click)="getTraveler(form.value.username)"
+          [disabled]="form.invalid"
+        >
           OK
         </button>
       </div>
