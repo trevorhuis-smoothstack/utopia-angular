@@ -45,4 +45,21 @@ export class CounterCancelComponent implements OnInit {
     this.flight = flight;
     this.modalService.open(modal);
   }
+
+  cancel() {
+    this.httpService
+      .put(
+        `${environment.counterUrl}${environment.counterCancelUri}traveler/${this.traveler.userId}/flight/${this.flight.flightId}`
+      )
+      .subscribe(
+        () => {
+          this.modalService.dismissAll();
+          alert("Ticket cancelled");
+        },
+        () => {
+          this.modalService.dismissAll();
+          alert("Error cancelling ticket");
+        }
+      );
+  }
 }
