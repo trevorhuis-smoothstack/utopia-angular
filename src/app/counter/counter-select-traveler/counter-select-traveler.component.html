@@ -6,6 +6,20 @@
         <div class="form-group">
           <label>Username</label>
           <input class="form-control" formControlName="username" />
+          <div
+            *ngIf="
+              errorsDirty('username') && form.controls.username.errors.required
+            "
+          >
+            Required
+          </div>
+          <div
+            *ngIf="
+              errorsDirty('username') && form.controls.username.errors.maxlength
+            "
+          >
+            Maximum length is {{ maxLength }} characters
+          </div>
         </div>
       </fieldset>
       <div class="form-buttons">

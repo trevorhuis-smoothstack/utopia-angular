@@ -12,6 +12,7 @@ import { maxLength } from "src/app/common/counter/counter-globals";
   styleUrls: ["./counter-select-traveler.component.css"],
 })
 export class CounterSelectTravelerComponent implements OnInit {
+  maxLength = maxLength;
   form = new FormGroup({
     username: new FormControl("", [
       Validators.required,
@@ -22,7 +23,7 @@ export class CounterSelectTravelerComponent implements OnInit {
   constructor(
     private router: Router,
     private httpService: CounterHttpService,
-    private dataService: CounterDataService,
+    private dataService: CounterDataService
   ) {}
 
   ngOnInit() {}

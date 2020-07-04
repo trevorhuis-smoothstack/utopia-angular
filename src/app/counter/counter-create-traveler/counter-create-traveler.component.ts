@@ -11,6 +11,7 @@ import { maxLength } from "src/app/common/counter/counter-globals";
   styleUrls: ["./counter-create-traveler.component.css"],
 })
 export class CounterCreateTravelerComponent implements OnInit {
+  maxLength = maxLength;
   form = new FormGroup({
     name: new FormControl("", [
       Validators.required,
@@ -25,7 +26,7 @@ export class CounterCreateTravelerComponent implements OnInit {
 
   constructor(
     private httpService: CounterHttpService,
-    private dataService: CounterDataService,
+    private dataService: CounterDataService
   ) {}
 
   ngOnInit() {}
@@ -44,5 +45,9 @@ export class CounterCreateTravelerComponent implements OnInit {
         (error) =>
           alert("Error creating traveler: Status " + error.error.status)
       );
+  }
+
+  errorsDirty(field: string) {
+    return this.form.controls[field].errors && this.form.controls[field].dirty;
   }
 }
