@@ -47,7 +47,8 @@ export class CounterCancellationComponent implements OnInit {
       )
       .subscribe(
         (result: any[]) => (this.flights = result),
-        (error: any) => alert("Error getting flights: Status " + error.error.status)
+        (error: any) =>
+          alert("Error getting flights: Status " + error.error.status)
       );
   }
 
@@ -70,6 +71,9 @@ export class CounterCancellationComponent implements OnInit {
         () => {
           this.modalService.dismissAll();
           alert("Ticket cancelled");
+          this.flights = this.flights.filter(
+            (flight) => flight !== this.flight
+          );
         },
         () => {
           this.modalService.dismissAll();
