@@ -12,7 +12,7 @@ export const environment = {
   counterCreateUserUri: "/user",
   counterGetUserUri: "/users/",
   counterTravelerUri: "/traveler/",
-  counterFlightUri: "/flights/bookable"
+  counterBookableFlightUri: "/flights/bookable"
 };
 
 /*
