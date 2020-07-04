@@ -51,6 +51,11 @@ export class CounterCancellationComponent implements OnInit {
       );
   }
 
+  getAirportName(airportId: number) {
+    return this.airports.find((airport) => airport.airportId === airportId)
+      .name;
+  }
+
   openCancellationModal(flight: any, modal: any) {
     this.flight = flight;
     this.modalService.open(modal);
