@@ -3,7 +3,8 @@ import { CounterHttpService } from "src/app/common/counter/service/counter-http.
 import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { environment } from "src/environments/environment";
-import { CounterValidationService } from 'src/app/common/counter/service/counter-validation.service';
+import { CounterValidationService } from "src/app/common/counter/service/counter-validation.service";
+import { maxLength } from "src/app/common/counter/counter-globals";
 
 @Component({
   selector: "app-counter-create-traveler",
@@ -12,8 +13,14 @@ import { CounterValidationService } from 'src/app/common/counter/service/counter
 })
 export class CounterCreateTravelerComponent implements OnInit {
   form = new FormGroup({
-    name: new FormControl("", [Validators.required]),
-    username: new FormControl("", [Validators.required]),
+    name: new FormControl("", [
+      Validators.required,
+      Validators.maxLength(maxLength),
+    ]),
+    username: new FormControl("", [
+      Validators.required,
+      Validators.maxLength(maxLength),
+    ]),
     password: new FormControl("", [Validators.required]),
   });
 

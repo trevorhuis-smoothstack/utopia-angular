@@ -5,6 +5,7 @@ import { CounterDataService } from "src/app/common/counter/service/counter-data.
 import { environment } from "src/environments/environment";
 import { Router } from "@angular/router";
 import { CounterValidationService } from "src/app/common/counter/service/counter-validation.service";
+import { maxLength } from "src/app/common/counter/counter-globals";
 
 @Component({
   selector: "app-counter-select-traveler",
@@ -13,7 +14,10 @@ import { CounterValidationService } from "src/app/common/counter/service/counter
 })
 export class CounterSelectTravelerComponent implements OnInit {
   form = new FormGroup({
-    username: new FormControl("", [Validators.required]),
+    username: new FormControl("", [
+      Validators.required,
+      Validators.maxLength(maxLength),
+    ]),
   });
 
   constructor(
