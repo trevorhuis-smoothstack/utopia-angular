@@ -40,4 +40,9 @@ export class CounterCancelComponent implements OnInit {
           alert("Error getting airports: Status " + error.error.status)
       );
   }
+
+  openCancellationModal(flight: any, modal: any) {
+    this.flight = flight;
+    this.modalService.open(modal);
+  }
 }
