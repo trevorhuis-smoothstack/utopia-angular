@@ -1,9 +1,9 @@
-<div id="sidebar" class="active" *ngIf="this.authorized">
+<div id="sidebar" class="active" *ngIf="authorized">
   <ul>
-    <li class="counter-data">
-      <h5><strong>Employee:</strong><br />{{this.counter.name}}</h5>
+    <li class="utopia-data">
+      <h5><strong>Employee:</strong><br />{{ counter.name }}</h5>
     </li>
-    <li class="logout-button">
+    <li class="utopia-button">
       <button
         type="button"
         class="btn btn-primary"
@@ -13,11 +13,18 @@
         Log Out
       </button>
     </li>
+    <li class="utopia-data" *ngIf="traveler">
+      <h5><strong>Customer:</strong><br />{{ traveler.name }}</h5>
+    </li>
+    <li class="utopia-button" *ngIf="traveler">
+      <button type="button" class="btn btn-primary" routerLink="/counter/traveler" (click)="resetLinks()">
+        Change
+      </button>
+    </li>
     <li
       id="book"
       class="side-link"
       (click)="startBook()"
-      routerLink="/counter/traveler"
     >
       Book Ticket
     </li>
@@ -25,12 +32,11 @@
       id="cancel"
       class="side-link"
       (click)="startCancel()"
-      routerLink="/counter/traveler/existing"
     >
       Cancel Ticket
     </li>
   </ul>
 </div>
-<div class="container counter-container" *ngIf="this.authorized">
+<div class="container counter-container" *ngIf="authorized">
   <router-outlet></router-outlet>
 </div>

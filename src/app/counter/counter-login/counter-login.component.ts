@@ -64,7 +64,7 @@ export class CounterLoginComponent implements OnInit {
                 localStorage.setItem("name", response.name);
                 localStorage.setItem("userId", response.userId);
                 this.dataService.setCounter(response);
-                this.router.navigate(["/counter"]);
+                this.router.navigate(["/counter/traveler"]);
               },
               (getUserError) => {
                 if (getUserError.error.status === 403) {

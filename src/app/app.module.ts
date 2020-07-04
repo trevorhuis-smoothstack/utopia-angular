@@ -14,16 +14,27 @@ import { AgentDashboardComponent } from "./agent/agent-dashboard/agent-dashboard
 import { FormsModule } from "@angular/forms";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { AgentUtopiaService } from "./common/h/agent-utopia.service";
-import { CounterLoginComponent } from './counter/counter-login/counter-login.component';
-import { CounterHttpService } from './common/counter/service/counter-http.service';
-import { CounterDashboardComponent } from './counter/counter-dashboard/counter-dashboard.component';
-import { CounterInterceptionService } from './common/counter/service/counter-interception.service';
-import { CounterTravelerTypeComponent } from './counter/booking/counter-traveler-type/counter-traveler-type.component';
-import { CounterSelectTravelerComponent } from './counter/counter-select-traveler/counter-select-traveler.component';
-import { CounterComponent } from './counter/counter/counter.component';
+import { CounterLoginComponent } from "./counter/counter-login/counter-login.component";
+import { CounterHttpService } from "./common/counter/service/counter-http.service";
+import { CounterDashboardComponent } from "./counter/counter-dashboard/counter-dashboard.component";
+import { CounterInterceptionService } from "./common/counter/service/counter-interception.service";
+import { CounterSelectTravelerComponent } from "./counter/counter-select-traveler/counter-select-traveler.component";
+import { CounterComponent } from "./counter/counter/counter.component";
+import { CounterTravelerComponent } from "./counter/counter-traveler/counter-traveler.component";
+import { CounterCreateTravelerComponent } from "./counter/counter-create-traveler/counter-create-traveler.component";
 
 @NgModule({
-  declarations: [AppComponent, AgentLoginComponent, AgentDashboardComponent, CounterLoginComponent, CounterDashboardComponent, CounterTravelerTypeComponent, CounterSelectTravelerComponent, CounterComponent],
+  declarations: [
+    AppComponent,
+    AgentLoginComponent,
+    AgentDashboardComponent,
+    CounterLoginComponent,
+    CounterDashboardComponent,
+    CounterSelectTravelerComponent,
+    CounterComponent,
+    CounterTravelerComponent,
+    CounterCreateTravelerComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -44,8 +55,8 @@ import { CounterComponent } from './counter/counter/counter.component';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: CounterInterceptionService,
-      multi: true
-    }
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
 })
