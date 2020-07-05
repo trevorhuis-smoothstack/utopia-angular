@@ -24,6 +24,7 @@
     "bootswatch": "^4.5.0",
     "core-js": "^2.5.4",
     "jquery": "^3.5.1",
+    "ng-multiselect-dropdown": "^0.2.10",
     "moment": "^2.26.0",
     "ngx-bootstrap": "^5.6.1",
     "popper.js": "^1.16.1",

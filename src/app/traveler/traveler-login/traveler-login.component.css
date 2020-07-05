@@ -1,0 +1,28 @@
+.traveler-login {
+    display: flex;
+    align-items: center;
+    height: calc(100% - 70.75px);
+    background: url("../../../assets/images/agent-login/seats.jpg");
+    background-size: cover;
+    box-shadow: inset 0 0 0 2000px rgba(44, 62, 80, 0.3);
+    background-position: center center; /* First value is from left and second is from top. You can use use number as well*/
+    background-repeat: no-repeat;
+    /* border-radius: 20px;
+    margin: 2rem;
+    height: calc(100% - 134.75px); */
+  }
+  
+  .traveler-login .login-form {
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2rem 3rem;
+    background-color: #ecf0f1;
+    border-radius: 10%;
+  }
+  
+  .traveler-login legend {
+      color: rgba(44, 62, 80);
+      text-align: center;
+      padding-bottom: 1rem;
+  }
