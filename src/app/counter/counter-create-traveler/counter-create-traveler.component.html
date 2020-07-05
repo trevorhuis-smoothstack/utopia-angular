@@ -72,6 +72,20 @@
             <span>&#8204;</span>
           </div>
         </div>
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <input
+            class="form-control"
+            formControlName="confirmPassword"
+            type="password"
+          />
+          <div>
+            <span *ngIf="form.errors?.validatePasswordMatch">
+              Passwords do not match
+            </span>
+            <span>&#8204;</span>
+          </div>
+        </div>
       </fieldset>
       <div class="form-buttons">
         <button

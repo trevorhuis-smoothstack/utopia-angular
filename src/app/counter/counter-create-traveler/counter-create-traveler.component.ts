@@ -19,18 +19,22 @@ import { of } from "rxjs";
 })
 export class CounterCreateTravelerComponent implements OnInit {
   maxLength = maxLength;
-  form = new FormGroup({
-    name: new FormControl("", [
-      Validators.required,
-      Validators.maxLength(maxLength),
-    ]),
-    username: new FormControl(
-      "",
-      [Validators.required, Validators.maxLength(maxLength)],
-      this.validateUsername.bind(this)
-    ),
-    password: new FormControl("", [Validators.required]),
-  });
+  form = new FormGroup(
+    {
+      name: new FormControl(null, [
+        Validators.required,
+        Validators.maxLength(maxLength),
+      ]),
+      username: new FormControl(
+        null,
+        [Validators.required, Validators.maxLength(maxLength)],
+        this.validateUsername.bind(this)
+      ),
+      password: new FormControl(null, [Validators.required]),
+      confirmPassword: new FormControl(null),
+    },
+    { validators: this.validatePasswordMatch }
+  );
 
   constructor(
     private httpService: CounterHttpService,
@@ -66,6 +70,13 @@ export class CounterCreateTravelerComponent implements OnInit {
         ),
         catchError(() => of(null))
       );
+  }
+
+  validatePasswordMatch(form: FormGroup) {
+    // debugger;
+    return form.value.password === form.value.confirmPassword
+      ? null
+      : { validatePasswordMatch: true };
   }
 
   errorsDirty(field: string) {
