@@ -54,8 +54,6 @@ export class CancelBookingComponent implements OnInit {
 
   ngOnInit() {
     this.airportsMap = new Map();
-    this.bookings = new Array();
-    this.selectedTravelerBookings = new Array();
 
     this.airports.forEach((element) => {
       this.airportsMap.set(element.airportId, element.name);
@@ -65,6 +63,8 @@ export class CancelBookingComponent implements OnInit {
   }
 
   loadBookings() {
+    this.bookings = new Array();
+    this.selectedTravelerBookings = new Array();
     this.service
       .get(
         `${environment.agentBackendUrl}${environment.bookingsUri}/${this.agent.userId}`
@@ -84,10 +84,6 @@ export class CancelBookingComponent implements OnInit {
   
               booking.flight.arriveAirport = this.airportsMap.get(booking.flight.arriveId);
               booking.flight.departAirport = this.airportsMap.get(booking.flight.departId);
-  
-              booking.flight.departTimeFormatted = moment(booking.flight.departTime).format(
-                "MMMM Do YYYY, h:mm a"
-              );
 
               if (this.traveler !== undefined && booking.travelerId == this.traveler.userId) {
                 this.selectedTravelerBookings.push(booking)

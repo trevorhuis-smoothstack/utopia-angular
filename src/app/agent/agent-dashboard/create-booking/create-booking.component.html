@@ -47,7 +47,7 @@
     <div class="price-slider">
       <fieldset class="form-group">
         <label for="customRange1"
-          >Price Filter<br>Max Price - ${{ customPrice }}</label
+          >Price Filter<br>Max Price - {{ customPrice | currency: "USD" }}</label
         >
         <input
           type="range"
@@ -110,17 +110,17 @@
     <tr
       *ngFor="
         let f of flights
-          | sortFlightsByDepartureAirport: selectedDeparture:filterMetadata
-          | sortFlightsByArrivalAirport: selectedArrival:filterMetadata
-          | sortByFlightPrice: customPrice:filterMetadata
-          | sortByDepartureDate: date:filterMetadata
+          | filterFlightsByDepartureAirport: selectedDeparture:filterMetadata
+          | filterFlightsByArrivalAirport: selectedArrival:filterMetadata
+          | filterByFlightPrice: customPrice:filterMetadata
+          | filterByDepartureDate: date:filterMetadata
           | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize
       "
     >
       <th scope="row">{{ f.departAirport }}</th>
       <td>{{ f.arriveAirport }}</td>
-      <td>{{ f.departTimeFormatted }}</td>
-      <td>$ {{ f.price }}</td>
+      <td>{{ f.departTime| date: "medium" }}</td>
+      <td> {{ f.price | currency: "USD" }}</td>
       <td>
         <button
           type="button"
@@ -136,18 +136,18 @@
     <tr
       *ngFor="
         let f of flights
-          | sortFlightsByDepartureAirport: selectedDeparture:filterMetadata
-          | sortFlightsByArrivalAirport: selectedArrival:filterMetadata
-          | sortByFlightPrice: customPrice:filterMetadata
-          | sortByDepartureDate: date:filterMetadata
+          | filterFlightsByDepartureAirport: selectedDeparture:filterMetadata
+          | filterFlightsByArrivalAirport: selectedArrival:filterMetadata
+          | filterByFlightPrice: customPrice:filterMetadata
+          | filterByDepartureDate: date:filterMetadata
           | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize
       "
       (click)="openBookFlightModal(bookFlightModal, f)"
     >
       <th scope="row">{{ f.departAirport }}</th>
       <td>{{ f.arriveAirport }}</td>
-      <td>{{ f.departTimeFormatted }}</td>
-      <td>$ {{ f.price }}</td>
+      <td>{{ f.departTime| date: "medium" }}</td>
+      <td> {{ f.price | currency: "USD" }}</td>
     </tr>
   </tbody>
 </table>
@@ -175,8 +175,7 @@
 
       <div class="modal-body">
         <div class="alert alert-success" *ngIf="flightBooked">
-          <strong>Flight Booked!</strong> Thank you for flying with Utopia
-          Airlines!
+          <strong>Flight Booked!</strong> 
         </div>
         <div class="form-group credit-card-form">
           <h5 class="text-center" *ngIf="!flightBooked">
@@ -202,11 +201,11 @@
             </tr>
             <tr class="table-dark">
               <th scope="row">Flight Time:</th>
-              <td>{{ selectedFlight.departTimeFormatted }}</td>
+              <td>{{ selectedFlight.departTime| date: "medium" | date: "medium" }}</td>
             </tr>
             <tr class="table-dark">
               <th scope="row">Price:</th>
-              <td>$ {{ selectedFlight.price }}</td>
+              <td>{{ selectedFlight.price | currency: "USD" }}</td>
             </tr>
           </table>
 

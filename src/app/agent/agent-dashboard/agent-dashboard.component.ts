@@ -23,7 +23,7 @@ import { Traveler } from "../../common/entities/Traveler";
 export class AgentDashboardComponent implements OnInit {
   traveler: any;
   airports: any;
-  airportsMap: Map<Number, String>;
+  airportsMap: Map<number, string>;
   bookFlightPage: any;
   cancelFlightPage: any;
   agent: any;

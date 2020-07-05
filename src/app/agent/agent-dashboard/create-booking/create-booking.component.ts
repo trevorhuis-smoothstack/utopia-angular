@@ -41,14 +41,14 @@ export class CreateBookingComponent implements OnInit {
   selectedFlight: Flight;
 
   // Slider
-  customPrice: number;
   minValue: number;
   maxValue: number;
+  customPrice: number;
 
   // Pagination
   page = 1;
   pageSize = 10;
-  filterMetadata = { count: 0 };
+  filterMetadata = { count: 0, maxPrice: this.maxValue };
 
   // Date Picker
   date: NgbDateStruct;
@@ -65,9 +65,9 @@ export class CreateBookingComponent implements OnInit {
     this.airportsMap = new Map();
 
     //slider
-    this.customPrice = 100;
     this.minValue = 1;
-    this.maxValue = 100;
+    this.maxValue = 1;
+    this.customPrice = 1;
 
     this.loadFlights();
 
@@ -98,6 +98,7 @@ export class CreateBookingComponent implements OnInit {
 
           this.formatFlights();
           this.changePaginationCount();
+          
         },
         (error) => {
           alert(error);
@@ -107,9 +108,11 @@ export class CreateBookingComponent implements OnInit {
 
   formatFlights() {
     this.flights.forEach((flight) => {
-      flight.departTimeFormatted = moment(flight.departTime).format(
-        "MMMM Do YYYY, h:mm a"
-      );
+      if (flight.price > this.maxValue) {
+        this.maxValue = flight.price;
+        this.customPrice = flight.price;
+      }
+
       flight.arriveAirport = this.airportsMap.get(flight.arriveId);
       flight.departAirport = this.airportsMap.get(flight.departId);
     });
@@ -150,21 +153,6 @@ export class CreateBookingComponent implements OnInit {
       }
     });
   }
-
-  // **********************************************
-  // Book flight modal
-  // **********************************************
-
-  // initializeBookFlightForm(flight: any) {
-  //   let booking = {
-  //     active: true,
-  //     flightId: flight.flightId,
-  //     bookerId: this.agent.userId,
-  //     travelerId: this.traveler.userId,
-  //     stripeId: null,
-  //   };
-
-  // }
 
   openBookFlightModal(modal: any, flight: any) {
     this.selectedFlight = flight;

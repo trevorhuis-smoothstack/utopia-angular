@@ -3,9 +3,9 @@ import * as moment from 'moment';
 import { Booking } from '../entities/Booking';
 
 @Pipe({
-  name: "sortBookingsByDepartureAirportPipe",
+  name: "filterBookingsByDepartureAirportPipe",
 })
-export class SortBookingsByDepartureAirportPipe implements PipeTransform {
+export class FilterBookingsByDepartureAirportPipe implements PipeTransform {
   transform(items: Booking[], term, filterMetadata): any {
     if (term === "All Airports") {
       filterMetadata.count = items.length;
@@ -25,9 +25,9 @@ export class SortBookingsByDepartureAirportPipe implements PipeTransform {
 }
 
 @Pipe({
-    name: "sortBookingsByArrivalAirportPipe",
+    name: "filterBookingsByArrivalAirportPipe",
   })
-export class SortBookingsByArrivalAirportPipe implements PipeTransform {
+export class FilterBookingsByArrivalAirportPipe implements PipeTransform {
     transform(items: Booking[], term, filterMetadata): any {
       if (term === "All Airports") {
         filterMetadata.count = items.length;
@@ -47,9 +47,9 @@ export class SortBookingsByArrivalAirportPipe implements PipeTransform {
   }
 
   @Pipe({
-    name: "sortByDepartureDatePipe",
+    name: "filterByDepartureDatePipe",
     })
-    export class SortByDepartureDatePipe implements PipeTransform {
+    export class FilterByDepartureDatePipe implements PipeTransform {
         transform(items: Booking[], date, filterMetadata): any {
             if (date === null) {
                 filterMetadata.count = items.length;
@@ -69,9 +69,9 @@ export class SortBookingsByArrivalAirportPipe implements PipeTransform {
       }
 
       @Pipe({
-        name: "sortBookingsByTravelerPipe",
+        name: "filterBookingsByTravelerPipe",
       })
-      export class SortBookingsByTravelerPipe implements PipeTransform {
+      export class FilterBookingsByTravelerPipe implements PipeTransform {
         transform(items: Booking[], term, filterMetadata): any {
           if (term) {
             let filteredArray = items.filter(

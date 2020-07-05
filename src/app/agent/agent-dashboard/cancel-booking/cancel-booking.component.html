@@ -106,12 +106,12 @@
     <tr
       *ngFor="
         let b of selectedTravelerBookings
-          | sortBookingsByDepartureAirportPipe
+          | filterBookingsByDepartureAirportPipe
             : selectedDeparture
             : filterMetadata
-          | sortBookingsByArrivalAirportPipe: selectedArrival:filterMetadata
-          | sortByDepartureDatePipe: date:filterMetadata
-          | sortBookingsByTravelerPipe: travelerSearch:filterMetadata
+          | filterBookingsByArrivalAirportPipe: selectedArrival:filterMetadata
+          | filterByDepartureDatePipe: date:filterMetadata
+          | filterBookingsByTravelerPipe: travelerSearch:filterMetadata
           | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize
       "
       class="table-active"
@@ -125,12 +125,12 @@
     <tr
       *ngFor="
         let b of bookings
-          | sortBookingsByDepartureAirportPipe
+          | filterBookingsByDepartureAirportPipe
             : selectedDeparture
             : filterMetadata
-          | sortBookingsByArrivalAirportPipe: selectedArrival:filterMetadata
-          | sortByDepartureDatePipe: date:filterMetadata
-          | sortBookingsByTravelerPipe: travelerSearch:filterMetadata
+          | filterBookingsByArrivalAirportPipe: selectedArrival:filterMetadata
+          | filterByDepartureDatePipe: date:filterMetadata
+          | filterBookingsByTravelerPipe: travelerSearch:filterMetadata
           | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize
       "
       (click)="openCancelBookingModal(cancelBookingModal ,b)"
@@ -138,19 +138,19 @@
       <th scope="row">{{ b.flightId }}</th>
       <td>{{ b.name }}</td>
       <td>{{ b.flight.departAirport }}</td>
-      <td>{{ b.flight.departTimeFormatted }}</td>
+      <td>{{ b.flight.departTime| date: "medium" }}</td>
     </tr>
   </tbody>
   <tbody *ngIf="!mobile">
     <tr
       *ngFor="
         let b of selectedTravelerBookings
-          | sortBookingsByDepartureAirportPipe
+          | filterBookingsByDepartureAirportPipe
             : selectedDeparture
             : filterMetadata
-          | sortBookingsByArrivalAirportPipe: selectedArrival:filterMetadata
-          | sortByDepartureDatePipe: date:filterMetadata
-          | sortBookingsByTravelerPipe: travelerSearch:filterMetadata
+          | filterBookingsByArrivalAirportPipe: selectedArrival:filterMetadata
+          | filterByDepartureDatePipe: date:filterMetadata
+          | filterBookingsByTravelerPipe: travelerSearch:filterMetadata
           | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize
       "
       class="table-active"
@@ -159,7 +159,7 @@
       <td>{{ b.name }}</td>
       <td>{{ b.flight.departAirport }}</td>
       <td>{{ b.flight.arriveAirport }}</td>
-      <td>{{ b.flight.departTimeFormatted }}</td>
+      <td>{{ b.flight.departTime| date: "medium" }}</td>
       <td>
         <button
           *ngIf="b.active"
@@ -175,12 +175,12 @@
     <tr
       *ngFor="
         let b of bookings
-          | sortBookingsByDepartureAirportPipe
+          | filterBookingsByDepartureAirportPipe
             : selectedDeparture
             : filterMetadata
-          | sortBookingsByArrivalAirportPipe: selectedArrival:filterMetadata
-          | sortByDepartureDatePipe: date:filterMetadata
-          | sortBookingsByTravelerPipe: travelerSearch:filterMetadata
+          | filterBookingsByArrivalAirportPipe: selectedArrival:filterMetadata
+          | filterByDepartureDatePipe: date:filterMetadata
+          | filterBookingsByTravelerPipe: travelerSearch:filterMetadata
           | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize
       "
     >
@@ -188,7 +188,7 @@
       <td>{{ b.name }}</td>
       <td>{{ b.flight.departAirport }}</td>
       <td>{{ b.flight.arriveAirport }}</td>
-      <td>{{ b.flight.departTimeFormatted }}</td>
+      <td>{{ b.flight.departTime | date: "medium"  }}</td>
       <td>
         <button
           *ngIf="b.active"
@@ -215,7 +215,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h4>Book a Flight</h4>
+        <h4>Cancel a Flight</h4>
         <button
           type="button"
           class="btn btn-primary"
@@ -227,7 +227,7 @@
 
       <div class="modal-body">
         <div class="alert alert-success" *ngIf="cancelledBooking">
-          <strong>Flight Cancelled!</strong> We hope you will come back to fly with Utopia Airlines!
+          <strong>Flight Cancelled!</strong>
         </div>
         <div class="form-group credit-card-form">
           <h5 class="text-center">
@@ -252,7 +252,7 @@
             </tr>
             <tr class="table-dark">
               <th scope="row">Flight Time:</th>
-              <td>{{ selectedBooking.flight.departTimeFormatted }}</td>
+              <td>{{ selectedBooking.flight.departTime| date: "medium" }}</td>
             </tr>
           </table>
 
@@ -263,7 +263,7 @@
             type="button"
             (click)="close(); cancelledBooking = false"
           >
-            Cancel
+            Close
           </button>
           <button
             *ngIf="!cancelledBooking"

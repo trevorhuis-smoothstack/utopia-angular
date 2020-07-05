@@ -36,33 +36,28 @@
       <fieldset>
         <legend>Create a Traveler</legend>
         <p>
-          Create a new account for your traveller. Save their username and
-          password to book flights for them
+          Create a new account for your traveler.
         </p>
         <div class="form-group">
           <label>Traveler Name</label>
-          <input name="email" class="form-control" formControlName="name" />
+          <input name="name" class="form-control" formControlName="name" />
         </div>
         <div class="form-group">
           <label>Account Username</label>
-          <input name="email" class="form-control" formControlName="username" />
+          <input name="username" class="form-control" formControlName="username" />
           <div class="form-requirement" *ngIf="usernameTaken">
             Username already taken.
           </div>
         </div>
 
         <div class="form-group">
-          <label>Password</label>
+          <label>Email</label>
           <input
             name="password"
             class="form-control"
             formControlName="password"
             type="password"
           />
-        </div>
-        <div class="form-group">
-          <label>Re-Type Password</label>
-          <input name="password" class="form-control" type="password" />
         </div>
       </fieldset>
       <div class="form-buttons">

@@ -3,9 +3,9 @@ import * as moment from 'moment';
 import { Flight } from '../entities/Flight';
 
 @Pipe({
-  name: "sortFlightsByDepartureAirport",
+  name: "filterFlightsByDepartureAirport",
 })
-export class SortFlightsByDepartureAirport implements PipeTransform {
+export class FilterFlightsByDepartureAirport implements PipeTransform {
   transform(items: Flight[], term, filterMetadata): any {
     if (term === "All Airports") {
       filterMetadata.count = items.length;
@@ -25,9 +25,9 @@ export class SortFlightsByDepartureAirport implements PipeTransform {
 }
 
 @Pipe({
-    name: "sortFlightsByArrivalAirport",
+    name: "filterFlightsByArrivalAirport",
   })
-export class SortFlightsByArrivalAirport implements PipeTransform {
+export class FilterFlightsByArrivalAirport implements PipeTransform {
     transform(items: Flight[], term, filterMetadata): any {
       if (term === "All Airports") {
         filterMetadata.count = items.length;
@@ -47,18 +47,18 @@ export class SortFlightsByArrivalAirport implements PipeTransform {
   }
 
 @Pipe({
-name: "sortByFlightPrice",
+name: "filterByFlightPrice",
 })
-export class SortByFlightPrice implements PipeTransform {
+export class FilterByFlightPrice implements PipeTransform {
     transform(items: Flight[], price, filterMetadata): any {
-        if (price === 100) {
+        if (price === filterMetadata.maxPrice) {
             filterMetadata.count = items.length;
             return items;
         }
 
       if (price) {
         let filteredArray = items.filter(
-          (item) => item.price < price
+          (item) => item.price <= price
         );
         filterMetadata.count = filteredArray.length;
         return filteredArray;
@@ -69,9 +69,9 @@ export class SortByFlightPrice implements PipeTransform {
   }
 
   @Pipe({
-    name: "sortByDepartureDate",
+    name: "filterByDepartureDate",
     })
-    export class SortByDepartureDate implements PipeTransform {
+    export class FilterByDepartureDate implements PipeTransform {
         transform(items: Flight[], date, filterMetadata): any {
             if (date === null) {
                 filterMetadata.count = items.length;

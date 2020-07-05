@@ -12,14 +12,12 @@ import { AgentUtopiaService } from 'src/app/common/h/agent-utopia.service';
 export class SelectTravelerComponent implements OnInit {
   selectTravelerForm = new FormGroup({
     username: new FormControl('', [<any>Validators.required, <any>Validators.minLength(5)]),
-    password: new FormControl('', [<any>Validators.required, <any>Validators.minLength(5)]),
   });
 
   createTravelerForm = new FormGroup({
     name: new FormControl('', [<any>Validators.required, <any>Validators.minLength(5)]),
     username: new FormControl('', [<any>Validators.required, <any>Validators.minLength(5)]),
-    password: new FormControl('', [<any>Validators.required, <any>Validators.minLength(5)]),
-    passwordCheck: new FormControl('', [<any>Validators.required, <any>Validators.minLength(5)]),
+    email: new FormControl('', [<any>Validators.required, <any>Validators.minLength(5)]),
   });
 
   traveler: Traveler;
@@ -45,7 +43,6 @@ export class SelectTravelerComponent implements OnInit {
   createSelectTravelerForm() {
     this.selectTravelerForm = this.formBuilder.group({
       username: '',
-      password: ''
     });
   }
 
@@ -79,7 +76,6 @@ export class SelectTravelerComponent implements OnInit {
     this.createTravelerForm = this.formBuilder.group({
       name: '',
       username: '',
-      password: ''
     })
   }
 
@@ -87,7 +83,7 @@ export class SelectTravelerComponent implements OnInit {
     let travelerBody = {
       name: this.createTravelerForm.value.name,
       username: this.createTravelerForm.value.username,
-      password: this.createTravelerForm.value.password,
+      password: "",
       role: "TRAVELER"
     };
 

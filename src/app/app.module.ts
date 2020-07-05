@@ -15,18 +15,18 @@ import { FormsModule } from "@angular/forms";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { AgentUtopiaService } from "./common/h/agent-utopia.service";
 import {
-  SortFlightsByDepartureAirport,
-  SortFlightsByArrivalAirport,
-  SortByFlightPrice,
-  SortByDepartureDate,
-} from "./common/h/sort-flights";
+  FilterFlightsByDepartureAirport,
+  FilterFlightsByArrivalAirport,
+  FilterByFlightPrice,
+  FilterByDepartureDate,
+} from "./common/h/filter-flights";
 
 import {
-  SortBookingsByArrivalAirportPipe,
-  SortBookingsByDepartureAirportPipe,
-  SortBookingsByTravelerPipe,
-  SortByDepartureDatePipe,
-} from "./common/h/sort-bookings";
+  FilterBookingsByArrivalAirportPipe,
+  FilterBookingsByDepartureAirportPipe,
+  FilterBookingsByTravelerPipe,
+  FilterByDepartureDatePipe,
+} from "./common/h/filter-bookings";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { CancelBookingComponent } from "./agent/agent-dashboard/cancel-booking/cancel-booking.component";
 import { CreateBookingComponent } from "./agent/agent-dashboard/create-booking/create-booking.component";
@@ -37,14 +37,14 @@ import { SelectTravelerComponent } from "./agent/agent-dashboard/select-traveler
     AppComponent,
     AgentLoginComponent,
     AgentDashboardComponent,
-    SortFlightsByDepartureAirport,
-    SortFlightsByArrivalAirport,
-    SortByFlightPrice,
-    SortByDepartureDate,
-    SortBookingsByArrivalAirportPipe,
-    SortBookingsByDepartureAirportPipe,
-    SortBookingsByTravelerPipe,
-    SortByDepartureDatePipe,
+    FilterFlightsByDepartureAirport,
+    FilterFlightsByArrivalAirport,
+    FilterByFlightPrice,
+    FilterByDepartureDate,
+    FilterBookingsByArrivalAirportPipe,
+    FilterBookingsByDepartureAirportPipe,
+    FilterBookingsByTravelerPipe,
+    FilterByDepartureDatePipe,
     CancelBookingComponent,
     CreateBookingComponent,
     SelectTravelerComponent,
