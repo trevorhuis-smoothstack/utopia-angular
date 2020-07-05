@@ -12,17 +12,15 @@ import {
   Validators,
   FormBuilder,
 } from "@angular/forms";
-import { Flight } from "../../entities/Flight";
+import { Flight } from "../../../common/entities/Flight";
 import { AgentUtopiaService } from "src/app/common/h/agent-utopia.service";
 import { environment } from "src/environments/environment";
 import { NgbDateStruct, NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { Agent } from "../../entities/Agent";
-import { Airport } from "../../entities/Airport";
-import { Traveler } from "../../entities/Traveler";
+import { Agent } from "../../../common/entities/Agent";
+import { Airport } from "../../../common/entities/Airport";
+import { Traveler } from "../../../common/entities/Traveler";
 import * as moment from "moment";
 import { Elements, Element, StripeService } from "ngx-stripe";
-import { Booking } from '../../entities/Booking';
-
 @Component({
   selector: "app-agent-create-booking",
   templateUrl: "./create-booking.component.html",

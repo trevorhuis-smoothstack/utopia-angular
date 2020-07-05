@@ -12,8 +12,8 @@ import {
   NgForm,
 } from "@angular/forms";
 import { NgbDateStruct, NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { Agent } from "../entities/Agent";
-import { Traveler } from "../entities/Traveler";
+import { Agent } from "../../common/entities/Agent";
+import { Traveler } from "../../common/entities/Traveler";
 
 @Component({
   selector: "app-agent-dashboard",

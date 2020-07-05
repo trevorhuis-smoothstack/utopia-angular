@@ -1,14 +1,14 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { Agent } from "../../entities/Agent";
+import { Agent } from "../../../common/entities/Agent";
 import { AgentUtopiaService } from "src/app/common/h/agent-utopia.service";
 import { environment } from "src/environments/environment";
-import { Airport } from "../../entities/Airport";
+import { Airport } from "../../../common/entities/Airport";
 import * as moment from "moment";
-import { Booking } from "../../entities/Booking";
-import { Flight } from "../../entities/Flight";
+import { Booking } from "../../../common/entities/Booking";
+import { Flight } from "../../../common/entities/Flight";
 import { mergeMap, tap, concatMap, delay, map } from "rxjs/operators";
 import { Observable, of, forkJoin } from "rxjs";
-import { Traveler } from '../../entities/Traveler';
+import { Traveler } from '../../../common/entities/Traveler';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
   // WHAT I WANT

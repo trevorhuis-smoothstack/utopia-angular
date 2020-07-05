@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from "@angular/core";
 import * as moment from 'moment';
-import { Booking } from 'src/app/agent/entities/Booking';
+import { Booking } from '../entities/Booking';
 
 @Pipe({
   name: "sortBookingsByDepartureAirportPipe",

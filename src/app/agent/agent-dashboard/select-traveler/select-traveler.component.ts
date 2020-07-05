@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { environment } from 'src/environments/environment';
-import { Traveler } from '../../entities/Traveler';
+import { Traveler } from '../../../common/entities/Traveler';
 import { AgentUtopiaService } from 'src/app/common/h/agent-utopia.service';
 
 @Component({
