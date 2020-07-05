@@ -8,6 +8,8 @@ import { CounterTravelerTypeComponent } from "./counter/booking/counter-traveler
 import { CounterSelectTravelerComponent } from "./counter/counter-select-traveler/counter-select-traveler.component";
 import { TravelerComponent } from './traveler/traveler.component';
 import { TravelerLoginComponent } from './traveler/traveler-login/traveler-login.component';
+import { CounterComponent } from "./counter/counter/counter.component";
+import { CounterTravelerComponent } from "./counter/counter-traveler/counter-traveler.component";
 
 const routes: Routes = [
   { path: "agent/login", component: AgentLoginComponent },
@@ -18,8 +20,9 @@ const routes: Routes = [
   { path: 'traveler/dashboard', component: TravelerComponent },
   { path: 'traveler/login', component: TravelerLoginComponent },
   {
-    path: "counter/traveler/existing",
-    component: CounterSelectTravelerComponent,
+    path: "counter",
+    component: CounterComponent,
+    children: [{ path: "traveler", component: CounterTravelerComponent }],
   },
 ];
 
