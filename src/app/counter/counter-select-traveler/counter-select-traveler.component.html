@@ -20,6 +20,13 @@
           >
             Maximum length is {{ maxLength }} characters
           </div>
+          <div
+            *ngIf="
+              errorsDirty('username') && form.controls.username.errors.validateTraveler
+            "
+          >
+            Traveler not found
+          </div>
         </div>
       </fieldset>
       <div class="form-buttons">
