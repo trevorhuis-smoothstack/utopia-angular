@@ -10,6 +10,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TravelerAuthService } from '../common/s/service/traveler-auth-service.service';
+import { TravelerDataService } from '../common/s/service/traveler-data.service';
 
 @Component({
   selector: 'app-traveler',
@@ -35,6 +36,8 @@ export class TravelerComponent implements OnInit {
 
 
   constructor(
+    private travelerDataService: TravelerDataService,
+    private authService: TravelerAuthService,
     private travelerService: TravelerService,
     private travelerAuthService: TravelerAuthService,
     private router: Router
@@ -54,16 +57,24 @@ export class TravelerComponent implements OnInit {
 
     this.username = localStorage.getItem('username');
     if (!localStorage.getItem('username')) {
-      console.log(localStorage.getItem('username'));
       this.router.navigate(['/traveler/login']);
     }
-    // this.currentUser = {
-    //   userId: 1,
-    //   username: 'sean',
-    //   name: 'sean',
-    //   role: 'TRAVELER'
-    // };
-    this.loadCurrentUser();
+
+    // this.authService.checkAuth().subscribe(
+    //   () => (this.authorized = true),
+    //   (error) => {
+    //     if (![401, 403].includes(error.error.status)) {
+    //       alert('Error checking authorization: Status ' + error.error.status);
+    //     }
+    //     this.router.navigate(['/traveler/login']);
+    //   }
+    // );
+
+    // this.loadCurrentUser();
+    this.currentUser = this.travelerDataService.getCurrentUser();
+    if (this.currentUser === undefined) {
+      this.router.navigate(['/traveler/login']);
+    }
   }
 
   loadCurrentUser() {
@@ -71,7 +82,7 @@ export class TravelerComponent implements OnInit {
     .get(`${environment.travelerBackendUrl}${environment.usernameUri}/${this.username}`)
     .subscribe((res) => {
       this.currentUser = res;
-      console.log(res);
+      this.travelerDataService.setCurrentUser(this.currentUser);
     },
     (error) => {
       alert(error);
@@ -85,7 +96,6 @@ export class TravelerComponent implements OnInit {
       .subscribe(
         (res) => {
           this.airports = res;
-          console.log(res);
         },
         (error) => {
           alert(error);
@@ -100,11 +110,6 @@ export class TravelerComponent implements OnInit {
     this.pickArrivalForm = new FormGroup({
       arrival: new FormControl(this.arrival),
     });
-  }
-
-  showArrivalDeparture() {
-    console.log(this.arrival);
-    console.log(this.departure);
   }
 
   toggleFlights() {

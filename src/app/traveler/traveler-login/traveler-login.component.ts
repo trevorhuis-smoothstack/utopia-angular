@@ -5,6 +5,7 @@ import { TravelerService } from '../../common/s/service/traveler.service';
 import * as moment from 'moment';
 import { TravelerAuthService } from 'src/app/common/s/service/traveler-auth-service.service';
 import { environment } from 'src/environments/environment';
+import { TravelerDataService } from 'src/app/common/s/service/traveler-data.service';
 
 @Component({
   selector: 'app-traveler-login',
@@ -20,19 +21,20 @@ export class TravelerLoginComponent implements OnInit {
   traveler: any;
 
   travelerLoginForm = new FormGroup({
-    username: new FormControl('', [Validators.required as any, Validators.minLength(1) as any]),
-    password: new FormControl('', [Validators.required as any, Validators.minLength(1) as any]),
+    username: new FormControl('', [Validators.required as any, Validators.required as any]),
+    password: new FormControl('', [Validators.required as any, Validators.required as any]),
   });
 
 
   createTravelerForm = new FormGroup({
-    name: new FormControl('', [Validators.required as any, Validators.minLength(1) as any]),
-    username: new FormControl('', [Validators.required as any, Validators.minLength(1) as any]),
-    password: new FormControl('', [Validators.required as any, Validators.minLength(1) as any]),
-    passwordCheck: new FormControl('', [Validators.required as any, Validators.minLength(1) as any]),
+    name: new FormControl('', [Validators.required as any, Validators.required as any]),
+    username: new FormControl('', [Validators.required as any, Validators.required as any]),
+    password: new FormControl('', [Validators.required as any, Validators.required as any]),
+    passwordCheck: new FormControl('', [Validators.required as any, Validators.required as any]),
   });
 
   constructor(
+    private travelerDataService: TravelerDataService,
     private fb: FormBuilder,
     private authService: TravelerAuthService,
     private travelerService: TravelerService,
@@ -52,8 +54,7 @@ export class TravelerLoginComponent implements OnInit {
       expires: localStorage.getItem('expires_at')
     };
 
-    console.log(this.traveler.username);
-    if (this.traveler.username) {
+    if (this.travelerDataService.getCurrentUser()) {
       this.router.navigate(['/traveler/dashboard']);
     }
   }
@@ -70,8 +71,9 @@ export class TravelerLoginComponent implements OnInit {
           localStorage.setItem('token', response.headers.get('Authorization'));
           localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
 
-          console.log('login!?');
-          this.router.navigate(['/traveler/dashboard']);
+          this.loadCurrentUser(val.username);
+
+
         }).catch(error => {
           if (error.error.status === 401) {
             this.setInvalidLogin();
@@ -88,6 +90,19 @@ export class TravelerLoginComponent implements OnInit {
 
   setInvalidLogin() {
     this.invalidLogin = true;
+  }
+
+  loadCurrentUser(username: string) {
+    this.travelerService
+    .get(`${environment.travelerBackendUrl}${environment.usernameUri}/${username}`)
+    .subscribe((res) => {
+      this.travelerDataService.setCurrentUser(res);
+      this.router.navigate(['/traveler/dashboard']);
+    },
+    (error) => {
+      alert(error);
+    }
+    );
   }
 
   createNewTraveler() {

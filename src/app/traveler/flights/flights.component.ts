@@ -66,7 +66,6 @@ export class FlightsComponent implements OnInit {
       .subscribe(
         (result: any[]) => {
           this.flights = result;
-          console.log(this.flights);
 
           this.airports.forEach((element) => {
             this.airportsMap.set(element.airportId, element.name);
@@ -117,7 +116,6 @@ export class FlightsComponent implements OnInit {
           const token = response.id;
           booking.stripeId = token;
 
-          console.log(booking);
           this.travelerService
             .post(
               `${environment.travelerBackendUrl}${environment.bookingUri}`,
@@ -127,7 +125,6 @@ export class FlightsComponent implements OnInit {
               (res) => {
                 // TODO: create toast to notify success
                 // reload the list of flights
-                console.log(res);
               },
               (error) => {
                 // TODO: create toast to notify failure.
@@ -135,14 +132,13 @@ export class FlightsComponent implements OnInit {
               }
             );
         } else {
-          console.log(response.error.message);
+          alert(response.error.message);
         }
       }
     );
   }
 
   openBookFlightModal(modal: any, flight: any) {
-    // console.log(flight);
     this.selectedFlight = flight;
     this.modalService.open(modal);
   }

@@ -34,6 +34,8 @@ import {
   SortByDepartureDate,
   SortByFlightPrice
 } from './common/h/sort-flights-airports';
+import { TravelerDataService } from './common/s/service/traveler-data.service';
+import { TravelerAuthService } from './common/s/service/traveler-auth-service.service';
 
 @NgModule({
   declarations: [
@@ -78,6 +80,9 @@ import {
     AgentUtopiaService,
     TravelerService,
     CounterHttpService,
+    TravelerDataService,
+    TravelerAuthInterceptor,
+    TravelerAuthService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: CounterInterceptionService,
