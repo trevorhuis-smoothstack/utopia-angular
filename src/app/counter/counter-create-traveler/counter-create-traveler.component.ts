@@ -1,9 +1,16 @@
 import { Component, OnInit } from "@angular/core";
 import { CounterHttpService } from "src/app/common/counter/service/counter-http.service";
 import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import {
+  FormControl,
+  FormGroup,
+  Validators,
+  AbstractControl,
+} from "@angular/forms";
 import { environment } from "src/environments/environment";
 import { maxLength } from "src/app/common/counter/counter-globals";
+import { map, catchError } from "rxjs/operators";
+import { of } from "rxjs";
 
 @Component({
   selector: "app-counter-create-traveler",
@@ -17,10 +24,11 @@ export class CounterCreateTravelerComponent implements OnInit {
       Validators.required,
       Validators.maxLength(maxLength),
     ]),
-    username: new FormControl("", [
-      Validators.required,
-      Validators.maxLength(maxLength),
-    ]),
+    username: new FormControl(
+      "",
+      [Validators.required, Validators.maxLength(maxLength)],
+      this.validateUsername.bind(this)
+    ),
     password: new FormControl("", [Validators.required]),
   });
 
@@ -44,6 +52,19 @@ export class CounterCreateTravelerComponent implements OnInit {
         (result) => this.dataService.newTraveler(result.body),
         (error) =>
           alert("Error creating traveler: Status " + error.error.status)
+      );
+  }
+
+  validateUsername(control: AbstractControl) {
+    return this.httpService
+      .getFull(
+        environment.counterUrl + environment.counterUsernameUri + control.value
+      )
+      .pipe(
+        map((response) =>
+          response.status === 204 ? { validateUsername: true } : null
+        ),
+        catchError(() => of(null))
       );
   }
 

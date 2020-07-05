@@ -11,6 +11,7 @@ export const environment = {
   counterGetUserUri: "/users/",
   counterTravelerUri: "/traveler/",
   counterAirportUri: "/airports",
+  counterUsernameUri: "/user/",
 };
 
 /*

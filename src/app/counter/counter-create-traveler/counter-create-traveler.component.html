@@ -8,14 +8,14 @@
           <input class="form-control" formControlName="name" />
           <div
             *ngIf="
-              errorsDirty('username') && form.controls.name.errors.required
+              errorsDirty('username') && form.controls.name.errors?.required
             "
           >
             Required
           </div>
           <div
             *ngIf="
-              errorsDirty('username') && form.controls.name.errors.maxlength
+              errorsDirty('username') && form.controls.name.errors?.maxlength
             "
           >
             Maximum length is {{ maxLength }} characters
@@ -26,17 +26,24 @@
           <input class="form-control" formControlName="username" />
           <div
             *ngIf="
-              errorsDirty('username') && form.controls.username.errors.required
+              errorsDirty('username') && form.controls.username.errors?.required
             "
           >
             Required
           </div>
           <div
             *ngIf="
-              errorsDirty('username') && form.controls.username.errors.maxlength
+              errorsDirty('username') && form.controls.username.errors?.maxlength
             "
           >
             Maximum length is {{ maxLength }} characters
+          </div>
+          <div
+            *ngIf="
+              errorsDirty('username') && form.controls.username.errors?.validateUsername
+            "
+          >
+            Username unavailable
           </div>
         </div>
         <div class="form-group">
@@ -48,7 +55,7 @@
           />
           <div
             *ngIf="
-              errorsDirty('password') && form.controls.password.errors.required
+              errorsDirty('password') && form.controls.password.errors?.required
             "
           >
             Required

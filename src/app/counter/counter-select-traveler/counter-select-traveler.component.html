@@ -8,21 +8,21 @@
           <input class="form-control" formControlName="username" />
           <div
             *ngIf="
-              errorsDirty('username') && form.controls.username.errors.required
+              errorsDirty('username') && form.controls.username.errors?.required
             "
           >
             Required
           </div>
           <div
             *ngIf="
-              errorsDirty('username') && form.controls.username.errors.maxlength
+              errorsDirty('username') && form.controls.username.errors?.maxlength
             "
           >
             Maximum length is {{ maxLength }} characters
           </div>
           <div
             *ngIf="
-              errorsDirty('username') && form.controls.username.errors.validateTraveler
+              errorsDirty('username') && form.controls.username.errors?.validateTraveler
             "
           >
             Traveler not found
