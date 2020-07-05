@@ -59,6 +59,7 @@ export class TravelerComponent implements OnInit {
     if (!localStorage.getItem('username')) {
       this.router.navigate(['/traveler/login']);
     }
+<<<<<<< HEAD
 
     // this.authService.checkAuth().subscribe(
     //   () => (this.authorized = true),
@@ -75,6 +76,9 @@ export class TravelerComponent implements OnInit {
     if (this.currentUser === undefined) {
       this.router.navigate(['/traveler/login']);
     }
+=======
+    this.loadCurrentUser();
+>>>>>>> 7995af5cdccb88d426cb2287c81f7acc1551a208
   }
 
   loadCurrentUser() {
