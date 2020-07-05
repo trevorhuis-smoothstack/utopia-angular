@@ -64,13 +64,33 @@
   margin-right: 10vh;
 }
 
-@media (max-width: 600px) {
+#new-traveler-btn-mobile {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 992px) {
   #agent-sidebar {
     display: none;
   }
 
   .agent-container {
-    margin-left: 0;
-    margin-right: 0;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
+
+.mobile-nav {
+  margin-top: 15px;
+}
+
+.nav-link {
+  text-align: center;
+  width: 110px;
+}
+
+/* .new-traveler-btn {
+  margin-left: auto;
+  margin-right: auto;
+} */

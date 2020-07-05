@@ -1,16 +1,19 @@
-import {
-  Component,
-  OnInit
-} from '@angular/core';
+import { Component, OnInit, HostListener } from "@angular/core";
 import { AgentUtopiaService } from "src/app/common/h/agent-utopia.service";
 import { AgentAuthService } from "src/app/common/h/service/AgentAuthService";
 import { Router } from "@angular/router";
 import * as moment from "moment";
 import { environment } from "src/environments/environment";
-import { FormGroup, FormControl, FormBuilder, Validators, NgForm } from '@angular/forms';
-import { NgbDateStruct, NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import { Agent } from '../entities/Agent';
-import { Traveler } from '../entities/Traveler';
+import {
+  FormGroup,
+  FormControl,
+  FormBuilder,
+  Validators,
+  NgForm,
+} from "@angular/forms";
+import { NgbDateStruct, NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { Agent } from "../entities/Agent";
+import { Traveler } from "../entities/Traveler";
 
 @Component({
   selector: "app-agent-dashboard",
@@ -25,20 +28,20 @@ export class AgentDashboardComponent implements OnInit {
   cancelFlightPage: any;
   agent: any;
   username: any;
+  mobile: boolean;
 
   constructor(
     private service: AgentUtopiaService,
     private authService: AgentAuthService,
-    private router: Router,
-  ) {
-    
-  }
+    private modalService: NgbModal,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     document.getElementById("nav-agent").classList.add("active");
     this.agent = {
       username: localStorage.getItem("username"),
-    }
+    };
 
     if (this.agent.username == null) {
       this.router.navigate(["/agent/login"]);
@@ -49,14 +52,39 @@ export class AgentDashboardComponent implements OnInit {
 
     this.loadAirports();
     this.loadAgent();
-    
+
     this.bookFlightPage = true;
     this.cancelFlightPage = false;
+
+    this.adjustForMobile(window.innerWidth);
   }
-  
+
+  // RESPONSIVE DESIGN
+  @HostListener("window:resize", ["$event"])
+  onResize(event) {
+    this.adjustForMobile(event.target.innerWidth);
+  }
+
+  adjustForMobile(width) {
+    if(width < 992) {
+      this.mobile = true;
+      this.moveSidebarToNav();
+    } else if (width > 992){
+      this.mobile = false;
+    }
+  }
+
+  moveSidebarToNav() {
+    let nav = document.getElementById("navbar-utopia");
+  }
+
   logout() {
     this.authService.logout();
     this.router.navigate(["/agent/login"]);
+  }
+
+  openLogoutModal(modal: any) {
+    this.modalService.open(modal);
   }
 
   newTraveler() {
@@ -79,16 +107,18 @@ export class AgentDashboardComponent implements OnInit {
   }
 
   loadAirports() {
-    this.service.get(`${environment.agentBackendUrl}${environment.airportsUri}`).subscribe(result => {
-      this.airports = result;
+    this.service
+      .get(`${environment.agentBackendUrl}${environment.airportsUri}`)
+      .subscribe((result) => {
+        this.airports = result;
 
-      this.airports.forEach(element => {
-        this.airportsMap.set(element.airportId, element.name);
-      });
-    }),
-    (error => {
-      alert(error);
-    })
+        this.airports.forEach((element) => {
+          this.airportsMap.set(element.airportId, element.name);
+        });
+      }),
+      (error) => {
+        alert(error);
+      };
   }
 
   openBookFlight() {
@@ -121,7 +151,6 @@ export class AgentDashboardComponent implements OnInit {
     )
       this.changeBookFlightClass();
     this.changeCancelFlightClass();
-    
   }
 
   changeCancelFlightClass() {

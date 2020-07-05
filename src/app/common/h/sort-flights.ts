@@ -1,30 +1,12 @@
 import { Pipe, PipeTransform } from "@angular/core";
 import * as moment from 'moment';
-
-// @Pipe({
-//   name: "sortFlightsByAirport",
-// })
-// export class SortCopiesByTitlePipe implements PipeTransform {
-//   transform(items: any[], term, filterMetadata): any {
-//     if (term) {
-//       let filteredArray = items.filter(
-//         (item) =>
-//           item.bookTitle.toLowerCase().indexOf(term.toLowerCase()) !== -1
-//       );
-//       filterMetadata.count = filteredArray.length;
-//       return filteredArray;
-//     } else {
-//       filterMetadata.count = items.length;
-//       return items;
-//     }
-//   }
-// }
+import { Flight } from 'src/app/agent/entities/Flight';
 
 @Pipe({
   name: "sortFlightsByDepartureAirport",
 })
 export class SortFlightsByDepartureAirport implements PipeTransform {
-  transform(items: any[], term, filterMetadata): any {
+  transform(items: Flight[], term, filterMetadata): any {
     if (term === "All Airports") {
       filterMetadata.count = items.length;
       return items;
@@ -32,7 +14,7 @@ export class SortFlightsByDepartureAirport implements PipeTransform {
 
     if (term) {
       let filteredArray = items.filter(
-        (item) => item.airportDepart.indexOf(term) !== -1
+        (item) => item.departAirport.indexOf(term) !== -1
       );
       filterMetadata.count = filteredArray.length;
       return filteredArray;
@@ -46,7 +28,7 @@ export class SortFlightsByDepartureAirport implements PipeTransform {
     name: "sortFlightsByArrivalAirport",
   })
 export class SortFlightsByArrivalAirport implements PipeTransform {
-    transform(items: any[], term, filterMetadata): any {
+    transform(items: Flight[], term, filterMetadata): any {
       if (term === "All Airports") {
         filterMetadata.count = items.length;
         return items;
@@ -54,7 +36,7 @@ export class SortFlightsByArrivalAirport implements PipeTransform {
   
       if (term) {
         let filteredArray = items.filter(
-          (item) => item.airportArrive.indexOf(term) !== -1
+          (item) => item.arriveAirport.indexOf(term) !== -1
         );
         filterMetadata.count = filteredArray.length;
         return filteredArray;
@@ -68,7 +50,7 @@ export class SortFlightsByArrivalAirport implements PipeTransform {
 name: "sortByFlightPrice",
 })
 export class SortByFlightPrice implements PipeTransform {
-    transform(items: any[], price, filterMetadata): any {
+    transform(items: Flight[], price, filterMetadata): any {
         if (price === 100) {
             filterMetadata.count = items.length;
             return items;
@@ -90,7 +72,7 @@ export class SortByFlightPrice implements PipeTransform {
     name: "sortByDepartureDate",
     })
     export class SortByDepartureDate implements PipeTransform {
-        transform(items: any[], date, filterMetadata): any {
+        transform(items: Flight[], date, filterMetadata): any {
             if (date === null) {
                 filterMetadata.count = items.length;
                 return items;

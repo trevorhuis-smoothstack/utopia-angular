@@ -9,7 +9,6 @@ export const environment = {
   usernameUri: "/user/username",
   userUri: "/user",
   agentTravelerUri: "/traveler",
-  airportUri: "/airport",
   flightUri: "/flight",
   bookingsUri: "/bookings",
   flightsUri: "/flights",

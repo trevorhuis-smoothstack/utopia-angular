@@ -28,37 +28,47 @@
     margin-left: 10px;
   }
   
-  .credit-info {
-    margin: 5px;
-  }
-
   .flight-filters {
-    display: grid;
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
   }
   
-  .arrive-select, .departure-select {
+  .arrive-select, .departure-select, .airport-select, .price-slider, .date-picker, .price-date-select {
     margin: 0px 10px;
     margin-bottom: 15px;
-    grid-row: 2;
+    /* grid-row: 2; */
   }
-  
-  .departure-select {
-    grid-column: 1;
-  }
-  
-  .arrive-select {
-    grid-column: 2;
-  }
-  
-  .price-slider {
-    margin: 10px;
-    grid-row: 3;
+
+  .arrive-select, .departure-select {
+    width: 150px
   }
   
   .date-picker {
-    margin: 0px 10px;
-    grid-row: 1;
     display: block;
+    width: 150px;
+  }
+
+  .date-input {
+    width: 150px;
+  }
+
+  .date-picker {
+    width: 150px;
+  }
+
+  .price-slider {
+    width: 150px;
   }
   
+  @media (max-width: 992px) {
+    .price-slider {
+      margin: 0px 10px;
+    }
+  
+    .agent-container {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
   

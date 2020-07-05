@@ -4,7 +4,7 @@ import { NgModule } from "@angular/core";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { AgentLoginComponent } from "./agent/agent-login/agent-login.component";
-
+import { NgxStripeModule } from "ngx-stripe";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { ReactiveFormsModule } from "@angular/forms";
 
@@ -17,13 +17,20 @@ import { AgentUtopiaService } from "./common/h/agent-utopia.service";
 import {
   SortFlightsByDepartureAirport,
   SortFlightsByArrivalAirport,
-  SortByFlightPrice,SortByDepartureDate
-} from "./common/h/sort-flights-airports";
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CancelBookingComponent } from './agent/agent-dashboard/cancel-booking/cancel-booking.component';
-import { CreateBookingComponent } from './agent/agent-dashboard/create-booking/create-booking.component';
-import { SelectTravelerComponent } from './agent/agent-dashboard/select-traveler/select-traveler.component';
+  SortByFlightPrice,
+  SortByDepartureDate,
+} from "./common/h/sort-flights";
+
+import {
+  SortBookingsByArrivalAirportPipe,
+  SortBookingsByDepartureAirportPipe,
+  SortBookingsByTravelerPipe,
+  SortByDepartureDatePipe,
+} from "./common/h/sort-bookings";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { CancelBookingComponent } from "./agent/agent-dashboard/cancel-booking/cancel-booking.component";
+import { CreateBookingComponent } from "./agent/agent-dashboard/create-booking/create-booking.component";
+import { SelectTravelerComponent } from "./agent/agent-dashboard/select-traveler/select-traveler.component";
 
 @NgModule({
   declarations: [
@@ -34,9 +41,13 @@ import { SelectTravelerComponent } from './agent/agent-dashboard/select-traveler
     SortFlightsByArrivalAirport,
     SortByFlightPrice,
     SortByDepartureDate,
+    SortBookingsByArrivalAirportPipe,
+    SortBookingsByDepartureAirportPipe,
+    SortBookingsByTravelerPipe,
+    SortByDepartureDatePipe,
     CancelBookingComponent,
     CreateBookingComponent,
-    SelectTravelerComponent
+    SelectTravelerComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,7 +57,7 @@ import { SelectTravelerComponent } from './agent/agent-dashboard/select-traveler
     NgbModule,
     FormsModule,
     BrowserAnimationsModule,
-    MatDatepickerModule
+    NgxStripeModule.forRoot(),
   ],
   providers: [
     AgentAuthService,
@@ -57,6 +68,6 @@ import { SelectTravelerComponent } from './agent/agent-dashboard/select-traveler
     },
     AgentUtopiaService,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

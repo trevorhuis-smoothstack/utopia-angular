@@ -57,7 +57,7 @@ export class SelectTravelerComponent implements OnInit {
       role: "TRAVELER"
     }
 
-    this.service.get(`${environment.agentBackendUrl}${environment.usernameUri}/${travelerBody.username}`).subscribe(
+    this.service.get(`${environment.agentBackendUrl}${environment.agentTravelerUri}/${travelerBody.username}`).subscribe(
       (result: any) => {
         if (result != null) {
           this.traveler = result;

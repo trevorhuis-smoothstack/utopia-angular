@@ -5,4 +5,6 @@ export interface Flight {
     departId: Number;
     arriveAirport: string;
     departAirport: string;
+    price: Number;
+    flightId: Number;
 }

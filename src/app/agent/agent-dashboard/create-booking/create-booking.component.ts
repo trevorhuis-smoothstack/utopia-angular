@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  HostListener,
+} from "@angular/core";
 import {
   FormGroup,
   FormControl,
@@ -7,12 +14,14 @@ import {
 } from "@angular/forms";
 import { Flight } from "../../entities/Flight";
 import { AgentUtopiaService } from "src/app/common/h/agent-utopia.service";
-import { environment } from 'src/environments/environment';
-import { NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Agent } from '../../entities/Agent';
-import { Airport } from '../../entities/Airport';
-import { Traveler } from '../../entities/Traveler';
-import * as moment from 'moment';
+import { environment } from "src/environments/environment";
+import { NgbDateStruct, NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { Agent } from "../../entities/Agent";
+import { Airport } from "../../entities/Airport";
+import { Traveler } from "../../entities/Traveler";
+import * as moment from "moment";
+import { Elements, Element, StripeService } from "ngx-stripe";
+import { Booking } from '../../entities/Booking';
 
 @Component({
   selector: "app-agent-create-booking",
@@ -23,18 +32,15 @@ export class CreateBookingComponent implements OnInit {
   @Input() agent: Agent;
   @Input() traveler: Traveler;
   @Input() airports: Airport[];
+  @Input() mobile: boolean;
 
   airportsMap: Map<Number, string>;
 
-  creditCardForm = new FormGroup({
-    cardNumber: new FormControl("", [<any>Validators.required]),
-    expMonth: new FormControl("", [<any>Validators.required]),
-    expYear: new FormControl("", [<any>Validators.required]),
-    cvc: new FormControl("", [<any>Validators.required]),
-  });
-
+  card: Element;
+  elements: Elements;
+  flightBooked: boolean;
   flights: Flight[];
-  selectedFlight: any;
+  selectedFlight: Flight;
 
   // Slider
   customPrice: number;
@@ -45,15 +51,14 @@ export class CreateBookingComponent implements OnInit {
   page = 1;
   pageSize = 10;
   filterMetadata = { count: 0 };
-  
+
   // Date Picker
   date: NgbDateStruct;
-  
 
   constructor(
-    private formBuilder: FormBuilder,
     private service: AgentUtopiaService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private stripe: StripeService
   ) {}
 
   ngOnInit() {
@@ -66,18 +71,24 @@ export class CreateBookingComponent implements OnInit {
     this.minValue = 1;
     this.maxValue = 100;
 
-    this.creditCardForm = this.formBuilder.group({
-      cardNumber: "",
-      expMonth: "",
-      expYear: "",
-      cvc: "",
-    });
-
     this.loadFlights();
 
     this.airports.forEach((element) => {
       this.airportsMap.set(element.airportId, element.name);
     });
+
+    this.stripe.setKey(
+      "pk_test_51Guj65Fb3TAD5KLT94lDvAoFWPcLphSSna40tyv7hCbT8m14pxaItIRXf4y5N33ZaYEU8cqVjXJ7I8lteoAUrmrE00E3zXAfTw"
+    );
+    this.stripe.elements().subscribe(
+      (elements) => {
+        this.card = elements.create("card", {});
+      },
+
+      (error) => {
+        alert(error);
+      }
+    );
   }
 
   loadFlights() {
@@ -111,47 +122,35 @@ export class CreateBookingComponent implements OnInit {
   }
 
   bookFlight() {
-    
-    let booking = {
-      active: true,
-      flightId: this.selectedFlight.flightId,
-      bookerId: this.agent.userId,
-      travelerId: this.traveler.userId,
-      stripeId: null,
-    };
-
-
-    (<any>window).Stripe.card.createToken(
-      {
-        number: this.creditCardForm.value.cardNumber,
-        exp_month: this.creditCardForm.value.expMonth,
-        exp_year: this.creditCardForm.value.expYear,
-        cvc: this.creditCardForm.value.cvc,
-      },
-      (status: number, response: any) => {
-        if (status === 200) {
-          let token = response.id;
-          booking.stripeId = token;
-
-          console.log(booking);
-          this.service
-            .post(
-              `${environment.agentBackendUrl}${environment.bookingUri}`,
-              booking
-            )
-            .subscribe(
-              (res) => {
-                console.log(res);
-              },
-              (error) => {
-                alert(error);
-              }
-            );
-        } else {
-          console.log(response.error.message);
-        }
+    let booking: any;
+    this.stripe.createToken(this.card, {}).subscribe((result) => {
+      if (result.token) {
+        booking = {
+          travelerId: this.traveler.userId,
+          flightId: this.selectedFlight.flightId,
+          bookerId: this.agent.userId,
+          active: true,
+          stripeId: result.token.id,
+        };
+        this.service
+          .post(`${environment.agentBackendUrl}${environment.bookingUri}`, booking)
+          .subscribe(
+            () => {
+              this.flightBooked = true;
+              this.flights = this.flights.filter(
+                (flight) => flight !== this.selectedFlight
+              );
+            },
+            (error) => {
+              this.modalService.dismissAll();
+              alert("Error booking ticket: Status " + error.error.status);
+            }
+          );
+      } else if (result.error) {
+        this.modalService.dismissAll();
+        alert("Error processing payment: Token creation failed.");
       }
-    );
+    });
   }
 
   // **********************************************
@@ -171,7 +170,7 @@ export class CreateBookingComponent implements OnInit {
 
   openBookFlightModal(modal: any, flight: any) {
     this.selectedFlight = flight;
-    // this.initializeBookFlightForm(flight);
     this.modalService.open(modal);
+    this.card.mount("#card");
   }
 }

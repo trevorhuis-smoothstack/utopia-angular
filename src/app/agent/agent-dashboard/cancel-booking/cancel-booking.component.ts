@@ -9,6 +9,7 @@ import { Flight } from "../../entities/Flight";
 import { mergeMap, tap, concatMap, delay, map } from "rxjs/operators";
 import { Observable, of, forkJoin } from "rxjs";
 import { Traveler } from '../../entities/Traveler';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
   // WHAT I WANT
   
@@ -33,16 +34,28 @@ import { Traveler } from '../../entities/Traveler';
 })
 export class CancelBookingComponent implements OnInit {
   @Input() agent: Agent;
+  @Input() traveler: Traveler;
   @Input() airports: Airport[];
+  @Input() mobile: boolean;
+  selectedTravelerBookings: Booking[];
   bookings: Booking[];
   airportsMap: Map<Number, string>;
   displayBookings: boolean;
+  selectedBooking: any;
+  cancelledBooking: boolean;
 
-  constructor(private service: AgentUtopiaService) {}
+    // Pagination
+    page = 1;
+    pageSize = 10;
+    filterMetadata = { count: 0 };
+
+  constructor(private service: AgentUtopiaService,
+    private modalService: NgbModal,) {}
 
   ngOnInit() {
     this.airportsMap = new Map();
     this.bookings = new Array();
+    this.selectedTravelerBookings = new Array();
 
     this.airports.forEach((element) => {
       this.airportsMap.set(element.airportId, element.name);
@@ -76,7 +89,13 @@ export class CancelBookingComponent implements OnInit {
                 "MMMM Do YYYY, h:mm a"
               );
 
-              this.bookings.push(booking)
+              if (this.traveler !== undefined && booking.travelerId == this.traveler.userId) {
+                this.selectedTravelerBookings.push(booking)
+              } else {
+                this.bookings.push(booking);
+              }
+              
+              this.changePaginationCount();
           })
 
           })
@@ -86,16 +105,35 @@ export class CancelBookingComponent implements OnInit {
   }
 
   
-  cancelFlight(booking) {
+  cancelBooking() {
+    let booking = {
+      travelerId: this.selectedBooking.travelerId,
+      flightId: this.selectedBooking.flightId,
+      bookerId: this.selectedBooking.bookerId,
+      active: this.selectedBooking.active,
+      stripeId: this.selectedBooking.stripeId
+    }
+
     this.service
       .put(`${environment.agentBackendUrl}${environment.bookingUri}`, booking)
       .subscribe(
         (res) => {
+          this.cancelledBooking = true;
+          this.loadBookings();
           console.log(res);
         },
         (error) => {
           alert(error);
         }
       );
+  }
+
+  changePaginationCount() {
+    this.filterMetadata.count = this.bookings.length;
+  }
+
+  openCancelBookingModal(modal: any, booking: any) {
+    this.selectedBooking = booking;
+    this.modalService.open(modal);
   }
 }
