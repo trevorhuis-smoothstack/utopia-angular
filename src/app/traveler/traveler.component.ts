@@ -57,12 +57,6 @@ export class TravelerComponent implements OnInit {
       console.log(localStorage.getItem('username'));
       this.router.navigate(['/traveler/login']);
     }
-    // this.currentUser = {
-    //   userId: 1,
-    //   username: 'sean',
-    //   name: 'sean',
-    //   role: 'TRAVELER'
-    // };
     this.loadCurrentUser();
   }
 

@@ -4,23 +4,22 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AgentLoginComponent } from './agent/agent-login/agent-login.component';
-
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
-
-import { AgentAuthService } from './common/h/service/AgentAuthService';
-import { AgentAuthInterceptor } from './common/h/service/AgentAuthInterceptor';
-import { AgentDashboardComponent } from './agent/agent-dashboard/agent-dashboard.component';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { AgentUtopiaService } from './common/h/agent-utopia.service';
-import { CounterLoginComponent } from './counter/counter-login/counter-login.component';
-import { CounterHttpService } from './common/counter/service/counter-http.service';
-import { CounterDashboardComponent } from './counter/counter-dashboard/counter-dashboard.component';
-import { CounterInterceptionService } from './common/counter/service/counter-interception.service';
-import { CounterTravelerTypeComponent } from './counter/booking/counter-traveler-type/counter-traveler-type.component';
-import { CounterSelectTravelerComponent } from './counter/counter-select-traveler/counter-select-traveler.component';
-import { CounterComponent } from './counter/counter/counter.component';
+import { AgentAuthService } from "./common/h/service/AgentAuthService";
+import { AgentAuthInterceptor } from "./common/h/service/AgentAuthInterceptor";
+import { AgentDashboardComponent } from "./agent/agent-dashboard/agent-dashboard.component";
+import { FormsModule } from "@angular/forms";
+import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
+import { AgentUtopiaService } from "./common/h/agent-utopia.service";
+import { CounterLoginComponent } from "./counter/counter-login/counter-login.component";
+import { CounterHttpService } from "./common/counter/service/counter-http.service";
+import { CounterDashboardComponent } from "./counter/counter-dashboard/counter-dashboard.component";
+import { CounterInterceptionService } from "./common/counter/service/counter-interception.service";
+import { CounterSelectTravelerComponent } from "./counter/counter-select-traveler/counter-select-traveler.component";
+import { CounterComponent } from "./counter/counter/counter.component";
+import { CounterTravelerComponent } from "./counter/counter-traveler/counter-traveler.component";
+import { CounterCreateTravelerComponent } from "./counter/counter-create-traveler/counter-create-traveler.component";
 import { TravelerComponent } from './traveler/traveler.component';
 import { TravelerService } from './common/s/service/traveler.service';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
@@ -44,6 +43,7 @@ import {
     CounterDashboardComponent,
     CounterTravelerTypeComponent,
     CounterSelectTravelerComponent,
+    CounterCreateTravelerComponent,
     CounterComponent,
     TravelerComponent,
     TravelerLoginComponent,
@@ -52,7 +52,7 @@ import {
     SortFlightsByDepartureAirport,
     SortFlightsByArrivalAirport,
     SortByDepartureDate,
-    SortByFlightPrice
+    SortByFlightPrice,
   ],
   imports: [
     BrowserModule,
@@ -77,12 +77,13 @@ import {
     },
     AgentUtopiaService,
     TravelerService,
+
     CounterHttpService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: CounterInterceptionService,
-      multi: true
-    }
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
 })
