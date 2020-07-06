@@ -1,8 +1,19 @@
-import { Component, OnInit } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { Component, OnInit, HostListener } from "@angular/core";
 import { AgentUtopiaService } from "src/app/common/h/agent-utopia.service";
 import { AgentAuthService } from "src/app/common/h/service/AgentAuthService";
 import { Router } from "@angular/router";
+import * as moment from "moment";
+import { environment } from "src/environments/environment";
+import {
+  FormGroup,
+  FormControl,
+  FormBuilder,
+  Validators,
+  NgForm,
+} from "@angular/forms";
+import { NgbDateStruct, NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { Agent } from "../../common/entities/Agent";
+import { Traveler } from "../../common/entities/Traveler";
 
 @Component({
   selector: "app-agent-dashboard",
@@ -11,135 +22,157 @@ import { Router } from "@angular/router";
 })
 export class AgentDashboardComponent implements OnInit {
   traveler: any;
-  flights: any;
   airports: any;
-  bookings: any;
-  username: any;
+  airportsMap: Map<number, string>;
   bookFlightPage: any;
   cancelFlightPage: any;
-  user: any;
+  agent: any;
+  username: any;
+  mobile: boolean;
 
   constructor(
-    private http: HttpClient,
     private service: AgentUtopiaService,
     private authService: AgentAuthService,
+    private modalService: NgbModal,
     private router: Router
   ) {}
 
   ngOnInit() {
-    this.username = localStorage.getItem("username");
+    document.getElementById("nav-agent").classList.add("active");
+    this.agent = {
+      username: localStorage.getItem("username"),
+    };
 
-    this.loadAgent();
-    this.loadFlights();
+    if (this.agent.username == null) {
+      this.router.navigate(["/agent/login"]);
+      return;
+    }
+
+    this.airportsMap = new Map();
+
     this.loadAirports();
+    this.loadAgent();
 
-    this.traveler = {
-      active: true,
-      bookerId: 1,
-      travelerId: 2,
-    };
+    this.bookFlightPage = true;
+    this.cancelFlightPage = false;
+
+    this.adjustForMobile(window.innerWidth);
   }
 
-  loadAgent() {
-    this.service
-      .get("http://127.0.0.1:8083/agent/users/" + this.username)
-      .subscribe(
-        (res) => {
-          this.user = res;
-
-          this.service
-            .get("http://127.0.0.1:8083/agent/bookings/" + this.user.userId)
-            .subscribe(
-              (res) => {
-                this.bookings = res;
-              },
-              (error) => {
-                alert(error);
-              }
-            );
-        },
-        (error) => {
-          alert(error);
-        }
-      );
+  // RESPONSIVE DESIGN
+  @HostListener("window:resize", ["$event"])
+  onResize(event) {
+    this.adjustForMobile(event.target.innerWidth);
   }
 
-  loadFlights() {
-    this.service.get("http://127.0.0.1:8083/agent/flights").subscribe(
-      (res) => {
-        this.flights = res;
-      },
-      (error) => {
-        alert(error);
-      }
-    );
+  adjustForMobile(width) {
+    if(width < 992) {
+      this.mobile = true;
+      this.moveSidebarToNav();
+    } else if (width > 992){
+      this.mobile = false;
+    }
   }
 
-  loadAirports() {
-    this.service.get("http://127.0.0.1:8083/agent/airports").subscribe(
-      (res) => {
-        this.airports = res;
-      },
-      (error) => {
-        alert(error);
-      }
-    );
-  }
-
-  bookFlight(flight) {
-    let booking = {
-      active: true,
-      flightId: flight.flightId,
-      bookerId: this.traveler.bookerId,
-      travelerId: this.traveler.travelerId,
-      stripeId: null,
-    };
-
-    let form = document.getElementsByTagName("form")[0];
-    (<any>window).Stripe.card.createToken(
-      {
-        number: form.cardNumber.value,
-        exp_month: form.expMonth.value,
-        exp_year: form.expYear.value,
-        cvc: form.cvc.value,
-      },
-      (status: number, response: any) => {
-        if (status === 200) {
-          let token = response.id;
-          booking.stripeId = token;
-
-          this.service
-            .post("http://127.0.0.1:8083/agent/booking", booking)
-            .subscribe(
-              (res) => {
-                console.log(res);
-              },
-              (error) => {
-                alert(error);
-              }
-            );
-        } else {
-          console.log(response.error.message);
-        }
-      }
-    );
-  }
-
-  cancelFlight(booking) {
-    console.log(booking);
-
-    this.service.put("http://127.0.0.1:8083/agent/booking", booking).subscribe(
-      (res) => {
-        console.log(res);
-      },
-      (error) => {
-        alert(error);
-      }
-    );
+  moveSidebarToNav() {
+    let nav = document.getElementById("navbar-utopia");
   }
 
   logout() {
     this.authService.logout();
     this.router.navigate(["/agent/login"]);
+  }
+
+  openLogoutModal(modal: any) {
+    this.modalService.open(modal);
+  }
+
+  newTraveler() {
+    this.traveler = null;
+  }
+
+  onTravelerChange(traveler: Traveler) {
+    this.traveler = traveler;
+  }
+
+  loadAgent() {
+    this.service
+      .get(
+        `${environment.agentBackendUrl}${environment.agentUsernameUri}/${this.agent.username}`
+      )
+      .subscribe((result: Agent) => {
+        this.agent.name = result.name;
+        this.agent.userId = result.userId;
+      });
+  }
+
+  loadAirports() {
+    this.service
+      .get(`${environment.agentBackendUrl}${environment.agentAirportsUri}`)
+      .subscribe((result) => {
+        this.airports = result;
+
+        this.airports.forEach((element) => {
+          this.airportsMap.set(element.airportId, element.name);
+        });
+      }),
+      (error) => {
+        alert(error);
+      };
+  }
+
+  openBookFlight() {
+    if (
+      document
+        .getElementById("agent-book-flight")
+        .classList.contains("side-link-active")
+    )
+      return;
+    if (
+      document
+        .getElementById("agent-cancel-flight")
+        .classList.contains("side-link-active")
+    )
+      this.changeCancelFlightClass();
+    this.changeBookFlightClass();
+  }
+
+  openCancelBooking() {
+    if (
+      document
+        .getElementById("agent-cancel-flight")
+        .classList.contains("side-link-active")
+    )
+      return;
+    if (
+      document
+        .getElementById("agent-book-flight")
+        .classList.contains("side-link-active")
+    )
+      this.changeBookFlightClass();
+    this.changeCancelFlightClass();
+  }
+
+  changeCancelFlightClass() {
+    document
+      .getElementById("agent-cancel-flight")
+      .classList.toggle("side-link-active");
+    if (this.cancelFlightPage === true) {
+      this.cancelFlightPage = false;
+    } else if (this.cancelFlightPage === false) {
+      this.cancelFlightPage = true;
+      this.bookFlightPage = false;
+    }
+  }
+
+  changeBookFlightClass() {
+    document
+      .getElementById("agent-book-flight")
+      .classList.toggle("side-link-active");
+    if (this.bookFlightPage === true) {
+      this.bookFlightPage = true;
+    } else if (this.bookFlightPage === false) {
+      this.bookFlightPage = true;
+    }
   }
 }
