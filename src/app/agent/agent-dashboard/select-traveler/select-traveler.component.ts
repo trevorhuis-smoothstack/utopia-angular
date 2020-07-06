@@ -1,39 +1,61 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { environment } from 'src/environments/environment';
-import { Traveler } from '../../../common/entities/Traveler';
-import { AgentUtopiaService } from 'src/app/common/h/agent-utopia.service';
+import { Component, OnInit, EventEmitter, Output } from "@angular/core";
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  FormBuilder,
+  Form,
+} from "@angular/forms";
+import { environment } from "src/environments/environment";
+import { Traveler } from "../../../common/entities/Traveler";
+import { AgentUtopiaService } from "src/app/common/h/agent-utopia.service";
 
 @Component({
-  selector: 'app-agent-select-traveler',
-  templateUrl: './select-traveler.component.html',
-  styleUrls: ['./select-traveler.component.css']
+  selector: "app-agent-select-traveler",
+  templateUrl: "./select-traveler.component.html",
+  styleUrls: ["./select-traveler.component.css"],
 })
 export class SelectTravelerComponent implements OnInit {
-  selectTravelerForm = new FormGroup({
-    username: new FormControl('', [<any>Validators.required, <any>Validators.minLength(5)]),
-  });
-
-  createTravelerForm = new FormGroup({
-    name: new FormControl('', [<any>Validators.required, <any>Validators.minLength(5)]),
-    username: new FormControl('', [<any>Validators.required, <any>Validators.minLength(5)]),
-    email: new FormControl('', [<any>Validators.required, <any>Validators.minLength(5)]),
-  });
-
+  selectTravelerForm: FormGroup;
+  createTravelerForm: FormGroup;
   traveler: Traveler;
   invalidLogin: boolean;
   createTraveler: boolean;
   usernameTaken: boolean;
 
   @Output() travelerChanged = new EventEmitter<Traveler>();
+  invalidLoginSpace: boolean;
 
-  constructor(private service: AgentUtopiaService,
-    private formBuilder: FormBuilder,) {
-    this.createSelectTravelerForm();
-   }
+  constructor(
+    private service: AgentUtopiaService,
+    private formBuilder: FormBuilder
+  ) {
+  }
 
   ngOnInit() {
     this.createTraveler = false;
+    
+    this.selectTravelerForm = new FormGroup({
+      username: new FormControl(null, [
+        Validators.required,
+        Validators.maxLength(45),
+      ]),
+    });
+
+    this.createTravelerForm = new FormGroup({
+      name: new FormControl(null, [
+        Validators.required,
+        Validators.maxLength(45),
+      ]),
+      username: new FormControl(null, [
+        Validators.required,
+        Validators.maxLength(45),
+      ]),
+      email: new FormControl(null, [
+        Validators.required,
+        Validators.maxLength(45),
+      ]),
+    });
   }
 
   // *************************
@@ -42,7 +64,7 @@ export class SelectTravelerComponent implements OnInit {
 
   createSelectTravelerForm() {
     this.selectTravelerForm = this.formBuilder.group({
-      username: '',
+      username: "",
     });
   }
 
@@ -51,32 +73,32 @@ export class SelectTravelerComponent implements OnInit {
       name: " ",
       username: this.selectTravelerForm.value.username,
       password: " ",
-      role: "TRAVELER"
-    }
+      role: "TRAVELER",
+    };
 
-    this.service.get(`${environment.agentBackendUrl}${environment.agentTravelerUri}/${travelerBody.username}`).subscribe(
-      (result: any) => {
-        if (result != null) {
-          this.traveler = result;
+    this.service
+      .get(
+        `${environment.agentBackendUrl}${environment.agentTravelerUri}/${travelerBody.username}`
+      )
+      .subscribe(
+        (result: any) => {
+          if (result != null) {
+            this.traveler = result;
 
-          this.changeTraveler(this.traveler); 
-          return;
-        } 
+            this.changeTraveler(this.traveler);
+            return;
+          }
 
-        this.invalidLogin = true;
-
-        },(error) => {
-          alert(error)
-        });
+          this.invalidLogin = true;
+        },
+        (error) => {
+          alert(error);
+        }
+      );
   }
 
   setupCreateTraveler() {
     this.createTraveler = true;
-
-    this.createTravelerForm = this.formBuilder.group({
-      name: '',
-      username: '',
-    })
   }
 
   createNewTraveler() {
@@ -84,33 +106,51 @@ export class SelectTravelerComponent implements OnInit {
       name: this.createTravelerForm.value.name,
       username: this.createTravelerForm.value.username,
       password: "",
-      role: "TRAVELER"
+      role: "TRAVELER",
     };
 
-    this.service.get(`${environment.agentBackendUrl}${environment.usernameUri}/${travelerBody.username}`).subscribe(
-      (result: any) => {
-        if (result != null) {
-          this.usernameTaken = true;
-          return;
-        };
+    this.service
+      .get(
+        `${environment.agentBackendUrl}${environment.agentUsernameUri}/${travelerBody.username}`
+      )
+      .subscribe(
+        (result: any) => {
+          if (result != null) {
+            this.usernameTaken = true;
+            return;
+          }
 
-        this.service.post(`${environment.agentBackendUrl}${environment.userUri}`, travelerBody).subscribe(
-          (result: any) => {
-            this.traveler = result;
-            this.createTraveler = false;
-            this.changeTraveler(this.traveler);
-          }, (error => {
-            alert(error);
-          })
-        )
-      },
-      (error) => {
-        alert(error);
-      }
-    )
+          this.service
+            .post(
+              `${environment.agentBackendUrl}${environment.agentUserUri}`,
+              travelerBody
+            )
+            .subscribe(
+              (result: any) => {
+                this.traveler = result;
+                this.createTraveler = false;
+                this.changeTraveler(this.traveler);
+              },
+              (error) => {
+                alert(error);
+              }
+            );
+        },
+        (error) => {
+          alert(error);
+        }
+      );
   }
 
   changeTraveler(traveler: Traveler) {
     this.travelerChanged.emit(traveler);
+  }
+
+  errorsDirtySelectTraveler(field: string) {
+    return this.selectTravelerForm.controls[field].errors && this.selectTravelerForm.controls[field].dirty;
+  }
+
+  errorsDirtyCreateTraveler(field: string) {
+    return this.createTravelerForm.controls[field].errors && this.createTravelerForm.controls[field].dirty;
   }
 }
