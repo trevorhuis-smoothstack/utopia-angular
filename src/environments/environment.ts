@@ -5,6 +5,9 @@
 export const environment = {
   production: false,
   agentBackendUrl: "http://127.0.0.1:8080/agent",
+  travelerBackendUrl: 'http://localhost:8080/traveler',
+  counterUrl: 'http://localhost:8080/counter',
+  loginUrl: 'http://localhost:8080/login',
   agentUserIdUri: "/user/id",
   agentUsernameUri: "/user/username",
   agentUserUri: "/user",
@@ -14,9 +17,6 @@ export const environment = {
   agentFlightsUri: "/flights",
   agentAirportsUri: "/airports",
   agentBookingUri: "/booking",
-  travelerBackendUrl: 'http://localhost:8080/traveler',
-  counterUrl: 'http://localhost:8080/counter',
-  loginUrl: 'http://localhost:8080/login',
   readTravelerAirports: '/airports',
   usernameUri: '/users',
   userUri: '/users',
@@ -29,7 +29,12 @@ export const environment = {
   flightsUri: '/flights',
   travelersUri: '/travelers',
   bookingUri: '/bookings',
-  counterCreateUserUri: '/traveler'
+  counterCreateUserUri: '/traveler',
+  counterCancellablyBookedUri: "/flights/cancellable/traveler/",
+  counterCancelUri: "/bookings",
+  counterBookableUri: "/flights/bookable",
+  counterBookUri: "/booking",
+  counterUsernameUri: "/user/",
 };
 
 /*

@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { TravelerService } from 'src/app/common/s/service/traveler.service';
 import { environment } from 'src/environments/environment';
 import * as moment from 'moment';
+import { StripeService } from 'ngx-stripe';
 
 @Component({
   selector: 'app-bookings',
@@ -14,13 +15,17 @@ export class BookingsComponent implements OnInit {
   bookings: any[];
   airportsMap: Map<number, string>;
 
-  constructor(private service: TravelerService) { }
+  constructor(private service: TravelerService, private stripe: StripeService) { }
 
   ngOnInit() {
     this.airportsMap = new Map();
     this.bookings = new Array();
 
     this.loadBookings();
+
+    this.stripe.setKey(
+      "pk_test_51Guj65Fb3TAD5KLT94lDvAoFWPcLphSSna40tyv7hCbT8m14pxaItIRXf4y5N33ZaYEU8cqVjXJ7I8lteoAUrmrE00E3zXAfTw"
+    );
   }
 
 

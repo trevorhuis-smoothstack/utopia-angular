@@ -6,6 +6,7 @@ import { Subject } from "rxjs";
 })
 export class CounterDataService {
   counter: any;
+  traveler: any;
 
   constructor() {}
 
@@ -13,15 +14,20 @@ export class CounterDataService {
 
   travelerObservable = this.travelerSource.asObservable();
 
-  setCounter(counter: any) {
-    this.counter = counter;
-  }
-
   getCounter() {
     return this.counter;
   }
 
-  newTraveler(traveler: any) {
+  setCounter(counter: any) {
+    this.counter = counter;
+  }
+
+  getTraveler() {
+    return this.traveler;
+  }
+
+  setTraveler(traveler: any) {
+    this.traveler = traveler;
     this.travelerSource.next(traveler);
   }
 }
