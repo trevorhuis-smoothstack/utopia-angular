@@ -28,7 +28,7 @@ export class CounterSelectTravelerComponent implements OnInit {
       .get(environment.counterUrl + environment.counterGetUserUri + username)
       .subscribe(
         (result) => {
-          this.dataService.newTraveler(result);
+          this.dataService.setTraveler(result);
           this.router.navigate(["/counter"]);
         },
         (error) => alert("Error getting traveler: Status " + error.error.status)

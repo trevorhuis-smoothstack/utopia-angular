@@ -21,11 +21,13 @@ export const environment = {
   CheckAuthUri: '/authorized',
   counterUrl: "http://localhost:8080/counter",
   loginUrl: "http://localhost:8080/login",
+  counterAirportUri: "/airports",
+  counterBookableUri: "/flights/bookable",
+  counterBookUri: "/booking",
   counterCheckAuthUri: "/authorized",
   counterCreateUserUri: "/user",
   counterGetUserUri: "/users/",
   counterTravelerUri: "/traveler/",
-  counterAirportUri: "/airports",
 };
 
 /*

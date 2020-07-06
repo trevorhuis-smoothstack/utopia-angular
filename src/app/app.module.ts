@@ -38,6 +38,7 @@ import { CounterSelectTravelerComponent } from "./counter/counter-select-travele
 import { CounterComponent } from "./counter/counter/counter.component";
 import { CounterTravelerComponent } from "./counter/counter-traveler/counter-traveler.component";
 import { CounterCreateTravelerComponent } from "./counter/counter-create-traveler/counter-create-traveler.component";
+import { CounterBookingComponent } from "./counter/counter-booking/counter-booking.component";
 import { TravelerComponent } from './traveler/traveler.component';
 import { TravelerService } from './common/s/service/traveler.service';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
@@ -65,6 +66,7 @@ import { TravelerLoginComponent } from './traveler/traveler-login/traveler-login
     CounterComponent,
     CounterTravelerComponent,
     CounterCreateTravelerComponent,
+    CounterBookingComponent,
     TravelerComponent,
     TravelerLoginComponent,
   ],
