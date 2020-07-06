@@ -19,6 +19,7 @@ export class FlightsComponent implements OnInit {
   flights: any;
   selectedFlight: any;
   date: NgbDateStruct;
+  flightButtonText = 'My Flights';
 
   // Slider
   customPrice = 100;

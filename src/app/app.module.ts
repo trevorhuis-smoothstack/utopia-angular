@@ -43,7 +43,6 @@ import { TravelerAuthService } from './common/s/service/traveler-auth-service.se
     AgentDashboardComponent,
     CounterLoginComponent,
     CounterDashboardComponent,
-    CounterTravelerTypeComponent,
     CounterSelectTravelerComponent,
     CounterCreateTravelerComponent,
     CounterComponent,

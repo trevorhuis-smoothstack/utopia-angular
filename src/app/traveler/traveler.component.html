@@ -1,8 +1,8 @@
 <div>
-  <h1>Welcome {{username}}</h1>
+  <h1 class="text-center">Welcome {{username}}</h1>
   <div>
-  <button (click)="logout()">logout</button>
-  <button (click)="toggleFlights()">show flights</button>
+  <button id="traveler-logout" class="btn btn-danger" (click)="logout()">logout</button>
+  <button class="btn btn-secondary" (click)="toggleFlights()">{{ flightButtonText }}</button>
   </div>
   <app-bookings *ngIf="!showFlights" [user]="currentUser" [airports]="airports"></app-bookings>
   <app-flights *ngIf="showFlights" [user]="currentUser" [airports]="airports"></app-flights>

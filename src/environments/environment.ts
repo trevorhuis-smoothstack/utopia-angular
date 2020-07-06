@@ -19,8 +19,7 @@ export const environment = {
   flightsUri: '/flights',
   travelersUri: '/travelers',
   bookingUri: '/bookings',
-  counterUrl: "http://localhost:8080/counter",
-  loginUrl: "http://localhost:8080/login",
+  counterCreateUserUri: '/traveler'
 };
 
 /*
