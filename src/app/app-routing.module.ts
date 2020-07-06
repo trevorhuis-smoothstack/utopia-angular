@@ -1,3 +1,4 @@
+
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { AgentLoginComponent } from "./agent/agent-login/agent-login.component";
@@ -18,9 +19,15 @@ const routes: Routes = [
   { path: 'traveler/dashboard', component: TravelerComponent },
   { path: 'traveler/login', component: TravelerLoginComponent },
   {
-    path: "counter",
+    path: 'counter',
     component: CounterComponent,
-    children: [{ path: "traveler", component: CounterTravelerComponent }],
+    children: [
+      {
+        path: 'traveler/existing',
+        component: CounterSelectTravelerComponent,
+      },
+    ],
+
   },
 ];
 

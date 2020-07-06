@@ -42,6 +42,12 @@ import { TravelerComponent } from './traveler/traveler.component';
 import { TravelerService } from './common/s/service/traveler.service';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { TravelerLoginComponent } from './traveler/traveler-login/traveler-login.component';
+import { FlightsComponent } from './traveler/flights/flights.component';
+import { BookingsComponent } from './traveler/bookings/bookings.component';
+import { TravelerAuthInterceptor } from './common/s/service/TravelerAuthInterceptor';
+
+import { TravelerDataService } from './common/s/service/traveler-data.service';
+import { TravelerAuthService } from './common/s/service/traveler-auth-service.service';
 
 @NgModule({
   declarations: [
@@ -62,11 +68,12 @@ import { TravelerLoginComponent } from './traveler/traveler-login/traveler-login
     CounterLoginComponent,
     CounterDashboardComponent,
     CounterSelectTravelerComponent,
-    CounterComponent,
-    CounterTravelerComponent,
     CounterCreateTravelerComponent,
+    CounterComponent,
     TravelerComponent,
     TravelerLoginComponent,
+    FlightsComponent,
+    BookingsComponent,
   ],
   imports: [
     BrowserModule,
@@ -86,9 +93,17 @@ import { TravelerLoginComponent } from './traveler/traveler-login/traveler-login
       useClass: AgentAuthInterceptor,
       multi: true,
     },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TravelerAuthInterceptor,
+      multi: true,
+    },
     AgentUtopiaService,
     TravelerService,
     CounterHttpService,
+    TravelerDataService,
+    TravelerAuthInterceptor,
+    TravelerAuthService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: CounterInterceptionService,
