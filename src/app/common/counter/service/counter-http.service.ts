@@ -8,7 +8,7 @@ export class CounterHttpService {
   constructor(private http: HttpClient) {}
 
   head(url: string) {
-    return this.http.head(url);
+    return this.http.head(url, { observe: "response" });
   }
 
   get(url: string) {
@@ -21,5 +21,9 @@ export class CounterHttpService {
 
   put(url: string) {
     return this.http.put(url,null);
+  }
+
+  getFull(url: string) {
+    return this.http.get(url, { observe: "response" });
   }
 }
