@@ -44,6 +44,7 @@ import { TravelerComponent } from './traveler/traveler.component';
 import { TravelerService } from './common/s/service/traveler.service';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { TravelerLoginComponent } from './traveler/traveler-login/traveler-login.component';
+import { CounterDateFilterPipe } from './common/counter/pipe/counter-date-filter.pipe';
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import { TravelerLoginComponent } from './traveler/traveler-login/traveler-login
     CounterBookingComponent,
     TravelerComponent,
     TravelerLoginComponent,
+    CounterDateFilterPipe,
   ],
   imports: [
     BrowserModule,
