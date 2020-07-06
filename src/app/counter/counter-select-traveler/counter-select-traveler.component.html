@@ -1,0 +1,18 @@
+<div class="select-traveler">
+  <div class="select-existing-traveler">
+    <form [formGroup]="form">
+      <fieldset>
+        <legend>Find Customer by Username</legend>
+        <div class="form-group">
+          <label>Username</label>
+          <input class="form-control" formControlName="username" />
+        </div>
+      </fieldset>
+      <div class="form-buttons">
+        <button class="btn btn-primary btn-block" (click)="getTraveler(form.value.username)">
+          OK
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

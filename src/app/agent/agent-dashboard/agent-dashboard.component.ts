@@ -98,7 +98,7 @@ export class AgentDashboardComponent implements OnInit {
   loadAgent() {
     this.service
       .get(
-        `${environment.agentBackendUrl}${environment.usernameUri}/${this.agent.username}`
+        `${environment.agentBackendUrl}${environment.agentUsernameUri}/${this.agent.username}`
       )
       .subscribe((result: Agent) => {
         this.agent.name = result.name;
@@ -108,7 +108,7 @@ export class AgentDashboardComponent implements OnInit {
 
   loadAirports() {
     this.service
-      .get(`${environment.agentBackendUrl}${environment.airportsUri}`)
+      .get(`${environment.agentBackendUrl}${environment.agentAirportsUri}`)
       .subscribe((result) => {
         this.airports = result;
 

@@ -67,18 +67,18 @@ export class CancelBookingComponent implements OnInit {
     this.selectedTravelerBookings = new Array();
     this.service
       .get(
-        `${environment.agentBackendUrl}${environment.bookingsUri}/${this.agent.userId}`
+        `${environment.agentBackendUrl}${environment.agentBookingsUri}/${this.agent.userId}`
       )
       .subscribe((result: Booking[]) => {
         result.forEach((booking: Booking) => {
 
           this.service.get(
-            `${environment.agentBackendUrl}${environment.userIdUri}/${booking.travelerId}`
+            `${environment.agentBackendUrl}${environment.agentUserIdUri}/${booking.travelerId}`
           ).subscribe((result: Traveler) => {
             booking.name = result.name;
 
             this.service.get(
-              `${environment.agentBackendUrl}${environment.flightUri}/${booking.flightId}`
+              `${environment.agentBackendUrl}${environment.agentFlightUri}/${booking.flightId}`
             ).subscribe((result: Flight) => {
               booking.flight = result;
   
@@ -111,7 +111,7 @@ export class CancelBookingComponent implements OnInit {
     }
 
     this.service
-      .put(`${environment.agentBackendUrl}${environment.bookingUri}`, booking)
+      .put(`${environment.agentBackendUrl}${environment.agentBookingUri}`, booking)
       .subscribe(
         (res) => {
           this.cancelledBooking = true;

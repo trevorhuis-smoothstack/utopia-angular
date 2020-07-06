@@ -91,7 +91,7 @@ export class CreateBookingComponent implements OnInit {
 
   loadFlights() {
     this.service
-      .get(`${environment.agentBackendUrl}${environment.flightsUri}`)
+      .get(`${environment.agentBackendUrl}${environment.agentFlightsUri}`)
       .subscribe(
         (result: Flight[]) => {
           this.flights = result;
@@ -134,7 +134,7 @@ export class CreateBookingComponent implements OnInit {
           stripeId: result.token.id,
         };
         this.service
-          .post(`${environment.agentBackendUrl}${environment.bookingUri}`, booking)
+          .post(`${environment.agentBackendUrl}${environment.agentBookingUri}`, booking)
           .subscribe(
             () => {
               this.flightBooked = true;

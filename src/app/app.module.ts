@@ -1,13 +1,12 @@
-import { BrowserModule } from "@angular/platform-browser";
-import { NgModule } from "@angular/core";
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
 
-import { AppRoutingModule } from "./app-routing.module";
-import { AppComponent } from "./app.component";
-import { AgentLoginComponent } from "./agent/agent-login/agent-login.component";
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { AgentLoginComponent } from './agent/agent-login/agent-login.component';
 import { NgxStripeModule } from "ngx-stripe";
-import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
-import { ReactiveFormsModule } from "@angular/forms";
-
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
 import { AgentAuthService } from "./common/h/service/AgentAuthService";
 import { AgentAuthInterceptor } from "./common/h/service/AgentAuthInterceptor";
 import { AgentDashboardComponent } from "./agent/agent-dashboard/agent-dashboard.component";
@@ -31,6 +30,18 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { CancelBookingComponent } from "./agent/agent-dashboard/cancel-booking/cancel-booking.component";
 import { CreateBookingComponent } from "./agent/agent-dashboard/create-booking/create-booking.component";
 import { SelectTravelerComponent } from "./agent/agent-dashboard/select-traveler/select-traveler.component";
+import { CounterLoginComponent } from "./counter/counter-login/counter-login.component";
+import { CounterHttpService } from "./common/counter/service/counter-http.service";
+import { CounterDashboardComponent } from "./counter/counter-dashboard/counter-dashboard.component";
+import { CounterInterceptionService } from "./common/counter/service/counter-interception.service";
+import { CounterSelectTravelerComponent } from "./counter/counter-select-traveler/counter-select-traveler.component";
+import { CounterComponent } from "./counter/counter/counter.component";
+import { CounterTravelerComponent } from "./counter/counter-traveler/counter-traveler.component";
+import { CounterCreateTravelerComponent } from "./counter/counter-create-traveler/counter-create-traveler.component";
+import { TravelerComponent } from './traveler/traveler.component';
+import { TravelerService } from './common/s/service/traveler.service';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { TravelerLoginComponent } from './traveler/traveler-login/traveler-login.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +59,14 @@ import { SelectTravelerComponent } from "./agent/agent-dashboard/select-traveler
     CancelBookingComponent,
     CreateBookingComponent,
     SelectTravelerComponent,
+    CounterLoginComponent,
+    CounterDashboardComponent,
+    CounterSelectTravelerComponent,
+    CounterComponent,
+    CounterTravelerComponent,
+    CounterCreateTravelerComponent,
+    TravelerComponent,
+    TravelerLoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -58,6 +77,7 @@ import { SelectTravelerComponent } from "./agent/agent-dashboard/select-traveler
     FormsModule,
     BrowserAnimationsModule,
     NgxStripeModule.forRoot(),
+    NgMultiSelectDropDownModule,
   ],
   providers: [
     AgentAuthService,
@@ -67,6 +87,13 @@ import { SelectTravelerComponent } from "./agent/agent-dashboard/select-traveler
       multi: true,
     },
     AgentUtopiaService,
+    TravelerService,
+    CounterHttpService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CounterInterceptionService,
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
 })

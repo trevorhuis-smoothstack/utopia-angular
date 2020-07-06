@@ -1,0 +1,58 @@
+a:active {
+  text-decoration: none;
+}
+
+#sidebar {
+  position: fixed;
+  width: 200px;
+  height: 100%;
+  background-color: #18bc9c;
+  left: -200px;
+  transition: all 400ms linear;
+  padding-top: 1rem;
+}
+
+#sidebar.active {
+  left: 0px;
+}
+
+#sidebar ul {
+  padding-inline-start: 0;
+}
+
+#sidebar .toggle-btn {
+  position: absolute;
+  left: 230px;
+  top: 20px;
+  cursor: pointer;
+}
+
+.utopia-button {
+  padding: 0px 10px 15px 10px;
+}
+
+.utopia-data {
+  padding: 5px 10px;
+}
+
+.side-link {
+  border-bottom: 1px solid #ffffff;
+  color: #ffffff;
+  list-style: none;
+  padding: 15px 10px;
+  cursor: pointer;
+  margin-left: auto;
+  outline: none;
+}
+
+.side-link-active {
+  background-color: #ffffff;
+  color: #18bc9c;
+  outline: none;
+}
+
+.counter-container {
+  margin-top: 2rem;
+  margin-left: calc(10vh + 200px);
+  margin-right: 10vh;
+}
