@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AgentDashboardComponent } from './agent-dashboard.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('AgentDashboardComponent', () => {
   let component: AgentDashboardComponent;
@@ -8,7 +9,7 @@ describe('AgentDashboardComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AgentDashboardComponent ]
+      declarations: [ AgentDashboardComponent ],
     })
     .compileComponents();
   }));
