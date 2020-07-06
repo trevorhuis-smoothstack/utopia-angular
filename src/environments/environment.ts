@@ -21,6 +21,8 @@ export const environment = {
   CheckAuthUri: '/authorized',
   counterUrl: "http://localhost:8080/counter",
   loginUrl: "http://localhost:8080/login",
+  counterCancellablyBookedUri: "/flights/cancellable/traveler/",
+  counterCancelUri: "/bookings",
   counterAirportUri: "/airports",
   counterBookableUri: "/flights/bookable",
   counterBookUri: "/booking",

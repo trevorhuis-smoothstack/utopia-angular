@@ -4,11 +4,11 @@ import { AgentLoginComponent } from "./agent/agent-login/agent-login.component";
 import { AgentDashboardComponent } from "./agent/agent-dashboard/agent-dashboard.component";
 import { CounterLoginComponent } from "./counter/counter-login/counter-login.component";
 import { CounterDashboardComponent } from "./counter/counter-dashboard/counter-dashboard.component";
-import { CounterSelectTravelerComponent } from "./counter/counter-select-traveler/counter-select-traveler.component";
 import { TravelerComponent } from './traveler/traveler.component';
 import { TravelerLoginComponent } from './traveler/traveler-login/traveler-login.component';
 import { CounterComponent } from "./counter/counter/counter.component";
 import { CounterTravelerComponent } from "./counter/counter-traveler/counter-traveler.component";
+import { CounterCancellationComponent } from "./counter/counter-cancellation/counter-cancellation.component";
 import { CounterBookingComponent } from "./counter/counter-booking/counter-booking.component";
 
 const routes: Routes = [
@@ -23,6 +23,7 @@ const routes: Routes = [
     component: CounterComponent,
     children: [
       { path: "traveler", component: CounterTravelerComponent },
+      { path: "cancellation", component: CounterCancellationComponent },
       { path: "booking", component: CounterBookingComponent },
     ],
   },

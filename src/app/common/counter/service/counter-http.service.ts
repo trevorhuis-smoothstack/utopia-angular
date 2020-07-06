@@ -19,7 +19,7 @@ export class CounterHttpService {
     return this.http.post(url, body, { observe: "response" });
   }
 
-  put(url: string, body: any) {
-    return this.http.put(url, body);
+  put(url: string) {
+    return this.http.put(url,null);
   }
 }
