@@ -2,3 +2,12 @@ nav {
   overflow: auto;
   z-index: 2;
 }
+
+.mr-auto {
+  margin: 5px;
+  margin-right: 15px;
+}
+
+.toast-body {
+  min-width: 250px;
+}

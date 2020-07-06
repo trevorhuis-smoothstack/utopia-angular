@@ -14,6 +14,7 @@ import {
 import { NgbDateStruct, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Agent } from "../../common/entities/Agent";
 import { Traveler } from "../../common/entities/Traveler";
+import { ToastService } from "src/app/common/toast-service.service";
 
 @Component({
   selector: "app-agent-dashboard",
@@ -34,7 +35,8 @@ export class AgentDashboardComponent implements OnInit {
     private service: AgentUtopiaService,
     private authService: AgentAuthService,
     private modalService: NgbModal,
-    private router: Router
+    private router: Router,
+    private toastService: ToastService
   ) {}
 
   ngOnInit() {
@@ -66,10 +68,10 @@ export class AgentDashboardComponent implements OnInit {
   }
 
   adjustForMobile(width) {
-    if(width < 992) {
+    if (width < 992) {
       this.mobile = true;
       this.moveSidebarToNav();
-    } else if (width > 992){
+    } else if (width > 992) {
       this.mobile = false;
     }
   }
@@ -100,25 +102,36 @@ export class AgentDashboardComponent implements OnInit {
       .get(
         `${environment.agentBackendUrl}${environment.agentUsernameUri}/${this.agent.username}`
       )
-      .subscribe((result: Agent) => {
-        this.agent.name = result.name;
-        this.agent.userId = result.userId;
-      });
+      .subscribe(
+        (result: Agent) => {
+          this.agent.name = result.name;
+          this.agent.userId = result.userId;
+        },
+        (error) => {
+          if (error.error.status === 500) {
+            this.toastService.newInternalErrorToast();
+          }
+        }
+      );
   }
 
   loadAirports() {
     this.service
       .get(`${environment.agentBackendUrl}${environment.agentAirportsUri}`)
-      .subscribe((result) => {
-        this.airports = result;
+      .subscribe(
+        (result) => {
+          this.airports = result;
 
-        this.airports.forEach((element) => {
-          this.airportsMap.set(element.airportId, element.name);
-        });
-      }),
-      (error) => {
-        alert(error);
-      };
+          this.airports.forEach((element) => {
+            this.airportsMap.set(element.airportId, element.name);
+          });
+        },
+        (error) => {
+          if (error.error.status === 500) {
+            this.toastService.newInternalErrorToast();
+          }
+        }
+      );
   }
 
   openBookFlight() {

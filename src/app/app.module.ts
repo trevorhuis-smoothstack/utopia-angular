@@ -11,7 +11,7 @@ import { AgentAuthService } from "./common/h/service/AgentAuthService";
 import { AgentAuthInterceptor } from "./common/h/service/AgentAuthInterceptor";
 import { AgentDashboardComponent } from "./agent/agent-dashboard/agent-dashboard.component";
 import { FormsModule } from "@angular/forms";
-import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
+import { NgbModule, } from "@ng-bootstrap/ng-bootstrap";
 import { AgentUtopiaService } from "./common/h/agent-utopia.service";
 import {
   FilterFlightsByDepartureAirport,

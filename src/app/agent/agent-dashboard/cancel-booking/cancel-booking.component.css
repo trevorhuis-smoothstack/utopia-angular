@@ -35,3 +35,6 @@
     width: 150px;
   }
   
+  .calendar {
+    z-index: 1;
+  }

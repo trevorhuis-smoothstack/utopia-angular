@@ -21,6 +21,7 @@ import { Airport } from "../../../common/entities/Airport";
 import { Traveler } from "../../../common/entities/Traveler";
 import * as moment from "moment";
 import { Elements, Element, StripeService } from "ngx-stripe";
+import { ToastService } from 'src/app/common/toast-service.service';
 @Component({
   selector: "app-agent-create-booking",
   templateUrl: "./create-booking.component.html",
@@ -56,7 +57,8 @@ export class CreateBookingComponent implements OnInit {
   constructor(
     private service: AgentUtopiaService,
     private modalService: NgbModal,
-    private stripe: StripeService
+    private stripe: StripeService,
+    private toastService: ToastService
   ) {}
 
   ngOnInit() {
@@ -87,7 +89,7 @@ export class CreateBookingComponent implements OnInit {
         alert(error);
       }
     );
-  }
+}
 
   loadFlights() {
     this.service
@@ -101,7 +103,7 @@ export class CreateBookingComponent implements OnInit {
           
         },
         (error) => {
-          alert(error);
+          this.toastService.newInternalErrorToast();
         }
       );
   }
@@ -136,7 +138,12 @@ export class CreateBookingComponent implements OnInit {
         this.service
           .post(`${environment.agentBackendUrl}${environment.agentBookingUri}`, booking)
           .subscribe(
-            () => {
+            (result) => {
+              if (result === null) {
+                this.modalService.dismissAll();
+                this.toastService.newFlightBookedToast();
+                return;
+              }
               this.flightBooked = true;
               this.flights = this.flights.filter(
                 (flight) => flight !== this.selectedFlight
@@ -144,7 +151,12 @@ export class CreateBookingComponent implements OnInit {
             },
             (error) => {
               this.modalService.dismissAll();
-              alert("Error booking ticket: Status " + error.error.status);
+              if (error.error.status === 400) {
+                this.toastService.newBadRequestToast("Your credit card was declined.");
+              } else if (error.error.status === 500) {
+                this.toastService.newInternalErrorToast();
+              }
+              
             }
           );
       } else if (result.error) {

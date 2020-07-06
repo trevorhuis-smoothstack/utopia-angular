@@ -60,6 +60,10 @@
   .price-slider {
     width: 150px;
   }
+
+  .calendar {
+    z-index: 1;
+  }
   
   @media (max-width: 992px) {
     .price-slider {
