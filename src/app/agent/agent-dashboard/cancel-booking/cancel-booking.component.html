@@ -1,0 +1,280 @@
+<div class="booking-filters">
+  <div class="traveler-date-select row">
+    <div class="name-search">
+      <label class="col-form-label" for="inputDefault"
+        >Search by Traveler</label
+      >
+      <input
+        (change)="page = 1"
+        type="text"
+        class="form-control"
+        [(ngModel)]="travelerSearch"
+        placeholder="Traveler Name"
+        id="inputDefault"
+      />
+    </div>
+    <div class="date-picker">
+      <label class="col-form-label" for="inputDefault">
+        Departure Date
+      </label>
+      <form class="form-inline">
+        <div class="form-group date-input">
+          <div class="input-group">
+            <input
+              class="form-control"
+              placeholder="yyyy-mm-dd"
+              name="dp"
+              [(ngModel)]="date"
+              ngbDatepicker
+              #d="ngbDatepicker"
+            />
+            <div class="input-group-append">
+              <button
+                class="btn btn-outline-secondary calendar"
+                (click)="d.toggle(); date = null"
+                type="button"
+              >
+                <svg
+                  width="1em"
+                  height="1em"
+                  viewBox="0 0 16 16"
+                  class="bi bi-calendar3"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857V3.857z"
+                  />
+                  <path
+                    fill-rule="evenodd"
+                    d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="airport-select row">
+    <div class="departure-select">
+      <label class="col-form-label" for="inputDefault">
+        Departure Airport
+      </label>
+      <select
+        class="custom-select"
+        [(ngModel)]="selectedDeparture"
+        (change)="page = 1"
+      >
+        <option selected="All Branches">All Airports</option>
+        <option *ngFor="let airport of airports" value="{{ airport.name }}">
+          {{ airport.name }}
+        </option>
+      </select>
+    </div>
+    <div class="arrive-select">
+      <label class="col-form-label" for="inputDefault">
+        Arrival Airport
+      </label>
+      <select
+        class="custom-select"
+        [(ngModel)]="selectedArrival"
+        (change)="page = 1"
+      >
+        <option selected="All Branches">All Airports</option>
+        <option *ngFor="let airport of airports" value="{{ airport.name }}">
+          {{ airport.name }}
+        </option>
+      </select>
+    </div>
+  </div>
+</div>
+<table class="table table-hover cancel-flight-table">
+  <thead>
+    <tr>
+      <th scope="col">Flight ID</th>
+      <th scope="col">Traveler</th>
+      <th scope="col">Departure Airport</th>
+      <th scope="col" *ngIf="!mobile">Arrival Airport</th>
+      <th scope="col">Departure Time</th>
+      <th scope="col" *ngIf="!mobile">Cancel Flight</th>
+    </tr>
+  </thead>
+  <tbody *ngIf="mobile">
+    <tr
+      *ngFor="
+        let b of selectedTravelerBookings
+          | filterBookingsByDepartureAirportPipe
+            : selectedDeparture
+            : filterMetadata
+          | filterBookingsByArrivalAirportPipe: selectedArrival:filterMetadata
+          | filterByDepartureDatePipe: date:filterMetadata
+          | filterBookingsByTravelerPipe: travelerSearch:filterMetadata
+          | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize
+      "
+      class="table-active"
+      (click)="openCancelBookingModal(cancelBookingModal ,b)"
+    >
+      <th scope="row">{{ b.flightId }}</th>
+      <td>{{ b.name }}</td>
+      <td>{{ b.flight.departAirport }}</td>
+      <td>{{ b.flight.departTimeFormatted }}</td>
+    </tr>
+    <tr
+      *ngFor="
+        let b of bookings
+          | filterBookingsByDepartureAirportPipe
+            : selectedDeparture
+            : filterMetadata
+          | filterBookingsByArrivalAirportPipe: selectedArrival:filterMetadata
+          | filterByDepartureDatePipe: date:filterMetadata
+          | filterBookingsByTravelerPipe: travelerSearch:filterMetadata
+          | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize
+      "
+      (click)="openCancelBookingModal(cancelBookingModal ,b)"
+    >
+      <th scope="row">{{ b.flightId }}</th>
+      <td>{{ b.name }}</td>
+      <td>{{ b.flight.departAirport }}</td>
+      <td>{{ b.flight.departTime| date: "medium" }}</td>
+    </tr>
+  </tbody>
+  <tbody *ngIf="!mobile">
+    <tr
+      *ngFor="
+        let b of selectedTravelerBookings
+          | filterBookingsByDepartureAirportPipe
+            : selectedDeparture
+            : filterMetadata
+          | filterBookingsByArrivalAirportPipe: selectedArrival:filterMetadata
+          | filterByDepartureDatePipe: date:filterMetadata
+          | filterBookingsByTravelerPipe: travelerSearch:filterMetadata
+          | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize
+      "
+      class="table-active"
+    >
+      <th scope="row">{{ b.flightId }}</th>
+      <td>{{ b.name }}</td>
+      <td>{{ b.flight.departAirport }}</td>
+      <td>{{ b.flight.arriveAirport }}</td>
+      <td>{{ b.flight.departTime| date: "medium" }}</td>
+      <td>
+        <button
+          *ngIf="b.active"
+          type="button"
+          class="btn btn-secondary"
+          (click)="openCancelBookingModal(cancelBookingModal ,b)"
+        >
+          Cancel Flight
+        </button>
+        <p class="text-danger" *ngIf="!b.active">Booking Cancelled</p>
+      </td>
+    </tr>
+    <tr
+      *ngFor="
+        let b of bookings
+          | filterBookingsByDepartureAirportPipe
+            : selectedDeparture
+            : filterMetadata
+          | filterBookingsByArrivalAirportPipe: selectedArrival:filterMetadata
+          | filterByDepartureDatePipe: date:filterMetadata
+          | filterBookingsByTravelerPipe: travelerSearch:filterMetadata
+          | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize
+      "
+    >
+      <th scope="row">{{ b.flightId }}</th>
+      <td>{{ b.name }}</td>
+      <td>{{ b.flight.departAirport }}</td>
+      <td>{{ b.flight.arriveAirport }}</td>
+      <td>{{ b.flight.departTime | date: "medium"  }}</td>
+      <td>
+        <button
+          *ngIf="b.active"
+          type="button"
+          class="btn btn-secondary"
+          (click)="openCancelBookingModal(cancelBookingModal ,b)"
+        >
+          Cancel Flight
+        </button>
+        <p class="text-danger" *ngIf="!b.active">Booking Cancelled</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<ngb-pagination
+  *ngIf="bookings"
+  [collectionSize]="filterMetadata.count"
+  [(page)]="page"
+  aria-label="Default pagination"
+>
+</ngb-pagination>
+
+<ng-template #cancelBookingModal let-close="close">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4>Cancel a Flight</h4>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="close(); cancelledBooking = false"
+        >
+          <span>&#215;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="alert alert-success" *ngIf="cancelledBooking">
+          <strong>Flight Cancelled!</strong>
+        </div>
+        <div class="form-group credit-card-form">
+          <h5 class="text-center">
+            Confirm the flight information
+          </h5>
+          <table class="table table-hover">
+            <tr class="table-dark">
+              <th scope="row">Traveler Name:</th>
+              <td>{{ selectedBooking.name }}</td>
+            </tr>
+            <tr class="table-dark">
+              <th scope="row">Flight Id:</th>
+              <td>{{ selectedBooking.flight.flightId }}</td>
+            </tr>
+            <tr class="table-dark">
+              <th scope="row">Departure Airport:</th>
+              <td>{{ selectedBooking.flight.departAirport }}</td>
+            </tr>
+            <tr class="table-dark">
+              <th scope="row">Arrival Airport:</th>
+              <td>{{ selectedBooking.flight.arriveAirport }}</td>
+            </tr>
+            <tr class="table-dark">
+              <th scope="row">Flight Time:</th>
+              <td>{{ selectedBooking.flight.departTime| date: "medium" }}</td>
+            </tr>
+          </table>
+
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn-secondary"
+            type="button"
+            (click)="close(); cancelledBooking = false"
+          >
+            Close
+          </button>
+          <button
+            *ngIf="!cancelledBooking"
+            class="btn btn-success"
+            type="button"
+            (click)="cancelBooking()"
+          >
+            Cancel Booking
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
