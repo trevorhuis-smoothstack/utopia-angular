@@ -13,6 +13,7 @@ import * as moment from 'moment';
 export class AgentLoginComponent implements OnInit {
   form:FormGroup;
   invalidLogin: boolean;
+  invalidAttempt: boolean;
 
   constructor(private fb:FormBuilder, 
     private authService: AgentAuthService, 
@@ -34,12 +35,13 @@ export class AgentLoginComponent implements OnInit {
     const val = this.form.value;
 
     if (val.username && val.password) {
+      this.invalidAttempt = false;
       this.authService.login(val.username, val.password).then(
         (response: any) => {
           const expiresAt = moment().add(response.headers.get('expires'), "second");
   
           localStorage.setItem("username", val.username);
-          localStorage.setItem("id_token_agent", response.headers.get('Authorization'));
+          localStorage.setItem("token", response.headers.get('Authorization'));
           localStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()));
           
           this.router.navigate(['/agent/dashboard']);
@@ -51,6 +53,8 @@ export class AgentLoginComponent implements OnInit {
           }
           
         })
+    } else {
+      this.invalidAttempt = true;
     }
   }
 
