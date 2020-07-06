@@ -11,6 +11,7 @@ import {
 import { Router } from '@angular/router';
 import { TravelerAuthService } from '../common/s/service/traveler-auth-service.service';
 import { TravelerDataService } from '../common/s/service/traveler-data.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-traveler',
@@ -37,6 +38,7 @@ export class TravelerComponent implements OnInit {
 
 
   constructor(
+    private modalService: NgbModal,
     private travelerDataService: TravelerDataService,
     private authService: TravelerAuthService,
     private travelerService: TravelerService,
@@ -125,5 +127,9 @@ export class TravelerComponent implements OnInit {
   logout() {
     this.travelerAuthService.logout();
     this.router.navigate(['/traveler/login']);
+  }
+
+  openLogoutModal(modal: any) {
+    this.modalService.open(modal);
   }
 }

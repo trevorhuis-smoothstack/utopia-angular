@@ -1,10 +1,86 @@
+<div id="traveler-sidebar" class="active">
+  <ul *ngIf="agent">
+    <li class="agent-data" id="agent-side-top">
+      <h5><strong>Agent:</strong><br />{{ agent.name }}</h5>
+    </li>
+    <li class="agent-logout">
+      <button type="button" class="btn btn-danger" (click)="openLogoutModal(logoutTravelerModal)">
+        Logout
+      </button>
+    </li>
+    <li class="agent-data" *ngIf="currentUser">
+      <h5><strong>Welcome:</strong><br />{{ currentUsere }}</h5>
+    </li>
+    <li class="agent-logout" *ngIf="traveler">
+      <button type="button" class="btn btn-primary" (click)="newTraveler()">
+        Pick New Traveler
+      </button>
+    </li>
+    <li class="agent-features">
+      <h4><strong>Features</strong></h4>
+    </li>
+    <li
+      id="agent-book-flight"
+      class="side-link side-link-active"
+      (click)="openBookFlight()"
+    >
+      Book Flight
+    </li>
+    <li
+      id="agent-cancel-flight"
+      class="side-link"
+      (click)="openCancelBooking()"
+    >
+      Cancel Bookings
+    </li>
+  </ul>
+</div>
+
 <div>
   <h1 class="text-center">Welcome {{username}}</h1>
   <div>
-  <button id="traveler-logout" class="btn btn-danger" (click)="logout()">logout</button>
+  <button id="traveler-logout" class="btn btn-danger" (click)="openLogoutModal(logoutTravelerModal)">logout</button>
   <button class="btn btn-secondary" (click)="toggleFlights()">{{ flightButtonText }}</button>
   </div>
   <app-bookings *ngIf="!showFlights" [user]="currentUser" [airports]="airports"></app-bookings>
   <app-flights *ngIf="showFlights" [user]="currentUser" [airports]="airports"></app-flights>
 </div>
 
+<ng-template #logoutTravelerModal let-close="close">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4>Logout</h4>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="close();"
+        >
+          <span>&#215;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+          <h5 class="text-center" >
+            Are you sure you want to logout?
+          </h5>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn-secondary"
+            type="button"
+            (click)="close();"
+          >
+            Cancel
+          </button>
+          <button
+            class="btn btn-success"
+            type="button"
+            (click)="logout(); close();"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+</ng-template>

@@ -19,19 +19,28 @@ export class TravelerLoginComponent implements OnInit {
   usernameTaken = false;
   createTraveler = false;
   traveler: any;
+  maxLength = 45;
 
   travelerLoginForm = new FormGroup({
-    username: new FormControl('', [Validators.required as any, Validators.required as any]),
-    password: new FormControl('', [Validators.required as any, Validators.required as any]),
+    username: new FormControl('', [Validators.required as any]),
+    password: new FormControl('', [Validators.required as any]),
   });
 
 
   createTravelerForm = new FormGroup({
-    name: new FormControl('', [Validators.required as any, Validators.required as any]),
-    username: new FormControl('', [Validators.required as any, Validators.required as any]),
-    password: new FormControl('', [Validators.required as any, Validators.required as any]),
-    passwordCheck: new FormControl('', [Validators.required as any, Validators.required as any]),
-  });
+    name: new FormControl(null, [
+      Validators.required,
+      Validators.maxLength(this.maxLength),
+    ]),
+    username: new FormControl(
+      null,
+      [Validators.required, Validators.maxLength(this.maxLength)],
+    ),
+    password: new FormControl(null, [Validators.required]),
+    confirmPassword: new FormControl(null),
+  },
+  { validators: this.validatePasswordMatch }
+  );
 
   constructor(
     private travelerDataService: TravelerDataService,
@@ -133,5 +142,11 @@ export class TravelerLoginComponent implements OnInit {
         alert(error);
       }
     );
+  }
+
+  validatePasswordMatch(form: FormGroup) {
+    return form.value.password === form.value.confirmPassword
+      ? null
+      : { validatePasswordMatch: true };
   }
 }

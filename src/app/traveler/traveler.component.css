@@ -68,6 +68,10 @@
     margin-right: 10vh;
   }
   
+  #logoutAgentModal {
+      z-index: 1;
+  }
+  
   @media (max-width: 600px) {
     #traveler-sidebar {
       display: none;
