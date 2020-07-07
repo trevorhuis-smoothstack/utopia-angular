@@ -14,7 +14,6 @@ const routes: Routes = [
   { path: "agent/login", component: AgentLoginComponent },
   { path: "agent/dashboard", component: AgentDashboardComponent },
   { path: "counter/login", component: CounterLoginComponent },
-  { path: "counter", component: CounterComponent },
   { path: 'traveler/dashboard', component: TravelerComponent },
   { path: 'traveler/login', component: TravelerLoginComponent },
   {
