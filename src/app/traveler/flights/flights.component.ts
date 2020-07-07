@@ -4,6 +4,7 @@ import { TravelerService } from 'src/app/common/s/service/traveler.service';
 import { NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'src/environments/environment';
 import * as moment from 'moment';
+import { StripeService, Element, Elements } from 'ngx-stripe';
 
 @Component({
   selector: 'app-flights',
@@ -14,6 +15,10 @@ export class FlightsComponent implements OnInit {
 
   @Input() user: any;
   @Input() airports: any;
+
+  // stripe
+  elements: Elements;
+  card: Element;
 
   airportsMap: Map<number, string>;
   flights: any;
@@ -30,29 +35,27 @@ export class FlightsComponent implements OnInit {
   pageSize = 10;
   filterMetadata = { count: 0 };
 
-
-  creditCardForm = new FormGroup({
-    cardNumber: new FormControl('', [Validators.required as any]),
-    expMonth: new FormControl('', [Validators.required as any]),
-    expYear: new FormControl('', [Validators.required as any]),
-    cvc: new FormControl('', [Validators.required as any]),
-  });
-
-
   constructor(
     private travelerService: TravelerService,
     private formBuilder: FormBuilder,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private stripe: StripeService
     ) { }
 
   ngOnInit() {
-    this.creditCardForm = this.formBuilder.group({
-      cardNumber: '',
-      expMonth: '',
-      expYear: '',
-      cvc: '',
-    });
+    this.stripe.setKey('pk_test_51GvUChBYMFlMJbBRvrWM7yZJHJhVExdReQ2A5K0uaKTidkmqRcnY48fr6VmnK9csVNOwkiH0xetgz36Gcvql6IF20098oe4tpg');
+    this.stripe.elements().subscribe(
+      (elements) => {
+        this.card = elements.create("card", {});
+      },
 
+      (error) => {
+        alert(error);
+      }
+    );
+    // this.stripe.setKey(
+    //   "pk_test_51GvUChBYMFlMJbBRvrWM7yZJHJhVExdReQ2A5K0uaKTidkmqRcnY48fr6VmnK9csVNOwkiH0xetgz36Gcvql6IF20098oe4tpg"
+    // );
     this.flights = new Array();
 
     this.airportsMap = new Map();
@@ -95,51 +98,42 @@ export class FlightsComponent implements OnInit {
   }
 
   bookFlight() {
-    const booking = {
-      active: true,
-      flightId: this.selectedFlight.flightId,
-      bookerId: this.user.userId,
-      travelerId: this.user.userId,
-      stripeId: null,
-    };
-
-
-    (window as any).Stripe.card.createToken(
-      {
-        number: this.creditCardForm.value.cardNumber,
-        exp_month: this.creditCardForm.value.expMonth,
-        exp_year: this.creditCardForm.value.expYear,
-        cvc: this.creditCardForm.value.cvc,
-      },
-      (status: number, response: any) => {
-        if (status === 200) {
-          const token = response.id;
-          booking.stripeId = token;
-
-          this.travelerService
-            .post(
-              `${environment.travelerBackendUrl}${environment.bookingUri}`,
-              booking
-            )
-            .subscribe(
-              (res) => {
-                // TODO: create toast to notify success
-                // reload the list of flights
-              },
-              (error) => {
-                // TODO: create toast to notify failure.
-                alert(error);
-              }
+    console.log("booking()");
+    let booking: any;
+    this.stripe.createToken(this.card, {}).subscribe((result) => {
+      if (result.token) {
+        booking = {
+          travelerId: this.user.userId,
+          flightId: this.selectedFlight.flightId,
+          bookerId: this.user.userId,
+          active: true,
+          stripeId: result.token.id,
+        };
+        this.travelerService
+        .post(environment.travelerBackendUrl + environment.bookingUri, booking)
+        .subscribe(
+          () => {
+            this.modalService.dismissAll();
+            this.flights = this.flights.filter(
+              (flight) => flight !== this.selectedFlight
             );
-        } else {
-          alert(response.error.message);
-        }
-      }
-    );
-  }
+          },
+          (error) => {
+            this.modalService.dismissAll();
+            alert('Error booking ticket: Status ' + error.error.status);
+          }
+        );
+    } else if (result.error) {
+      this.modalService.dismissAll();
+      alert("Error processing payment: Token creation failed.");
+    }
+  });
+}
 
   openBookFlightModal(modal: any, flight: any) {
     this.selectedFlight = flight;
     this.modalService.open(modal);
+    this.card.mount('#card');
+
   }
 }

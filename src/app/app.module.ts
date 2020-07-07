@@ -71,16 +71,14 @@ import { TravelerAuthService } from './common/s/service/traveler-auth-service.se
     CounterDashboardComponent,
     CounterSelectTravelerComponent,
     CounterCreateTravelerComponent,
-<<<<<<< HEAD
     CounterComponent,
-=======
     CounterCancellationComponent,
     CounterBookingComponent,
->>>>>>> dev
     TravelerComponent,
     TravelerLoginComponent,
     FlightsComponent,
     BookingsComponent,
+    CounterTravelerComponent
   ],
   imports: [
     BrowserModule,

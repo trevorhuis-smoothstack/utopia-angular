@@ -22,10 +22,6 @@ export class BookingsComponent implements OnInit {
     this.bookings = new Array();
 
     this.loadBookings();
-
-    this.stripe.setKey(
-      "pk_test_51GvUChBYMFlMJbBRvrWM7yZJHJhVExdReQ2A5K0uaKTidkmqRcnY48fr6VmnK9csVNOwkiH0xetgz36Gcvql6IF20098oe4tpg"
-    );
   }
 
 

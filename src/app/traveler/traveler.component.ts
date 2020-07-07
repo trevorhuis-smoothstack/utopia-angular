@@ -120,7 +120,7 @@ export class TravelerComponent implements OnInit {
     if (this.showFlights) {
       this.flightButtonText = 'My Bookings';
     } else {
-      this.flightButtonText = 'Return to Search Flights';
+      this.flightButtonText = 'Search Flights';
     }
   }
 

@@ -1,49 +1,24 @@
 <div id="traveler-sidebar" class="active">
-  <ul *ngIf="agent">
-    <li class="agent-data" id="agent-side-top">
-      <h5><strong>Agent:</strong><br />{{ agent.name }}</h5>
+  <ul id="traveler-sidebar-list">   
+    <li id="traveler-side-top" class="traveler-logout">
+      <button id="traveler-logout-button" type="button" class="btn btn-primary" (click)="toggleFlights()">
+        {{flightButtonText}}
+      </button>
     </li>
-    <li class="agent-logout">
-      <button type="button" class="btn btn-danger" (click)="openLogoutModal(logoutTravelerModal)">
+    <li class="traveler-logout">
+      <button type="button" class="btn btn-danger" id="traveler-logout-button"(click)="openLogoutModal(logoutTravelerModal)">
         Logout
       </button>
-    </li>
-    <li class="agent-data" *ngIf="currentUser">
-      <h5><strong>Welcome:</strong><br />{{ currentUsere }}</h5>
-    </li>
-    <li class="agent-logout" *ngIf="traveler">
-      <button type="button" class="btn btn-primary" (click)="newTraveler()">
-        Pick New Traveler
-      </button>
-    </li>
-    <li class="agent-features">
-      <h4><strong>Features</strong></h4>
-    </li>
-    <li
-      id="agent-book-flight"
-      class="side-link side-link-active"
-      (click)="openBookFlight()"
-    >
-      Book Flight
-    </li>
-    <li
-      id="agent-cancel-flight"
-      class="side-link"
-      (click)="openCancelBooking()"
-    >
-      Cancel Bookings
     </li>
   </ul>
 </div>
 
 <div>
   <h1 class="text-center">Welcome {{username}}</h1>
-  <div>
-  <button id="traveler-logout" class="btn btn-danger" (click)="openLogoutModal(logoutTravelerModal)">logout</button>
-  <button class="btn btn-secondary" (click)="toggleFlights()">{{ flightButtonText }}</button>
+  <div class="container flights-container">
+    <app-bookings  *ngIf="!showFlights" [user]="currentUser" [airports]="airports"></app-bookings>
+    <app-flights   *ngIf="showFlights" [user]="currentUser" [airports]="airports"></app-flights>
   </div>
-  <app-bookings *ngIf="!showFlights" [user]="currentUser" [airports]="airports"></app-bookings>
-  <app-flights *ngIf="showFlights" [user]="currentUser" [airports]="airports"></app-flights>
 </div>
 
 <ng-template #logoutTravelerModal let-close="close">
