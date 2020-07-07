@@ -43,6 +43,7 @@ export class CancelBookingComponent implements OnInit {
   displayBookings: boolean;
   selectedBooking: any;
   cancelledBooking: boolean;
+  hideCancelled: boolean;
 
     // Pagination
     page = 1;
@@ -53,6 +54,8 @@ export class CancelBookingComponent implements OnInit {
     private modalService: NgbModal,) {}
 
   ngOnInit() {
+    
+    this.hideCancelled = false;
     this.airportsMap = new Map();
 
     this.airports.forEach((element) => {
@@ -92,7 +95,7 @@ export class CancelBookingComponent implements OnInit {
               }
               
               this.changePaginationCount();
-          })
+          });
 
           })
 

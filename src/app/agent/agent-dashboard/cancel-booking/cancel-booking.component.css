@@ -35,3 +35,9 @@
     width: 150px;
   }
   
+  .custom-switch {
+    flex-basis: 100%;
+    align-self: center;
+    margin-right: auto;
+    margin-left: 10px;
+  }
