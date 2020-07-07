@@ -32,7 +32,6 @@ import { CreateBookingComponent } from "./agent/agent-dashboard/create-booking/c
 import { SelectTravelerComponent } from "./agent/agent-dashboard/select-traveler/select-traveler.component";
 import { CounterLoginComponent } from "./counter/counter-login/counter-login.component";
 import { CounterHttpService } from "./common/counter/service/counter-http.service";
-import { CounterDashboardComponent } from "./counter/counter-dashboard/counter-dashboard.component";
 import { CounterInterceptionService } from "./common/counter/service/counter-interception.service";
 import { CounterSelectTravelerComponent } from "./counter/counter-select-traveler/counter-select-traveler.component";
 import { CounterComponent } from "./counter/counter/counter.component";
@@ -63,7 +62,6 @@ import { CounterDateFilterPipe } from './common/counter/pipe/counter-date-filter
     CreateBookingComponent,
     SelectTravelerComponent,
     CounterLoginComponent,
-    CounterDashboardComponent,
     CounterSelectTravelerComponent,
     CounterComponent,
     CounterTravelerComponent,
