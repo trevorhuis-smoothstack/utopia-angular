@@ -40,7 +40,10 @@
   </thead>
   <tbody>
     <tr
-      *ngFor="let flight of flights"
+      *ngFor="
+        let flight of flights
+          | slice: (currentPage - 1) * rowsPerPage:currentPage * rowsPerPage
+      "
       style="cursor: pointer;"
       (click)="openBookingModal(flight, bookingModal)"
     >
@@ -51,6 +54,12 @@
     </tr>
   </tbody>
 </table>
+<ngb-pagination
+  *ngIf="flights"
+  [collectionSize]="flights ? flights.length : 0"
+  [(page)]="currentPage"
+>
+</ngb-pagination>
 
 <ng-template #bookingModal let-close="close">
   <div class="modal-dialog">
@@ -97,11 +106,7 @@
           <button class="btn btn-secondary" type="button" (click)="close()">
             Cancel
           </button>
-          <button
-            class="btn btn-success"
-            type="button"
-            (click)="book()"
-          >
+          <button class="btn btn-success" type="button" (click)="book()">
             Book Ticket
           </button>
         </div>

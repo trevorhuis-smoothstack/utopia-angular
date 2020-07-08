@@ -12,6 +12,8 @@ import { Elements, Element, StripeService } from "ngx-stripe";
   styleUrls: ["./counter-booking.component.css"],
 })
 export class CounterBookingComponent implements OnInit {
+  currentPage = 1;
+  rowsPerPage = 10;
   elements: Elements;
   card: Element;
   counter = this.dataService.getCounter();
