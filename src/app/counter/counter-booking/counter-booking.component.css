@@ -27,3 +27,8 @@
 .date-input {
   width: 150px;
 }
+
+.price-date-select {
+  margin: 0px 10px;
+  margin-bottom: 15px;
+}
