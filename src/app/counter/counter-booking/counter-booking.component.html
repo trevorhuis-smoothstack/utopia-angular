@@ -55,9 +55,10 @@
   </tbody>
 </table>
 <ngb-pagination
-  *ngIf="flights"
+  *ngIf="flights && flights.length"
   [collectionSize]="flights ? flights.length : 0"
   [(page)]="currentPage"
+  [pageSize]="rowsPerPage"
 >
 </ngb-pagination>
 
