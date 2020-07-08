@@ -11,6 +11,8 @@ import { environment } from "src/environments/environment";
   styleUrls: ["./counter-cancellation.component.css"],
 })
 export class CounterCancellationComponent implements OnInit {
+  currentPage = 1;
+  rowsPerPage = 10;
   traveler: any;
   airports: any[];
   flights: any[];
@@ -50,6 +52,7 @@ export class CounterCancellationComponent implements OnInit {
         (error: any) =>
           alert("Error getting flights: Status " + error.error.status)
       );
+      debugger;
   }
 
   getAirportName(airportId: number) {
