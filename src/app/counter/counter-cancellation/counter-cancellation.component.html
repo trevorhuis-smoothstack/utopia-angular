@@ -1,4 +1,26 @@
 <h2 class="text-center">Cancel Ticket</h2>
+<div class="airport-selectors">
+  <div class="depart-select">
+    <label class="col-form-label" for="inputDefault">
+      Departure Airport
+    </label>
+    <select class="custom-select" [(ngModel)]="departAirport">
+      <option *ngFor="let airport of airports" [ngValue]="airport">
+        {{ airport.name }}
+      </option>
+    </select>
+  </div>
+  <div class="arrive-select">
+    <label class="col-form-label" for="inputDefault">
+      Arrival Airport
+    </label>
+    <select class="custom-select" [(ngModel)]="arriveAirport">
+      <option *ngFor="let airport of airports" [ngValue]="airport">
+        {{ airport.name }}
+      </option>
+    </select>
+  </div>
+</div>
 <table class="table table-hover">
   <thead>
     <tr>
@@ -10,7 +32,10 @@
   </thead>
   <tbody>
     <tr
-      *ngFor="let flight of flights"
+      *ngFor="
+        let flight of flights
+          | counterAirportFilter: departAirport:arriveAirport
+      "
       style="cursor: pointer;"
       (click)="openCancellationModal(flight, cancellationModal)"
     >
@@ -63,11 +88,7 @@
           <button class="btn btn-secondary" type="button" (click)="close()">
             Keep
           </button>
-          <button
-            class="btn btn-success"
-            type="button"
-            (click)="cancel()"
-          >
+          <button class="btn btn-success" type="button" (click)="cancel()">
             Cancel Ticket
           </button>
         </div>

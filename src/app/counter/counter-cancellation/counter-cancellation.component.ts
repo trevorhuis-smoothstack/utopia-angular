@@ -15,6 +15,8 @@ export class CounterCancellationComponent implements OnInit {
   airports: any[];
   flights: any[];
   flight: any;
+  departAirport: any;
+  arriveAirport: any;
 
   constructor(
     private modalService: NgbModal,
