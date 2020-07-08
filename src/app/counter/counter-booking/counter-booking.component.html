@@ -7,7 +7,7 @@
     <select
       class="custom-select"
       [(ngModel)]="departAirport"
-      (change)="getFlightsIf(arriveAirport)"
+      (change)="getFlightsIf(arriveAirport); currentPage = 1"
     >
       <option *ngFor="let airport of airports" [ngValue]="airport">
         {{ airport.name }}
@@ -21,7 +21,7 @@
     <select
       class="custom-select"
       [(ngModel)]="arriveAirport"
-      (change)="getFlightsIf(departAirport)"
+      (change)="getFlightsIf(departAirport); currentPage = 1"
     >
       <option *ngFor="let airport of airports" [ngValue]="airport">
         {{ airport.name }}
