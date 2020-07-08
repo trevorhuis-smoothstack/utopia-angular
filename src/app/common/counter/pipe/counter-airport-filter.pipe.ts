@@ -8,11 +8,12 @@ export class CounterAirportFilterPipe implements PipeTransform {
     let output = input;
     if (departAirport)
       output = output.filter(
-        (flight) => (flight.departId = departAirport.airportId)
+        (flight) => (flight.departId === departAirport.airportId)
       );
     if (arriveAirport)
       output = output.filter(
-        (flight) => (flight.arriveId = arriveAirport.airportId)
+        (flight) => (flight.arriveId === arriveAirport.airportId)
       );
+      return output;
   }
 }
