@@ -16,3 +16,14 @@
 .arrive-select {
   grid-column: 2;
 }
+
+.date-picker {
+  display: block;
+  width: 150px;
+  margin: 0px 10px;
+  margin-bottom: 15px;
+}
+
+.date-input {
+  width: 150px;
+}
