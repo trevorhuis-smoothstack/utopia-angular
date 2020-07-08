@@ -1,20 +1,22 @@
 <h2 class="text-center">Book Ticket</h2>
-<div class="price-slider">
-  <fieldset class="form-group">
-    <label for="customRange1"
-      >Max Price: {{ customPrice | currency: "USD" }}</label
-    >
-    <input
-      type="range"
-      class="custom-range slider-input"
-      id="custom-price"
-      [min]="minPrice"
-      [max]="maxPrice"
-      data-show-value="true"
-      data-popup-enabled="true"
-      [(ngModel)]="customPrice"
-    />
-  </fieldset>
+<div class="price-date-select">
+  <div class="price-slider">
+    <fieldset class="form-group">
+      <label for="customRange1"
+        >Max Price: {{ customPrice | currency: "USD" }}</label
+      >
+      <input
+        type="range"
+        class="custom-range slider-input"
+        id="custom-price"
+        [min]="minPrice"
+        [max]="maxPrice"
+        data-show-value="true"
+        data-popup-enabled="true"
+        [(ngModel)]="customPrice"
+      />
+    </fieldset>
+  </div>
 </div>
 <div class="airport-selectors">
   <div class="depart-select">
