@@ -12,6 +12,8 @@ import { Elements, Element, StripeService } from "ngx-stripe";
   styleUrls: ["./counter-booking.component.css"],
 })
 export class CounterBookingComponent implements OnInit {
+  minDate: any;
+  maxDate: any;
   elements: Elements;
   card: Element;
   counter = this.dataService.getCounter();
@@ -79,6 +81,15 @@ export class CounterBookingComponent implements OnInit {
   getAirportName(airportId: number) {
     return this.airports.find((airport) => airport.airportId === airportId)
       .name;
+  }
+
+  getCurrentDate() {
+    const now = new Date();
+    return {
+      year: now.getFullYear(),
+      month: now.getMonth() + 1,
+      day: now.getDate(),
+    };
   }
 
   openBookingModal(flight: any, modal: any) {
