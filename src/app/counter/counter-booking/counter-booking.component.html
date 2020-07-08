@@ -57,7 +57,7 @@
   </thead>
   <tbody>
     <tr
-      *ngFor="let flight of flights"
+      *ngFor="let flight of flights | counterPriceFilter: customPrice"
       style="cursor: pointer;"
       (click)="openBookingModal(flight, bookingModal)"
     >
