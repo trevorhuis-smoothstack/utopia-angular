@@ -12,6 +12,9 @@ import { Elements, Element, StripeService } from "ngx-stripe";
   styleUrls: ["./counter-booking.component.css"],
 })
 export class CounterBookingComponent implements OnInit {
+  minPrice = 0;
+  maxPrice = 10000;
+  customPrice = 10000;
   elements: Elements;
   card: Element;
   counter = this.dataService.getCounter();

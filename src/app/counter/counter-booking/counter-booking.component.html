@@ -1,4 +1,21 @@
 <h2 class="text-center">Book Ticket</h2>
+<div class="price-slider">
+  <fieldset class="form-group">
+    <label for="customRange1"
+      >Max Price: {{ customPrice | currency: "USD" }}</label
+    >
+    <input
+      type="range"
+      class="custom-range slider-input"
+      id="custom-price"
+      [min]="minPrice"
+      [max]="maxPrice"
+      data-show-value="true"
+      data-popup-enabled="true"
+      [(ngModel)]="customPrice"
+    />
+  </fieldset>
+</div>
 <div class="airport-selectors">
   <div class="depart-select">
     <label class="col-form-label" for="inputDefault">
@@ -97,11 +114,7 @@
           <button class="btn btn-secondary" type="button" (click)="close()">
             Cancel
           </button>
-          <button
-            class="btn btn-success"
-            type="button"
-            (click)="book()"
-          >
+          <button class="btn btn-success" type="button" (click)="book()">
             Book Ticket
           </button>
         </div>
