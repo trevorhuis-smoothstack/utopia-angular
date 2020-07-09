@@ -1,0 +1,98 @@
+#traveler-sidebar {
+    position: fixed;
+    width: 200px;
+    height: 100%;
+    background-color: #18bc9c;
+    left: -200px;
+    z-index: 1; /* Stay on top */
+    top: 0px; /* Stay at the top */
+    transition: all 400ms linear;
+    overflow: hidden;
+  }
+
+  #traveler-logout {
+      left: 0px;
+  }
+  
+  #traveler-sidebar.active {
+    left: 0px;
+  }
+  
+  .flights-container {
+    margin-top: 2rem;
+    margin-left: calc(10vh + 200px);
+    margin-right: 10vh;
+  }
+
+  #traveler-side-top {
+    padding-top: 100px;
+  }
+
+  #traveler-sidebar ul {
+    padding-inline-start: 0;
+  }
+  
+  #traveler-logout-button {
+    min-width: 150px;
+  }
+
+  .traveler-logout {
+    padding: 10px 10px 15px 10px;
+  }
+  
+  .traveler-data {
+    padding: 5px 10px;
+    padding: 1rem;
+  }
+  
+  #traveler-side-top {
+    padding-top: 100px;
+  }
+  
+  .traveler-data h5 {
+    line-height: 1.5rem;
+  }
+  
+  .side-link,
+  .agent-features {
+    border-bottom: 1px solid #ffffff;
+  }
+  
+  .traveler-link {
+    color: #ffffff;
+    list-style: none;
+    padding: 15px 10px;
+    cursor: pointer;
+    margin-left: auto;
+  }
+  
+  .traveler-features {
+    padding: 15px 10px;
+    color: #ffffff;
+  }
+  
+  .traveler-link-active {
+    background-color: #ffffff;
+    color: #18bc9c;
+  }
+  
+  .traveler-container {
+    margin-top: 2rem;
+    margin-left: calc(10vh + 200px);
+    margin-right: 10vh;
+  }
+  
+  #logoutAgentModal {
+      z-index: 1;
+  }
+  
+  @media (max-width: 600px) {
+    #traveler-sidebar {
+      display: none;
+    }
+  
+    .traveler-container {
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }

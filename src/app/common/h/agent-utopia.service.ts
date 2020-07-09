@@ -12,6 +12,10 @@ export class AgentUtopiaService {
     return this.http.get(url);
   }
 
+  getWithParams(url, params) {
+    return this.http.get(url, params);
+  }
+
   post(url, body) {
     return this.http.post(url,body);
   }

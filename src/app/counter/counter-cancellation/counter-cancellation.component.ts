@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, AfterViewInit, OnDestroy } from "@angular/core";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Router } from "@angular/router";
 import { CounterHttpService } from "src/app/common/counter/service/counter-http.service";
@@ -10,7 +10,8 @@ import { environment } from "src/environments/environment";
   templateUrl: "./counter-cancellation.component.html",
   styleUrls: ["./counter-cancellation.component.css"],
 })
-export class CounterCancellationComponent implements OnInit {
+export class CounterCancellationComponent
+  implements OnInit, AfterViewInit, OnDestroy {
   minDate: any;
   maxDate: any;
   traveler: any;
@@ -52,6 +53,15 @@ export class CounterCancellationComponent implements OnInit {
         (error: any) =>
           alert("Error getting flights: Status " + error.error.status)
       );
+  }
+
+  ngAfterViewInit() {
+    document.getElementById("book").classList.remove("side-link-active");
+    document.getElementById("cancel").classList.add("side-link-active");
+  }
+
+  ngOnDestroy() {
+    document.getElementById("cancel").classList.remove("side-link-active");
   }
 
   getAirportName(airportId: number) {
