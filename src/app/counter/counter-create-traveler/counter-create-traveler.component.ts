@@ -7,8 +7,12 @@ import {
   Validators,
   AbstractControl,
 } from "@angular/forms";
+import { ToastrService } from "ngx-toastr";
 import { environment } from "src/environments/environment";
-import { maxLength } from "src/app/common/counter/counter-globals";
+import {
+  maxLength,
+  uncheckedErrorMessage,
+} from "src/app/common/counter/counter-globals";
 import { map, catchError } from "rxjs/operators";
 import { of } from "rxjs";
 
@@ -37,6 +41,7 @@ export class CounterCreateTravelerComponent implements OnInit {
   );
 
   constructor(
+    private toastr: ToastrService,
     private httpService: CounterHttpService,
     private dataService: CounterDataService
   ) {}
@@ -55,7 +60,10 @@ export class CounterCreateTravelerComponent implements OnInit {
       .subscribe(
         (result) => this.dataService.setTraveler(result.body),
         (error) =>
-          alert("Error creating traveler: Status " + error.error.status)
+          this.toastr.error(
+            uncheckedErrorMessage,
+            "Error creating traveler: Status " + error.error.status
+          )
       );
   }
 
