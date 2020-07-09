@@ -1,0 +1,212 @@
+<div class="flight-filters">
+  <div class="date-picker">
+    <label class="col-form-label" for="inputDefault">
+      Pick a Departure Date
+    </label>
+    <form class="form-inline">
+      <div class="form-group">
+        <div class="input-group">
+          <input
+            class="form-control"
+            placeholder="yyyy-mm-dd"
+            name="dp"
+            [(ngModel)]="date"
+            ngbDatepicker
+            #d="ngbDatepicker"
+          />
+          <div class="input-group-append">
+            <button
+              class="btn btn-outline-secondary calendar"
+              (click)="d.toggle(); date = null"
+              type="button"
+            >
+              <svg
+                width="1em"
+                height="1em"
+                viewBox="0 0 16 16"
+                class="bi bi-calendar3"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857V3.857z"
+                />
+                <path
+                  fill-rule="evenodd"
+                  d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <button
+        type="button"
+        class="btn btn-outline-secondary reset-date"
+        (click)="date = null"
+      >
+        Reset Date
+      </button>
+    </form>
+  </div>
+  <div class="departure-select">
+    <label class="col-form-label" for="inputDefault">
+      Filter by Departure Airport
+    </label>
+    <select
+      class="custom-select"
+      [(ngModel)]="selectedDeparture"
+      (change)="page = 1"
+    >
+      <option selected="All Branches">All Airports</option>
+      <option *ngFor="let airport of airports" value="{{ airport.name }}">
+        {{ airport.name }}
+      </option>
+    </select>
+  </div>
+  <div class="arrive-select">
+    <label class="col-form-label" for="inputDefault">
+      Filter by Arrival Airport
+    </label>
+    <select
+      class="custom-select"
+      [(ngModel)]="selectedArrival"
+      (change)="page = 1"
+    >
+      <option selected="All Branches">All Airports</option>
+      <option *ngFor="let airport of airports" value="{{ airport.name }}">
+        {{ airport.name }}
+      </option>
+    </select>
+  </div>
+  <div class="price-slider">
+    <fieldset class="form-group">
+      <label for="customRange1"
+        >Filter By Price<br />Max Price - ${{ customPrice }}</label
+      >
+      <input
+        type="range"
+        class="custom-range"
+        id="custom-price"
+        value="50"
+        [min]="minValue"
+        [max]="maxValue"
+        data-show-value="true"
+        data-popup-enabled="true"
+        [(ngModel)]="customPrice"
+      />
+    </fieldset>
+  </div>
+</div>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Depart From</th>
+      <th scope="col">Arrive To</th>
+      <th scope="col">Departure Time</th>
+      <th scope="col">Price</th>
+      <th scope="col">Book</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr
+      *ngFor="
+        let f of flights
+          | filterFlightsByDepartureAirport: selectedDeparture:filterMetadata
+          | filterFlightsByArrivalAirport: selectedArrival:filterMetadata
+          | filterByFlightPrice: customPrice:filterMetadata
+          | filterByDepartureDate: date:filterMetadata
+          | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize
+      "
+    >
+      <th scope="row">{{ f.departAirport }}</th>
+      <td>{{ f.arriveAirport }}</td>
+      <td>{{ f.departTimeFormatted }}</td>
+      <td>$ {{ f.price }}</td>
+      <td>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="openBookFlightModal(bookFlightModal, f)"
+        >
+          Book Flight
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<ngb-pagination
+  *ngIf="flights"
+  [collectionSize]="filterMetadata.count"
+  [(page)]="page"
+  aria-label="Default pagination"
+>
+</ngb-pagination>
+
+
+<ng-template #bookFlightModal let-close="close">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4>Book a Flight</h4>
+        <button type="button" class="btn btn-primary" (click)="close()">
+          <span>&#215;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <h5 class="text-center">Confirm flight information</h5>
+          <table class="table table-hover">
+            <tr class="table-dark">
+              <th scope="row">Name:</th>
+              <td>{{ user.name }}</td>
+            </tr>
+            <tr class="table-dark">
+              <th scope="row">Flight Id:</th>
+              <td>{{ selectedFlight.flightId }}</td>
+            </tr>
+            <tr class="table-dark">
+              <th scope="row">Departure Airport:</th>
+              <td>{{ selectedFlight.departAirport }}</td>
+            </tr>
+            <tr class="table-dark">
+              <th scope="row">Arrival Airport:</th>
+              <td>{{ selectedFlight.arriveAirport }}</td>
+            </tr>
+            <tr class="table-dark">
+              <th scope="row">Flight Departs:</th>
+              <td>{{ selectedFlight.departTimeFormatted }}</td>
+            </tr>
+            <tr class="table-dark">
+              <th scope="row">Price:</th>
+              <td>$ {{ selectedFlight.price }}</td>
+            </tr>
+          </table>
+
+          <h5 class="text-center">Enter credit or debit card</h5>
+          <form>
+            <div id="card" class="field"></div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn-secondary"
+            type="button"
+            (click)="close()"
+          >
+            Cancel
+          </button>
+          <button
+            class="btn btn-success"
+            type="button"
+            (click)="bookFlight();"
+          >
+            Book Flight
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
