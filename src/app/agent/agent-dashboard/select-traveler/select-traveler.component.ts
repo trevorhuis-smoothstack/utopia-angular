@@ -9,6 +9,7 @@ import {
 import { environment } from "src/environments/environment";
 import { Traveler } from "../../../common/entities/Traveler";
 import { AgentUtopiaService } from "src/app/common/h/agent-utopia.service";
+import { ToastsService } from 'src/app/common/s/service/toasts.service';
 
 @Component({
   selector: "app-agent-select-traveler",
@@ -28,7 +29,8 @@ export class SelectTravelerComponent implements OnInit {
 
   constructor(
     private service: AgentUtopiaService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private toastService: ToastsService
   ) {
   }
 
@@ -92,7 +94,7 @@ export class SelectTravelerComponent implements OnInit {
           this.invalidLogin = true;
         },
         (error) => {
-          alert(error);
+          this.toastService.showError("We are having an error reading traveler information. Please try again later or call IT if the problem continues.", "Internal Error");
         }
       );
   }
@@ -130,14 +132,15 @@ export class SelectTravelerComponent implements OnInit {
                 this.traveler = result;
                 this.createTraveler = false;
                 this.changeTraveler(this.traveler);
+                this.toastService.showSuccess("New User: " + this.traveler.name,"New User Created");
               },
               (error) => {
-                alert(error);
+                this.toastService.showError("We are having an error creating a new traveler. Please try again later or call IT if the problem continues.", "Internal Error");
               }
             );
         },
         (error) => {
-          alert(error);
+          this.toastService.showError("We are having an error reading traveler information. Please try again later or call IT if the problem continues.", "Internal Error");
         }
       );
   }

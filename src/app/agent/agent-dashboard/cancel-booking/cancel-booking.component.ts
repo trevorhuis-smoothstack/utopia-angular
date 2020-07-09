@@ -10,6 +10,7 @@ import { mergeMap, tap, concatMap, delay, map } from "rxjs/operators";
 import { Observable, of, forkJoin } from "rxjs";
 import { Traveler } from '../../../common/entities/Traveler';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastsService } from 'src/app/common/s/service/toasts.service';
 
   // WHAT I WANT
   
@@ -50,7 +51,8 @@ export class CancelBookingComponent implements OnInit {
     filterMetadata = { count: 0 };
 
   constructor(private service: AgentUtopiaService,
-    private modalService: NgbModal,) {}
+    private modalService: NgbModal,
+    private toastService: ToastsService) {}
 
   ngOnInit() {
     this.airportsMap = new Map();
@@ -89,7 +91,7 @@ export class CancelBookingComponent implements OnInit {
         });
       },
       (error) => {
-        alert(error);
+        this.toastService.showError("We are having an error loading booking information. Please try again later or call IT if the problem continues.", "Internal Error")
       }
     )
   }
@@ -112,7 +114,7 @@ export class CancelBookingComponent implements OnInit {
           this.loadBookings();
         },
         (error) => {
-          alert(error);
+          this.toastService.showError("We are having an error cancelling that booking. Please try again later or call IT if the problem continues.", "Internal Error")
         }
       );
   }

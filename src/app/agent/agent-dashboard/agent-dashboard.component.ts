@@ -14,6 +14,7 @@ import {
 import { NgbDateStruct, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Agent } from "../../common/entities/Agent";
 import { Traveler } from "../../common/entities/Traveler";
+import { ToastsService } from 'src/app/common/s/service/toasts.service';
 
 @Component({
   selector: "app-agent-dashboard",
@@ -34,7 +35,8 @@ export class AgentDashboardComponent implements OnInit {
     private service: AgentUtopiaService,
     private authService: AgentAuthService,
     private modalService: NgbModal,
-    private router: Router
+    private router: Router,
+    private toastService: ToastsService
   ) {}
 
   ngOnInit() {
@@ -103,6 +105,9 @@ export class AgentDashboardComponent implements OnInit {
       .subscribe((result: Agent) => {
         this.agent.name = result.name;
         this.agent.userId = result.userId;
+      },
+      (error) =>{
+        this.toastService.showError("We are having an error reading your information. Please try again later or call IT if the problem continues.", "Internal Error");
       });
   }
 
@@ -117,7 +122,7 @@ export class AgentDashboardComponent implements OnInit {
         });
       }),
       (error) => {
-        alert(error);
+        this.toastService.showError("We are having an error reading flight information. Please try again later or call IT if the problem continues.", "Internal Error");
       };
   }
 
