@@ -1,5 +1,22 @@
 <h2 class="text-center">Book Ticket</h2>
 <div class="price-date-select">
+  <div class="price-slider">
+    <fieldset class="form-group">
+      <label for="customRange1"
+        >Max Price: {{ customPrice | currency: "USD" }}</label
+      >
+      <input
+        type="range"
+        class="custom-range slider-input"
+        id="custom-price"
+        [min]="minPrice"
+        [max]="maxPrice"
+        data-show-value="true"
+        data-popup-enabled="true"
+        [(ngModel)]="customPrice"
+      />
+    </fieldset>
+  </div>
   <span class="date-picker">
     <label class="col-form-label" for="inputDefault">
       Earliest&#160;Departure&#160;Date
@@ -130,7 +147,11 @@
   </thead>
   <tbody>
     <tr
-      *ngFor="let flight of flights | counterDateFilter: minDate:maxDate"
+      *ngFor="
+        let flight of flights
+          | counterPriceFilter: customPrice
+          | counterDateFilter: minDate:maxDate
+      "
       style="cursor: pointer;"
       (click)="openBookingModal(flight, bookingModal)"
     >

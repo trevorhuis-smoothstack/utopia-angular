@@ -15,6 +15,9 @@ export class CounterBookingComponent
   implements OnInit, AfterViewInit, OnDestroy {
   minDate: any;
   maxDate: any;
+  minPrice = 0;
+  maxPrice = 10000;
+  customPrice = 10000;
   elements: Elements;
   card: Element;
   counter = this.dataService.getCounter();
