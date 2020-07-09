@@ -12,6 +12,8 @@ import { environment } from "src/environments/environment";
 })
 export class CounterCancellationComponent
   implements OnInit, AfterViewInit, OnDestroy {
+  minDate: any;
+  maxDate: any;
   traveler: any;
   airports: any[];
   flights: any[];
@@ -65,6 +67,15 @@ export class CounterCancellationComponent
   getAirportName(airportId: number) {
     return this.airports.find((airport) => airport.airportId === airportId)
       .name;
+  }
+
+  getCurrentDate() {
+    const now = new Date();
+    return {
+      year: now.getFullYear(),
+      month: now.getMonth() + 1,
+      day: now.getDate(),
+    };
   }
 
   openCancellationModal(flight: any, modal: any) {
