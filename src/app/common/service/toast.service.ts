@@ -14,4 +14,13 @@ export class ToastService {
   newToast(toast: any) {
     this.toastSource.next(toast);
   }
+
+  newUnexpectedErrorToast(header: string, status: number) {
+    this.toastSource.next({
+      header: header,
+      body:
+        "Please try again. If the problem persists, please contact the IT department.",
+      status: "Status " + status,
+    });
+  }
 }
