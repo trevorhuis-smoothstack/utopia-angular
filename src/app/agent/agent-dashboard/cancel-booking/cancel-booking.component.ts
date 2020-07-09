@@ -67,37 +67,31 @@ export class CancelBookingComponent implements OnInit {
     this.selectedTravelerBookings = new Array();
     this.service
       .get(
-        `${environment.agentBackendUrl}${environment.agentBookingsUri}/${this.agent.userId}`
+        `${environment.agentBackendUrl}${environment.agentFlightsUri}/${this.agent.userId}${environment.agentTravelerUri}/${this.traveler.userId}`
       )
-      .subscribe((result: Booking[]) => {
-        result.forEach((booking: Booking) => {
+      .subscribe((result: Flight[]) => {
+        result.forEach((flight: Flight) => {
+          flight.arriveAirport = this.airportsMap.get(flight.arriveId);
+          flight.departAirport = this.airportsMap.get(flight.departId);
 
-          this.service.get(
-            `${environment.agentBackendUrl}${environment.agentUserIdUri}/${booking.travelerId}`
-          ).subscribe((result: Traveler) => {
-            booking.name = result.name;
-
-            this.service.get(
-              `${environment.agentBackendUrl}${environment.agentFlightUri}/${booking.flightId}`
-            ).subscribe((result: Flight) => {
-              booking.flight = result;
-  
-              booking.flight.arriveAirport = this.airportsMap.get(booking.flight.arriveId);
-              booking.flight.departAirport = this.airportsMap.get(booking.flight.departId);
-
-              if (this.traveler !== undefined && booking.travelerId == this.traveler.userId) {
-                this.selectedTravelerBookings.push(booking)
-              } else {
-                this.bookings.push(booking);
-              }
-              
-              this.changePaginationCount();
-          })
-
-          })
-
+          let booking: Booking = {
+            travelerId: this.traveler.userId,
+            flightId: flight.flightId,
+            active: true,
+            stripeId: "secret",
+            bookerId: this.agent.userId,
+            name: this.traveler.name,
+            flight: flight
+          }
+          this.bookings.push(booking);
+          this.changePaginationCount();
+          
         });
-      });
+      },
+      (error) => {
+        alert(error);
+      }
+    )
   }
 
   
@@ -116,7 +110,6 @@ export class CancelBookingComponent implements OnInit {
         (res) => {
           this.cancelledBooking = true;
           this.loadBookings();
-          console.log(res);
         },
         (error) => {
           alert(error);
