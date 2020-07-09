@@ -114,7 +114,7 @@
     <select
       class="custom-select"
       [(ngModel)]="departAirport"
-      (change)="getFlightsIf(arriveAirport)"
+      (change)="getFlightsIf(arriveAirport); currentPage = 1"
     >
       <option *ngFor="let airport of airports" [ngValue]="airport">
         {{ airport.name }}
@@ -128,7 +128,7 @@
     <select
       class="custom-select"
       [(ngModel)]="arriveAirport"
-      (change)="getFlightsIf(departAirport)"
+      (change)="getFlightsIf(departAirport); currentPage = 1"
     >
       <option *ngFor="let airport of airports" [ngValue]="airport">
         {{ airport.name }}
@@ -151,6 +151,7 @@
         let flight of flights
           | counterPriceFilter: customPrice
           | counterDateFilter: minDate:maxDate
+          | slice: (currentPage - 1) * rowsPerPage:currentPage * rowsPerPage
       "
       style="cursor: pointer;"
       (click)="openBookingModal(flight, bookingModal)"
@@ -162,6 +163,13 @@
     </tr>
   </tbody>
 </table>
+<ngb-pagination
+  *ngIf="flights && flights.length"
+  [collectionSize]="flights ? flights.length : 0"
+  [(page)]="currentPage"
+  [pageSize]="rowsPerPage"
+>
+</ngb-pagination>
 
 <ng-template #bookingModal let-close="close">
   <div class="modal-dialog">

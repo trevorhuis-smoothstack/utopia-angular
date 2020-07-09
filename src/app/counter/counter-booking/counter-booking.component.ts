@@ -13,6 +13,8 @@ import { Elements, Element, StripeService } from "ngx-stripe";
 })
 export class CounterBookingComponent
   implements OnInit, AfterViewInit, OnDestroy {
+  currentPage = 1;
+  rowsPerPage = 10;
   minDate: any;
   maxDate: any;
   minPrice = 0;

@@ -12,6 +12,8 @@ import { environment } from "src/environments/environment";
 })
 export class CounterCancellationComponent
   implements OnInit, AfterViewInit, OnDestroy {
+  currentPage = 1;
+  rowsPerPage = 10;
   minDate: any;
   maxDate: any;
   traveler: any;
@@ -53,6 +55,7 @@ export class CounterCancellationComponent
         (error: any) =>
           alert("Error getting flights: Status " + error.error.status)
       );
+    debugger;
   }
 
   ngAfterViewInit() {
