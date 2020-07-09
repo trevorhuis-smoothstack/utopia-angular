@@ -74,7 +74,7 @@ export class CreateBookingComponent implements OnInit {
     this.maxValue = 1;
     this.customPrice = 10000;
 
-    this.loadFlights({ params: { price: this.customPrice } });
+    this.loadPremierFlights();
 
     this.airports.forEach((element) => {
       this.airportsMap.set(element.airportId, element.name);
@@ -126,6 +126,21 @@ export class CreateBookingComponent implements OnInit {
       params.params.dateEnd = `${dateEnd.year()}-${(dateEnd.month() + 1)}-${dateEnd.date()}`;
     }
     this.loadFlights(params);
+  }
+
+  loadPremierFlights() {
+    this.service.get(`${environment.agentBackendUrl}${environment.agentFlightsUri}${environment.agentPremierUri}`,).subscribe(
+      (result: any) => {
+        this.flights = result;
+        
+        
+        this.formatFlights();
+        this.changePaginationCount();
+      },
+      (error) => {
+        alert(error);
+      }
+    );
   }
 
   loadFlights(params) {
