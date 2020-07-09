@@ -21,6 +21,7 @@ import { Airport } from "../../../common/entities/Airport";
 import { Traveler } from "../../../common/entities/Traveler";
 import * as moment from "moment";
 import { Elements, Element, StripeService } from "ngx-stripe";
+import { FlightQuery } from "src/app/common/entities/FlightQuery";
 @Component({
   selector: "app-agent-create-booking",
   templateUrl: "./create-booking.component.html",
@@ -39,6 +40,9 @@ export class CreateBookingComponent implements OnInit {
   flightBooked: boolean;
   flights: Flight[];
   selectedFlight: Flight;
+  selectedDeparture: any;
+  selectedArrival: any;
+  flexibleDeparture: any;
 
   // Slider
   minValue: number;
@@ -60,6 +64,7 @@ export class CreateBookingComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.flexibleDeparture = false;
     this.flights = new Array();
 
     this.airportsMap = new Map();
@@ -67,9 +72,9 @@ export class CreateBookingComponent implements OnInit {
     //slider
     this.minValue = 1;
     this.maxValue = 1;
-    this.customPrice = 1;
+    this.customPrice = 10000;
 
-    this.loadFlights();
+    this.loadFlights({ params: { price: this.customPrice } });
 
     this.airports.forEach((element) => {
       this.airportsMap.set(element.airportId, element.name);
@@ -89,16 +94,57 @@ export class CreateBookingComponent implements OnInit {
     );
   }
 
-  loadFlights() {
-    this.service
-      .get(`${environment.agentBackendUrl}${environment.agentFlightsUri}`)
-      .subscribe(
-        (result: Flight[]) => {
-          this.flights = result;
+  updateButton() {
+    let params = {
+      params: {
+        price: this.customPrice,
+        arriveId: "",
+        departId: "",
+        dateBegin: "",
+        dateEnd: ""
+      },
+    };
+    if(this.selectedArrival != undefined && this.selectedArrival != "All Airports") {
+      params.params.arriveId = (parseInt(this.selectedArrival) + 1).toString();
+    }
+    if(this.selectedDeparture != undefined && this.selectedDeparture != "All Airports") {
+      params.params.departId = (parseInt(this.selectedDeparture) + 1).toString();
+    }
+    if(this.date != undefined) {
+      let dateBegin = moment(`${this.date.year}-${this.date.month}-${this.date.day}`, "YYYY-MM-DD");
+      if (this.flexibleDeparture) {
+        dateBegin.add(-2, 'days');
+      }
+      params.params.dateBegin = `${dateBegin.year()}-${(dateBegin.month() + 1)}-${dateBegin.date()}`;
+    }
+    if(this.date != undefined) {
+      let dateEnd = moment(`${this.date.year}-${this.date.month}-${this.date.day}`, "YYYY-MM-DD")
+      if (this.flexibleDeparture)
+        dateEnd.add(3, 'days');
+      else
+        dateEnd.add(1, 'days');
+      params.params.dateEnd = `${dateEnd.year()}-${(dateEnd.month() + 1)}-${dateEnd.date()}`;
+    }
+    this.loadFlights(params);
+  }
 
+  loadFlights(params) {
+    this.service
+      .getWithParams(
+        `${environment.agentBackendUrl}${environment.agentFlightsUri}`,
+        params
+      )
+      .subscribe(
+        (result: any) => {
+          this.flights = result;
+          
+          if (this.flights == null) {
+            console.log("no flights");
+            // Turn into a toast
+            return;
+          }
           this.formatFlights();
           this.changePaginationCount();
-          
         },
         (error) => {
           alert(error);
@@ -134,7 +180,10 @@ export class CreateBookingComponent implements OnInit {
           stripeId: result.token.id,
         };
         this.service
-          .post(`${environment.agentBackendUrl}${environment.agentBookingUri}`, booking)
+          .post(
+            `${environment.agentBackendUrl}${environment.agentBookingUri}`,
+            booking
+          )
           .subscribe(
             () => {
               this.flightBooked = true;
