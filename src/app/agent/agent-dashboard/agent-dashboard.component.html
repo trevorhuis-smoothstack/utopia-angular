@@ -4,7 +4,11 @@
       <h5><strong>Agent:</strong><br />{{ agent.name }}</h5>
     </li>
     <li class="agent-logout">
-      <button type="button" class="btn btn-primary" (click)="openLogoutModal(logoutAgentModal)">
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="openLogoutModal(logoutAgentModal)"
+      >
         Logout
       </button>
     </li>
@@ -36,42 +40,94 @@
   </ul>
 </div>
 
-<div class=" container mobile-nav" *ngIf="mobile">
+<div class="container mobile-nav" *ngIf="mobile">
   <ul class="nav nav-tabs">
     <li class="nav-item">
-      <a class="nav-link active" data-toggle="tab" (click)="openBookFlight()">Book Flight</a>
+      <a class="nav-link active" data-toggle="tab" (click)="openBookFlight()"
+        >Book Flight</a
+      >
     </li>
     <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" (click)="openCancelBooking()">Cancel Booking</a>
+      <a class="nav-link" data-toggle="tab" (click)="openCancelBooking()"
+        >Cancel Booking</a
+      >
     </li>
     <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" (click)="openLogoutModal(logoutAgentModal)"><br>Logout</a>
+      <a
+        class="nav-link"
+        data-toggle="tab"
+        (click)="openLogoutModal(logoutAgentModal)"
+        ><br />Logout</a
+      >
     </li>
   </ul>
-  
 </div>
 
 <div class="container agent-container" *ngIf="bookFlightPage">
   <h2 *ngIf="!mobile" class="text-center">Book Flights</h2>
-  <div class="container traveler-header " *ngIf="mobile">
-    <h5 class="text-center" *ngIf="traveler">Book for {{ traveler.name }} or </h5>
-  <button type="button" class="btn btn-primary" id="new-traveler-btn-mobile" (click)="newTraveler()" *ngIf="traveler">
-    Pick New Traveler
-  </button>
+  <div class="container traveler-header" *ngIf="mobile">
+    <h5 class="text-center" *ngIf="traveler">
+      Book for {{ traveler.name }} or
+    </h5>
+    <button
+      type="button"
+      class="btn btn-primary"
+      id="new-traveler-btn-mobile"
+      (click)="newTraveler()"
+      *ngIf="traveler"
+    >
+      Pick New Traveler
+    </button>
   </div>
-  
+
   <div class="traveler-container" *ngIf="!traveler">
-    <app-agent-select-traveler (travelerChanged)="onTravelerChange($event)"></app-agent-select-traveler>
+    <app-agent-select-traveler
+      (travelerChanged)="onTravelerChange($event)"
+    ></app-agent-select-traveler>
   </div>
 
   <div *ngIf="traveler">
-    <app-agent-create-booking [agent]="agent" [airports]="airports" [traveler]="traveler" [mobile]="mobile"></app-agent-create-booking>
+    <app-agent-create-booking
+      [agent]="agent"
+      [airports]="airports"
+      [traveler]="traveler"
+      [mobile]="mobile"
+    ></app-agent-create-booking>
   </div>
 </div>
 
 <div class="container agent-container" *ngIf="cancelFlightPage">
-  <h2 *ngIf="!mobile" class="text-center">Cancel Traveler's Flights</h2>
-  <app-agent-cancel-booking [agent]="agent" [airports]="airports" [traveler]="traveler" [mobile]="mobile"></app-agent-cancel-booking>
+  <h2 *ngIf="!mobile" class="text-center">Cancel Traveler Bookings</h2>
+
+  <div class="container traveler-header" *ngIf="mobile">
+    <h5 class="text-center" *ngIf="traveler">
+      Cancel for {{ traveler.name }} or
+    </h5>
+    <button
+      type="button"
+      class="btn btn-primary"
+      id="new-traveler-btn-mobile"
+      (click)="newTraveler()"
+      *ngIf="traveler"
+    >
+      Pick New Traveler
+    </button>
+  </div>
+
+  <div class="traveler-container" *ngIf="!traveler">
+    <app-agent-select-traveler
+      (travelerChanged)="onTravelerChange($event)"
+    ></app-agent-select-traveler>
+  </div>
+
+  <div *ngIf="traveler">
+    <app-agent-cancel-booking
+      [agent]="agent"
+      [airports]="airports"
+      [traveler]="traveler"
+      [mobile]="mobile"
+    ></app-agent-cancel-booking>
+  </div>
 </div>
 
 <ng-template #logoutAgentModal let-close="close">
@@ -79,38 +135,28 @@
     <div class="modal-content">
       <div class="modal-header">
         <h4>Logout</h4>
-        <button
-          type="button"
-          class="btn btn-primary"
-          (click)="close();"
-        >
+        <button type="button" class="btn btn-primary" (click)="close()">
           <span>&#215;</span>
         </button>
       </div>
 
       <div class="modal-body">
-          <h5 class="text-center" >
-            Are you sure you want to logout?
-          </h5>
-        </div>
-        <div class="modal-footer">
-          <button
-            class="btn btn-secondary"
-            type="button"
-            (click)="close();"
-          >
-            Cancel
-          </button>
-          <button
-            class="btn btn-success"
-            type="button"
-            (click)="logout(); close();"
-          >
-            Logout
-          </button>
-        </div>
+        <h5 class="text-center">
+          Are you sure you want to logout?
+        </h5>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" (click)="close()">
+          Cancel
+        </button>
+        <button
+          class="btn btn-success"
+          type="button"
+          (click)="logout(); close()"
+        >
+          Logout
+        </button>
       </div>
     </div>
+  </div>
 </ng-template>
-
-
