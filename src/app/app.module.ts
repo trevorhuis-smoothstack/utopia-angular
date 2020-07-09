@@ -43,6 +43,14 @@ import { TravelerComponent } from './traveler/traveler.component';
 import { TravelerService } from './common/s/service/traveler.service';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { TravelerLoginComponent } from './traveler/traveler-login/traveler-login.component';
+import { FlightsComponent } from './traveler/flights/flights.component';
+import { BookingsComponent } from './traveler/bookings/bookings.component';
+import { TravelerAuthInterceptor } from './common/s/service/TravelerAuthInterceptor';
+import { ToastrModule } from 'ngx-toastr';
+
+import { TravelerDataService } from './common/s/service/traveler-data.service';
+import { TravelerAuthService } from './common/s/service/traveler-auth-service.service';
+import { ToastsService } from './common/s/service/toasts.service';
 
 @NgModule({
   declarations: [
@@ -62,13 +70,15 @@ import { TravelerLoginComponent } from './traveler/traveler-login/traveler-login
     SelectTravelerComponent,
     CounterLoginComponent,
     CounterSelectTravelerComponent,
-    CounterComponent,
-    CounterTravelerComponent,
     CounterCreateTravelerComponent,
+    CounterComponent,
     CounterCancellationComponent,
     CounterBookingComponent,
     TravelerComponent,
     TravelerLoginComponent,
+    FlightsComponent,
+    BookingsComponent,
+    CounterTravelerComponent,
   ],
   imports: [
     BrowserModule,
@@ -80,6 +90,7 @@ import { TravelerLoginComponent } from './traveler/traveler-login/traveler-login
     BrowserAnimationsModule,
     NgxStripeModule.forRoot(),
     NgMultiSelectDropDownModule,
+    ToastrModule.forRoot()
   ],
   providers: [
     AgentAuthService,
@@ -88,9 +99,18 @@ import { TravelerLoginComponent } from './traveler/traveler-login/traveler-login
       useClass: AgentAuthInterceptor,
       multi: true,
     },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TravelerAuthInterceptor,
+      multi: true,
+    },
     AgentUtopiaService,
     TravelerService,
     CounterHttpService,
+    TravelerDataService,
+    TravelerAuthInterceptor,
+    TravelerAuthService,
+    ToastsService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: CounterInterceptionService,
