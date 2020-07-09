@@ -1,4 +1,26 @@
 <h2 class="text-center">Cancel Ticket</h2>
+<div class="airport-selectors">
+  <div class="depart-select">
+    <label class="col-form-label" for="inputDefault">
+      Departure Airport
+    </label>
+    <select class="custom-select" [(ngModel)]="departAirport">
+      <option *ngFor="let airport of airports" [ngValue]="airport">
+        {{ airport.name }}
+      </option>
+    </select>
+  </div>
+  <div class="arrive-select">
+    <label class="col-form-label" for="inputDefault">
+      Arrival Airport
+    </label>
+    <select class="custom-select" [(ngModel)]="arriveAirport">
+      <option *ngFor="let airport of airports" [ngValue]="airport">
+        {{ airport.name }}
+      </option>
+    </select>
+  </div>
+</div>
 <div class="price-date-select">
   <span class="date-picker">
     <label class="col-form-label" for="inputDefault">
@@ -102,6 +124,7 @@
     <tr
       *ngFor="
         let flight of flights
+          | counterAirportFilter: departAirport:arriveAirport
           | counterDateFilter: minDate:maxDate
           | slice: (currentPage - 1) * rowsPerPage:currentPage * rowsPerPage
       "
