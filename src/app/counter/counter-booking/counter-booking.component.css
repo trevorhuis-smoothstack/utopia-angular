@@ -16,6 +16,23 @@
 .arrive-select {
   grid-column: 2;
 }
-.toast-bootstrap-compatibility-fix {
-  opacity: 1;
+
+.price-date-select {
+  margin: 0px 10px;
+  margin-bottom: 15px;
+}
+.date-picker {
+  display: block;
+  width: 150px;
+  margin: 0px 10px;
+  margin-bottom: 15px;
+}
+
+@media (max-width: 992px) {
+  .price-slider {
+    margin: 0px 10px;
+  }
+}
+.date-input {
+  width: 150px;
 }

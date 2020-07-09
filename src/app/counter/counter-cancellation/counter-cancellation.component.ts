@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, AfterViewInit, OnDestroy } from "@angular/core";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
@@ -12,11 +12,18 @@ import { uncheckedErrorMessage } from "src/app/common/counter/counter-globals";
   templateUrl: "./counter-cancellation.component.html",
   styleUrls: ["./counter-cancellation.component.css"],
 })
-export class CounterCancellationComponent implements OnInit {
+export class CounterCancellationComponent
+  implements OnInit, AfterViewInit, OnDestroy {
+  currentPage = 1;
+  rowsPerPage = 10;
+  minDate: any;
+  maxDate: any;
   traveler: any;
   airports: any[];
   flights: any[];
   flight: any;
+  departAirport: any;
+  arriveAirport: any;
 
   constructor(
     private modalService: NgbModal,
@@ -59,11 +66,30 @@ export class CounterCancellationComponent implements OnInit {
             "Error getting flights: Status " + error.error.status
           )
       );
+    debugger;
+  }
+
+  ngAfterViewInit() {
+    document.getElementById("book").classList.remove("side-link-active");
+    document.getElementById("cancel").classList.add("side-link-active");
+  }
+
+  ngOnDestroy() {
+    document.getElementById("cancel").classList.remove("side-link-active");
   }
 
   getAirportName(airportId: number) {
     return this.airports.find((airport) => airport.airportId === airportId)
       .name;
+  }
+
+  getCurrentDate() {
+    const now = new Date();
+    return {
+      year: now.getFullYear(),
+      month: now.getMonth() + 1,
+      day: now.getDate(),
+    };
   }
 
   openCancellationModal(flight: any, modal: any) {

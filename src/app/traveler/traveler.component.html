@@ -1,54 +1,61 @@
-<div>
-  <h1>Welcome {{username}}</h1>
-  <div>
-    <!-- let's add the dropdowns here.  -->
-    <form [formGroup]="pickDepartureForm">
-      <ng-multiselect-dropdown [placeholder]="'Select Departure'" [data]="airports" formControlName="departure"
-      [settings]="dropdownSettings" (onSelect)="onItemSelect($event)">
-    </ng-multiselect-dropdown>
-    </form>
-    <form [formGroup]="pickArrivalForm">
-    <ng-multiselect-dropdown [placeholder]="'Select Arrival'" [data]="airports" formControlName="arrival"
-    [settings]="dropdownSettings" (onSelect)="onItemSelect($event)">
-  </ng-multiselect-dropdown>
-  </form>
-  <button (click)="logout()">logout</button>
-  </div>
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">City</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let a of airports; let i = index">
-      <th>{{ i + 1 }}</th>
-      <td>{{ a.name }}</td>
-    </tr>
-  </tbody>
-</table>
+<div id="traveler-sidebar" class="active">
+  <ul id="traveler-sidebar-list">   
+    <li id="traveler-side-top" class="traveler-logout">
+      <button id="traveler-logout-button" type="button" class="btn btn-primary" (click)="toggleFlights()">
+        {{flightButtonText}}
+      </button>
+    </li>
+    <li class="traveler-logout">
+      <button type="button" class="btn btn-danger" id="traveler-logout-button"(click)="openLogoutModal(logoutTravelerModal)">
+        Logout
+      </button>
+    </li>
+  </ul>
 </div>
 
-<!--  THE PAGE 
-      1. We have buttons that load different information
-        -Button that loads currently booked flights
-        -Button that loads passed flights
-        -Button that loads purchased flights????
-        -Button that shows the screen to purchase a flight
-      2. We have user information such as name or username shown on the screen
-         and text on the screen that askes the user what they would like to do
-         or where they would like to go. 
-      3. There will be a profile button?
-        -The profile button will show (as a dropdown maybe)the user's details, and 
-         have a button that they can press to edit, or logout. 
-        -The "edit" button will allow them to change their name and password, but not username.
-        -The logout button will return them to the login screen.-->
+<div>
+  <h1 class="text-center">Welcome {{username}}</h1>
+  <div class="container flights-container">
+    <app-bookings  *ngIf="!showFlights" [user]="currentUser" [airports]="airports"></app-bookings>
+    <app-flights   *ngIf="showFlights" [user]="currentUser" [airports]="airports"></app-flights>
+  </div>
+</div>
 
+<ng-template #logoutTravelerModal let-close="close">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4>Logout</h4>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="close();"
+        >
+          <span>&#215;</span>
+        </button>
+      </div>
 
-<!-- FOR PURCHASING FLIGHT -->
-<!-- Dropdown to choose airport to depart from -->
-<!-- Dropdown to choose airport to arrive from -->
-<!-- List of flights based on departId, arriveId, and travelerId -->
-
-
+      <div class="modal-body">
+          <h5 class="text-center" >
+            Are you sure you want to logout?
+          </h5>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn-secondary"
+            type="button"
+            (click)="close();"
+          >
+            Cancel
+          </button>
+          <button
+            class="btn btn-success"
+            type="button"
+            (click)="logout(); close();"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+</ng-template>

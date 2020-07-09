@@ -25,7 +25,9 @@ export class CounterComponent implements OnInit {
   ngOnInit() {
     this.counter = this.dataService.getCounter();
     this.authService.checkAuth().subscribe(
-      () => (this.authorized = true),
+      () => {
+        this.authorized = true;
+      },
       (error) => {
         if (![401, 403, 500].includes(error.error.status))
           this.toastr.error(
@@ -45,18 +47,4 @@ export class CounterComponent implements OnInit {
     this.dataService.setCounter(null);
   }
 
-  startBook() {
-    document.getElementById("cancel").classList.remove("side-link-active");
-    document.getElementById("book").classList.add("side-link-active");
-  }
-
-  startCancel() {
-    document.getElementById("book").classList.remove("side-link-active");
-    document.getElementById("cancel").classList.add("side-link-active");
-  }
-
-  resetLinks() {
-    document.getElementById("book").classList.remove("side-link-active");
-    document.getElementById("cancel").classList.remove("side-link-active");
-  }
 }
