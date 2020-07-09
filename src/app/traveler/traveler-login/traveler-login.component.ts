@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import { TravelerAuthService } from 'src/app/common/s/service/traveler-auth-service.service';
 import { environment } from 'src/environments/environment';
 import { TravelerDataService } from 'src/app/common/s/service/traveler-data.service';
+import { ToastsService } from 'src/app/common/s/service/toasts.service';
 
 @Component({
   selector: 'app-traveler-login',
@@ -20,29 +21,17 @@ export class TravelerLoginComponent implements OnInit {
   createTraveler = false;
   traveler: any;
   maxLength = 45;
+  minLength = 1;
+  travelerLoginForm: FormGroup;
+  createTravelerForm: FormGroup;
 
-  travelerLoginForm = new FormGroup({
-    username: new FormControl('', [Validators.required as any]),
-    password: new FormControl('', [Validators.required as any]),
-  });
-
-
-  createTravelerForm = new FormGroup({
-    name: new FormControl(null, [
-      Validators.required,
-      Validators.maxLength(this.maxLength),
-    ]),
-    username: new FormControl(
-      null,
-      [Validators.required, Validators.maxLength(this.maxLength)],
-    ),
-    password: new FormControl(null, [Validators.required]),
-    confirmPassword: new FormControl(null),
-  },
-  { validators: this.validatePasswordMatch }
-  );
+  // name: any;
+  // username: any;
+  // password: string;
+  // confirmPassword: string;
 
   constructor(
+    private toastsService: ToastsService,
     private travelerDataService: TravelerDataService,
     private fb: FormBuilder,
     private authService: TravelerAuthService,
@@ -66,6 +55,8 @@ export class TravelerLoginComponent implements OnInit {
     if (this.travelerDataService.getCurrentUser()) {
       this.router.navigate(['/traveler/dashboard']);
     }
+
+    this.initializeFormGroups();
   }
 
   login() {
@@ -87,10 +78,39 @@ export class TravelerLoginComponent implements OnInit {
           if (error.error.status === 401) {
             this.setInvalidLogin();
           } else {
-            alert(error);
+            this.toastsService.showError('incorrect username or password', 'login error');
           }
         });
     }
+  }
+
+  initializeFormGroups() {
+    this.travelerLoginForm = new FormGroup({
+      username: new FormControl('', [Validators.required as any]),
+      password: new FormControl('', [Validators.required as any]),
+    });
+
+    this.createTravelerForm = new FormGroup({
+     name: new FormControl(null, [
+        Validators.required,
+        Validators.maxLength(this.maxLength),
+        Validators.minLength(this.minLength)
+      ]),
+      username: new FormControl(
+        null,
+        [
+          Validators.required,
+          Validators.required, Validators.maxLength(this.maxLength),
+          Validators.minLength(this.minLength)
+        ],
+      ),
+      password: new FormControl(null, [Validators.required]),
+      confirmPassword: new FormControl(null, [
+        Validators.required,
+      ]),
+    },
+    // { validators: this.validatePasswordMatch }
+    );
   }
 
   toggleCreateTraveler() {
@@ -109,6 +129,7 @@ export class TravelerLoginComponent implements OnInit {
       this.router.navigate(['/traveler/dashboard']);
     },
     (error) => {
+      // TODO: chanage alert to logging service call.
       alert(error);
     }
     );
@@ -126,6 +147,7 @@ export class TravelerLoginComponent implements OnInit {
       (result: any) => {
         if (result != null) {
           this.usernameTaken = true;
+          this.toastsService.showError('Username taken', 'Error');
           return;
         }
 
@@ -133,20 +155,22 @@ export class TravelerLoginComponent implements OnInit {
           (result: any) => {
             this.traveler = result;
             this.toggleCreateTraveler();
+            this.toastsService.showSuccess('Account created. Login with your new credentials', 'Yay!');
           }, (error => {
-            alert(error);
+            this.toastsService.showError('Username taken', 'Error');
           })
         );
       },
       (error) => {
+        // TODO: log error in logging service.
         alert(error);
       }
     );
   }
 
-  validatePasswordMatch(form: FormGroup) {
-    return form.value.password === form.value.confirmPassword
-      ? null
-      : { validatePasswordMatch: true };
-  }
+  // validatePasswordMatch(form: FormGroup) {
+  //   return form.value.password === form.value.confirmPassword
+  //     ? null
+  //     : { validatePasswordMatch: true };
+  // }
 }

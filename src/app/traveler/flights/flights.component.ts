@@ -5,6 +5,7 @@ import { NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'src/environments/environment';
 import * as moment from 'moment';
 import { StripeService, Element, Elements } from 'ngx-stripe';
+import { ToastsService } from 'src/app/common/s/service/toasts.service';
 
 @Component({
   selector: 'app-flights',
@@ -36,6 +37,7 @@ export class FlightsComponent implements OnInit {
   filterMetadata = { count: 0 };
 
   constructor(
+    private toastsService: ToastsService,
     private travelerService: TravelerService,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
@@ -46,10 +48,11 @@ export class FlightsComponent implements OnInit {
     this.stripe.setKey('pk_test_51GvUChBYMFlMJbBRvrWM7yZJHJhVExdReQ2A5K0uaKTidkmqRcnY48fr6VmnK9csVNOwkiH0xetgz36Gcvql6IF20098oe4tpg');
     this.stripe.elements().subscribe(
       (elements) => {
-        this.card = elements.create("card", {});
+        this.card = elements.create('card', {});
       },
 
       (error) => {
+        // TODO: log in logging service instead of usign alert.
         alert(error);
       }
     );
@@ -78,7 +81,7 @@ export class FlightsComponent implements OnInit {
           this.changePaginationCount();
         },
         (error) => {
-          alert(error);
+          this.toastsService.showError('problem loading flights', 'Error');
         }
       );
   }
@@ -98,7 +101,7 @@ export class FlightsComponent implements OnInit {
   }
 
   bookFlight() {
-    console.log("booking()");
+    console.log('booking()');
     let booking: any;
     this.stripe.createToken(this.card, {}).subscribe((result) => {
       if (result.token) {
@@ -114,18 +117,19 @@ export class FlightsComponent implements OnInit {
         .subscribe(
           () => {
             this.modalService.dismissAll();
+            this.toastsService.showSuccess('Flight booked. View in My Bookings', 'yay!');
             this.flights = this.flights.filter(
               (flight) => flight !== this.selectedFlight
             );
           },
           (error) => {
             this.modalService.dismissAll();
-            alert('Error booking ticket: Status ' + error.error.status);
+            this.toastsService.showError('Something went wrong booking flight', 'Error');
           }
         );
     } else if (result.error) {
       this.modalService.dismissAll();
-      alert("Error processing payment: Token creation failed.");
+      this.toastsService.showError('Incorrect card information.', 'Error');
     }
   });
 }
@@ -134,6 +138,5 @@ export class FlightsComponent implements OnInit {
     this.selectedFlight = flight;
     this.modalService.open(modal);
     this.card.mount('#card');
-
   }
 }

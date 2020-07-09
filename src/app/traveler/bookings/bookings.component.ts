@@ -2,7 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { TravelerService } from 'src/app/common/s/service/traveler.service';
 import { environment } from 'src/environments/environment';
 import * as moment from 'moment';
-import { StripeService } from 'ngx-stripe';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastsService } from 'src/app/common/s/service/toasts.service';
 
 @Component({
   selector: 'app-bookings',
@@ -14,8 +15,13 @@ export class BookingsComponent implements OnInit {
   @Input() airports: any;
   bookings: any[];
   airportsMap: Map<number, string>;
+  bookingToCancel: any;
 
-  constructor(private service: TravelerService, private stripe: StripeService) { }
+  constructor(
+    private toastsService: ToastsService,
+    private service: TravelerService,
+    private modalService: NgbModal
+    ) { }
 
   ngOnInit() {
     this.airportsMap = new Map();
@@ -63,17 +69,23 @@ export class BookingsComponent implements OnInit {
     });
   }
 
-  cancelFlight(booking) {
+  cancelFlight() {
     this.service
-      .put(`${environment.travelerBackendUrl}${environment.bookingsUri}`, booking)
+      .put(`${environment.travelerBackendUrl}${environment.bookingsUri}`, this.bookingToCancel)
       .subscribe(
         (res) => {
-          this.bookings.splice(this.bookings.indexOf(booking), 1);
+          this.bookings.splice(this.bookings.indexOf(this.bookingToCancel), 1);
+          this.toastsService.showSuccess('Trip canceled. We\'ll miss you', 'Done');
         },
         (error) => {
-          alert(error);
+          this.toastsService.showError('problem canceling flight', 'Error');
         }
       );
+  }
+
+  openCancelModal(modal: any, booking: any) {
+    this.bookingToCancel = booking;
+    this.modalService.open(modal);
   }
 
 }

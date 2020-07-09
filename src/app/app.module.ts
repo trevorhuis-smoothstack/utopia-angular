@@ -47,9 +47,11 @@ import { TravelerLoginComponent } from './traveler/traveler-login/traveler-login
 import { FlightsComponent } from './traveler/flights/flights.component';
 import { BookingsComponent } from './traveler/bookings/bookings.component';
 import { TravelerAuthInterceptor } from './common/s/service/TravelerAuthInterceptor';
+import { ToastrModule } from 'ngx-toastr';
 
 import { TravelerDataService } from './common/s/service/traveler-data.service';
 import { TravelerAuthService } from './common/s/service/traveler-auth-service.service';
+import { ToastsService } from './common/s/service/toasts.service';
 
 @NgModule({
   declarations: [
@@ -78,7 +80,7 @@ import { TravelerAuthService } from './common/s/service/traveler-auth-service.se
     TravelerLoginComponent,
     FlightsComponent,
     BookingsComponent,
-    CounterTravelerComponent
+    CounterTravelerComponent,
   ],
   imports: [
     BrowserModule,
@@ -90,6 +92,7 @@ import { TravelerAuthService } from './common/s/service/traveler-auth-service.se
     BrowserAnimationsModule,
     NgxStripeModule.forRoot(),
     NgMultiSelectDropDownModule,
+    ToastrModule.forRoot()
   ],
   providers: [
     AgentAuthService,
@@ -109,6 +112,7 @@ import { TravelerAuthService } from './common/s/service/traveler-auth-service.se
     TravelerDataService,
     TravelerAuthInterceptor,
     TravelerAuthService,
+    ToastsService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: CounterInterceptionService,

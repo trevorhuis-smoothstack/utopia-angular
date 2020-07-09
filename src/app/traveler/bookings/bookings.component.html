@@ -15,12 +15,12 @@
         <td>{{ b.flight.departAirport }}</td>
         <td>{{ b.flight.arriveAirport }}</td>
         <td>{{ b.flight.departTimeFormatted }}</td>
-        <td> <!-- TODO give a yes no to cancel booking -->
+        <td>
           <button
             *ngIf="b.active"
             type="button"
             class="btn btn-secondary"
-            (click)="cancelFlight(b)"
+            (click)="openCancelModal(cancelFlightModal, b)"
           >
             Cancel Flight
           </button>
@@ -30,4 +30,42 @@
   </table>
 </Div>
 
+<ng-template #cancelFlightModal let-close="close">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4>Logout</h4>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="close();"
+        >
+          <span>&#215;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+          <h5 class="text-center" >
+            Are you sure you want to cancel this flight?
+          </h5>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn-secondary"
+            type="button"
+            (click)="close();"
+          >
+            No
+          </button>
+          <button
+            class="btn btn-success"
+            type="button"
+            (click)="cancelFlight(); close();"
+          >
+            Yes
+          </button>
+        </div>
+      </div>
+    </div>
+</ng-template>
   

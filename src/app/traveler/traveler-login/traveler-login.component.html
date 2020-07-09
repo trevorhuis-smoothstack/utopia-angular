@@ -36,14 +36,26 @@
         </p>
         <div class="form-group">
           <label>Name</label>
-          <input name="email" class="form-control" formControlName="name" />
+          <input class="form-control" formControlName="name" />
+          <!-- <div *ngIf="name.errors.minlength">
+            Name reqired.
+          </div>
+          <div *ngIf="name.errors.maxLength">
+            Name must be 45 characters or less.
+          </div> -->
         </div>
         <div class="form-group">
           <label>Username</label>
           <input name="email" class="form-control" formControlName="username" />
+          <!-- <div *ngIf="username.errors.minLength">
+            username reqired.
+          </div>
+          <div *ngIf="createTravelerForm.username.errors.maxLength">
+            username must be 45 characters or less.
+          </div>
           <div class="form-requirement" *ngIf="usernameTaken">
             Username already taken.
-          </div>
+          </div> -->
         </div>
 
         <div class="form-group">
@@ -57,12 +69,12 @@
         </div>
         <div class="form-group">
           <label>Re-Type Password</label>
-          <input name="password" class="form-control" type="password" />
-          <div>
-            <span *ngIf="createTravelerForm.errors?.validatePasswordMatch">
+          <input name="confirmPassword" class="form-control" type="password" />
+          <!-- <div>
+            <span *ngIf="createTravelerForm.errors?.validatePasswordMatch(createTravelerForm">
               Passwords do not match
             </span>
-          </div>
+          </div> -->
         </div>
       </fieldset>
       <div class="form-buttons">

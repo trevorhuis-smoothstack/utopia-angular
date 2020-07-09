@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { TravelerAuthService } from '../common/s/service/traveler-auth-service.service';
 import { TravelerDataService } from '../common/s/service/traveler-data.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastsService } from '../common/s/service/toasts.service';
 
 @Component({
   selector: 'app-traveler',
@@ -38,6 +39,7 @@ export class TravelerComponent implements OnInit {
 
 
   constructor(
+    private toastsService: ToastsService,
     private modalService: NgbModal,
     private travelerDataService: TravelerDataService,
     private authService: TravelerAuthService,
@@ -88,7 +90,7 @@ export class TravelerComponent implements OnInit {
       this.travelerDataService.setCurrentUser(this.currentUser);
     },
     (error) => {
-      alert(error);
+      this.toastsService.showError('login error', 'Error');
     }
     );
   }
@@ -101,7 +103,7 @@ export class TravelerComponent implements OnInit {
           this.airports = res;
         },
         (error) => {
-          alert(error);
+          this.toastsService.showError('problem loading airports', 'Database Error');
         }
       );
   }
