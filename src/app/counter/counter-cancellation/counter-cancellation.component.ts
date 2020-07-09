@@ -66,7 +66,6 @@ export class CounterCancellationComponent
             "Error getting flights: Status " + error.error.status
           )
       );
-    debugger;
   }
 
   ngAfterViewInit() {
