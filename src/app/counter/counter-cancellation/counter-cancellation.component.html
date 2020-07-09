@@ -1,4 +1,116 @@
 <h2 class="text-center">Cancel Ticket</h2>
+<div class="airport-selectors">
+  <div class="depart-select">
+    <label class="col-form-label" for="inputDefault">
+      Departure Airport
+    </label>
+    <select class="custom-select" [(ngModel)]="departAirport">
+      <option *ngFor="let airport of airports" [ngValue]="airport">
+        {{ airport.name }}
+      </option>
+    </select>
+  </div>
+  <div class="arrive-select">
+    <label class="col-form-label" for="inputDefault">
+      Arrival Airport
+    </label>
+    <select class="custom-select" [(ngModel)]="arriveAirport">
+      <option *ngFor="let airport of airports" [ngValue]="airport">
+        {{ airport.name }}
+      </option>
+    </select>
+  </div>
+</div>
+<div class="price-date-select">
+  <span class="date-picker">
+    <label class="col-form-label" for="inputDefault">
+      Earliest&#160;Departure&#160;Date
+    </label>
+    <form class="form-inline">
+      <div class="form-group date-input">
+        <div class="input-group">
+          <input
+            name="minDate"
+            class="form-control"
+            placeholder="yyyy-mm-dd"
+            [(ngModel)]="minDate"
+            ngbDatepicker
+            [minDate]="getCurrentDate()"
+            #minD="ngbDatepicker"
+          />
+          <div class="input-group-append">
+            <button
+              class="btn btn-outline-secondary calendar"
+              (click)="minD.toggle()"
+              type="button"
+            >
+              <svg
+                width="1em"
+                height="1em"
+                viewBox="0 0 16 16"
+                class="bi bi-calendar3"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857V3.857z"
+                />
+                <path
+                  fill-rule="evenodd"
+                  d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+    <label class="col-form-label" for="inputDefault">
+      Latest Departure Date
+    </label>
+    <form class="form-inline">
+      <div class="form-group date-input">
+        <div class="input-group">
+          <input
+            name="maxDate"
+            class="form-control"
+            placeholder="yyyy-mm-dd"
+            [(ngModel)]="maxDate"
+            ngbDatepicker
+            [minDate]="getCurrentDate()"
+            #maxD="ngbDatepicker"
+          />
+          <div class="input-group-append">
+            <button
+              class="btn btn-outline-secondary calendar"
+              (click)="maxD.toggle()"
+              type="button"
+            >
+              <svg
+                width="1em"
+                height="1em"
+                viewBox="0 0 16 16"
+                class="bi bi-calendar3"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857V3.857z"
+                />
+                <path
+                  fill-rule="evenodd"
+                  d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </span>
+</div>
 <table class="table table-hover">
   <thead>
     <tr>
@@ -10,7 +122,12 @@
   </thead>
   <tbody>
     <tr
-      *ngFor="let flight of flights"
+      *ngFor="
+        let flight of flights
+          | counterAirportFilter: departAirport:arriveAirport
+          | counterDateFilter: minDate:maxDate
+          | slice: (currentPage - 1) * rowsPerPage:currentPage * rowsPerPage
+      "
       style="cursor: pointer;"
       (click)="openCancellationModal(flight, cancellationModal)"
     >
@@ -21,6 +138,13 @@
     </tr>
   </tbody>
 </table>
+<ngb-pagination
+  *ngIf="flights && flights.length"
+  [collectionSize]="flights ? flights.length : 0"
+  [(page)]="currentPage"
+  [pageSize]="rowsPerPage"
+>
+</ngb-pagination>
 
 <ng-template #cancellationModal let-close="close">
   <div class="modal-dialog">
@@ -63,11 +187,7 @@
           <button class="btn btn-secondary" type="button" (click)="close()">
             Keep
           </button>
-          <button
-            class="btn btn-success"
-            type="button"
-            (click)="cancel()"
-          >
+          <button class="btn btn-success" type="button" (click)="cancel()">
             Cancel Ticket
           </button>
         </div>

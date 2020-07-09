@@ -1,9 +1,11 @@
 import { Component, OnInit, AfterViewInit, OnDestroy } from "@angular/core";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Router } from "@angular/router";
+import { ToastrService } from "ngx-toastr";
 import { CounterHttpService } from "src/app/common/counter/service/counter-http.service";
 import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
 import { environment } from "src/environments/environment";
+import { uncheckedErrorMessage } from "src/app/common/counter/counter-globals";
 
 @Component({
   selector: "app-counter-cancellation",
@@ -12,14 +14,21 @@ import { environment } from "src/environments/environment";
 })
 export class CounterCancellationComponent
   implements OnInit, AfterViewInit, OnDestroy {
+  currentPage = 1;
+  rowsPerPage = 10;
+  minDate: any;
+  maxDate: any;
   traveler: any;
   airports: any[];
   flights: any[];
   flight: any;
+  departAirport: any;
+  arriveAirport: any;
 
   constructor(
     private modalService: NgbModal,
     private router: Router,
+    private toastr: ToastrService,
     private httpService: CounterHttpService,
     private dataService: CounterDataService
   ) {}
@@ -38,7 +47,10 @@ export class CounterCancellationComponent
       .subscribe(
         (result: any[]) => (this.airports = result),
         (error: any) =>
-          alert("Error getting airports: Status " + error.error.status)
+          this.toastr.error(
+            uncheckedErrorMessage,
+            "Error getting airports: Status " + error.error.status
+          )
       );
     this.httpService
       .get(
@@ -49,8 +61,12 @@ export class CounterCancellationComponent
       .subscribe(
         (result: any[]) => (this.flights = result),
         (error: any) =>
-          alert("Error getting flights: Status " + error.error.status)
+          this.toastr.error(
+            uncheckedErrorMessage,
+            "Error getting flights: Status " + error.error.status
+          )
       );
+    debugger;
   }
 
   ngAfterViewInit() {
@@ -67,6 +83,15 @@ export class CounterCancellationComponent
       .name;
   }
 
+  getCurrentDate() {
+    const now = new Date();
+    return {
+      year: now.getFullYear(),
+      month: now.getMonth() + 1,
+      day: now.getDate(),
+    };
+  }
+
   openCancellationModal(flight: any, modal: any) {
     this.flight = flight;
     this.modalService.open(modal);
@@ -80,14 +105,16 @@ export class CounterCancellationComponent
       .subscribe(
         () => {
           this.modalService.dismissAll();
-          alert("Ticket cancelled");
+          this.toastr.success("Ticket cancelled", "Success");
           this.flights = this.flights.filter(
             (flight) => flight !== this.flight
           );
         },
-        () => {
-          this.modalService.dismissAll();
-          alert("Error cancelling ticket");
+        (error) => {
+          this.toastr.error(
+            uncheckedErrorMessage,
+            "Error cancelling ticket: Status " + error.error.status
+          );
         }
       );
   }

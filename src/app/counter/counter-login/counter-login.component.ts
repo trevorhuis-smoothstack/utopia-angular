@@ -1,10 +1,12 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, Validators, FormGroup } from "@angular/forms";
+import { ToastrService } from "ngx-toastr";
 import { CounterHttpService } from "../../common/counter/service/counter-http.service";
 import { environment } from "src/environments/environment";
 import { Router } from "@angular/router";
 import { CounterAuthService } from "src/app/common/counter/service/counter-auth.service";
 import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
+import { uncheckedErrorMessage } from "src/app/common/counter/counter-globals";
 
 @Component({
   selector: "app-counter-login",
@@ -19,6 +21,7 @@ export class CounterLoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
+    private toastr: ToastrService,
     private httpService: CounterHttpService,
     private authService: CounterAuthService,
     private dataService: CounterDataService
@@ -33,8 +36,11 @@ export class CounterLoginComponent implements OnInit {
     this.authService.checkAuth().subscribe(
       () => this.router.navigate(["/counter"]),
       (error) => {
-        if (![401, 403].includes(error.error.status))
-          alert("Error checking authorization: Status " + error.error.status);
+        if (![401, 403, 500].includes(error.error.status))
+          this.toastr.error(
+            uncheckedErrorMessage,
+            "Error checking authorization: Status " + error.error.status
+          );
         this.authorized = false;
       }
     );
@@ -70,13 +76,21 @@ export class CounterLoginComponent implements OnInit {
                 if (getUserError.error.status === 403) {
                   this.badCreds = true;
                   localStorage.removeItem("token");
-                } else alert("error getting user");
+                } else
+                  this.toastr.error(
+                    uncheckedErrorMessage,
+                    "Error getting user: Stauts " + getUserError.error.status
+                  );
               }
             );
         },
         (loginError) => {
           if (loginError.error.status === 401) this.badCreds = true;
-          else alert("error logging in");
+          else
+            this.toastr.error(
+              uncheckedErrorMessage,
+              "Error logging in: Status " + loginError.error.status
+            );
         }
       );
   }
