@@ -149,9 +149,9 @@
     <tr
       *ngFor="
         let flight of flights
-          | slice: (currentPage - 1) * rowsPerPage:currentPage * rowsPerPage
           | counterPriceFilter: customPrice
           | counterDateFilter: minDate:maxDate
+          | slice: (currentPage - 1) * rowsPerPage:currentPage * rowsPerPage
       "
       style="cursor: pointer;"
       (click)="openBookingModal(flight, bookingModal)"
