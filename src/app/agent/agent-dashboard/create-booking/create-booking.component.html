@@ -157,10 +157,6 @@
     <tr
       *ngFor="
         let f of flights
-          | filterFlightsByDepartureAirport: selectedDeparture:filterMetadata
-          | filterFlightsByArrivalAirport: selectedArrival:filterMetadata
-          | filterByFlightPrice: customPrice:filterMetadata
-          | filterByDepartureDate: date:filterMetadata
           | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize
       "
       (click)="openBookFlightModal(bookFlightModal, f)"

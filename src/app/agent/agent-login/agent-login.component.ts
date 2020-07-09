@@ -28,9 +28,14 @@ export class AgentLoginComponent implements OnInit {
   }
 
   ngOnInit() {
+    document.getElementById("nav-agent").classList.add("active");
     if(this.authService.isLoggedIn()) {
       this.router.navigate(['/agent/dashboard']);
     }
+  }
+
+  ngOnDestroy() {
+    document.getElementById("nav-agent").classList.remove("active");
   }
 
   login() {

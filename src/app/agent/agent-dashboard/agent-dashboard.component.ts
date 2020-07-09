@@ -61,6 +61,10 @@ export class AgentDashboardComponent implements OnInit {
     this.adjustForMobile(window.innerWidth);
   }
 
+  ngOnDestroy() {
+    document.getElementById("nav-agent").classList.remove("active");
+  }
+
   // RESPONSIVE DESIGN
   @HostListener("window:resize", ["$event"])
   onResize(event) {
