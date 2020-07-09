@@ -15,7 +15,7 @@ export class ToastService {
     this.toastSource.next(toast);
   }
 
-  newUnexpectedErrorToast(header: string, status: number) {
+  newUnexpectedErrorToast(header: string, status: any) {
     this.toastSource.next({
       header: header,
       body:
