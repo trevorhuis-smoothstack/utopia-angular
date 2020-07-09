@@ -25,11 +25,6 @@ export class TravelerLoginComponent implements OnInit {
   travelerLoginForm: FormGroup;
   createTravelerForm: FormGroup;
 
-  // name: any;
-  // username: any;
-  // password: string;
-  // confirmPassword: string;
-
   constructor(
     private toastsService: ToastsService,
     private travelerDataService: TravelerDataService,
@@ -77,8 +72,9 @@ export class TravelerLoginComponent implements OnInit {
         }).catch(error => {
           if (error.error.status === 401) {
             this.setInvalidLogin();
-          } else {
             this.toastsService.showError('incorrect username or password', 'login error');
+          } else {
+            this.toastsService.showError('Servers may be down. Contact support for more information.', 'Server error');
           }
         });
     }
