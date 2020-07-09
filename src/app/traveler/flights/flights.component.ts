@@ -29,7 +29,7 @@ export class FlightsComponent implements OnInit {
   // Slider
   customPrice = 100;
   minValue = 1;
-  maxValue = 100;
+  maxValue = 10000;
 
   // Pagination
   page = 1;
