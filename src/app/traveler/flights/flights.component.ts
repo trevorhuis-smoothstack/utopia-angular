@@ -56,9 +56,6 @@ export class FlightsComponent implements OnInit {
         alert(error);
       }
     );
-    // this.stripe.setKey(
-    //   "pk_test_51GvUChBYMFlMJbBRvrWM7yZJHJhVExdReQ2A5K0uaKTidkmqRcnY48fr6VmnK9csVNOwkiH0xetgz36Gcvql6IF20098oe4tpg"
-    // );
     this.flights = new Array();
 
     this.airportsMap = new Map();

@@ -77,8 +77,9 @@ export class TravelerLoginComponent implements OnInit {
         }).catch(error => {
           if (error.error.status === 401) {
             this.setInvalidLogin();
-          } else {
             this.toastsService.showError('incorrect username or password', 'login error');
+          } else {
+            this.toastsService.showError('Servers may be down. Please contact support for more information', 'server error');
           }
         });
     }
