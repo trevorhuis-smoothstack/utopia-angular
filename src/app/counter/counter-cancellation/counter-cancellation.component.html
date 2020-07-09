@@ -1,0 +1,77 @@
+<h2 class="text-center">Cancel Ticket</h2>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Departure Airport</th>
+      <th scope="col">Arrival Airport</th>
+      <th scope="col">Departure Time</th>
+      <th scope="col">Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr
+      *ngFor="let flight of flights"
+      style="cursor: pointer;"
+      (click)="openCancellationModal(flight, cancellationModal)"
+    >
+      <td>{{ getAirportName(flight.departId) }}</td>
+      <td>{{ getAirportName(flight.arriveId) }}</td>
+      <td>{{ flight.departTime | date: "medium" }}</td>
+      <td>{{ flight.price | currency: "USD" }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<ng-template #cancellationModal let-close="close">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4>Cancel Ticket</h4>
+        <button type="button" class="btn btn-primary" (click)="close()">
+          <span>&#215;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <table class="table table-hover table-dark">
+            <tr>
+              <th scope="row">Customer:</th>
+              <td>{{ traveler.name }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Flight Number:</th>
+              <td>{{ flight.flightId }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Departure:</th>
+              <td>
+                {{ getAirportName(flight.departId) }},
+                {{ flight.departTime | date: "medium" }}
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Arrival:</th>
+              <td>{{ getAirportName(flight.arriveId) }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Price:</th>
+              <td>{{ flight.price | currency: "USD" }}</td>
+            </tr>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" (click)="close()">
+            Keep
+          </button>
+          <button
+            class="btn btn-success"
+            type="button"
+            (click)="cancel()"
+          >
+            Cancel Ticket
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

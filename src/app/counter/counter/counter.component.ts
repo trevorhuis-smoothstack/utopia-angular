@@ -21,9 +21,6 @@ export class CounterComponent implements OnInit {
 
   ngOnInit() {
     this.counter = this.dataService.getCounter();
-    this.dataService.travelerObservable.subscribe(
-      (traveler) => (this.traveler = traveler)
-    );
     this.authService.checkAuth().subscribe(
       () => (this.authorized = true),
       (error) => {
@@ -32,6 +29,9 @@ export class CounterComponent implements OnInit {
         this.router.navigate(["/counter/login"]);
       }
     );
+    this.dataService.travelerObservable.subscribe((traveler) => {
+      this.traveler = traveler;
+    });
   }
 
   logOut() {

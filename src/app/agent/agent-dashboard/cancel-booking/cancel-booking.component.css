@@ -1,0 +1,37 @@
+.cancel-flight-table {
+    margin-top: 2rem;
+  }
+  
+  .booking-filters {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .arrive-select, .departure-select, .airport-select, .name-search, .date-picker, .traveler-date-select {
+    margin: 0px 10px;
+    margin-bottom: 15px;
+    /* grid-row: 2; */
+  }
+
+  .arrive-select, .departure-select {
+    width: 150px
+  }
+  
+  .date-picker {
+    display: block;
+    width: 150px;
+  }
+
+  .date-input {
+    width: 150px;
+  }
+
+  .date-picker {
+    width: 150px;
+  }
+
+  .name-search {
+    width: 150px;
+  }
+  

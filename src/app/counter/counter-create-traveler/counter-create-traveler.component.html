@@ -1,15 +1,57 @@
 <div class="select-traveler">
-  <div class="select-existing-traveler">
+  <div class="create-traveler">
     <form [formGroup]="form">
       <fieldset>
         <legend>Add New Customer</legend>
         <div class="form-group">
           <label>Name</label>
           <input class="form-control" formControlName="name" />
+          <div>
+            <span
+              *ngIf="errorsDirty('name') && form.controls.name.errors?.required"
+            >
+              Required
+            </span>
+            <span
+              *ngIf="
+                errorsDirty('name') && form.controls.name.errors?.maxlength
+              "
+            >
+              Maximum length is {{ maxLength }} characters
+            </span>
+            <span>&#8204;</span>
+          </div>
         </div>
         <div class="form-group">
           <label>Username</label>
           <input class="form-control" formControlName="username" />
+          <div>
+            <span
+              *ngIf="
+                errorsDirty('username') &&
+                form.controls.username.errors?.required
+              "
+            >
+              Required
+            </span>
+            <span
+              *ngIf="
+                errorsDirty('username') &&
+                form.controls.username.errors?.maxlength
+              "
+            >
+              Maximum length is {{ maxLength }} characters
+            </span>
+            <span
+              *ngIf="
+                errorsDirty('username') &&
+                form.controls.username.errors?.validateUsername
+              "
+            >
+              Username unavailable
+            </span>
+            <span>&#8204;</span>
+          </div>
         </div>
         <div class="form-group">
           <label>Password</label>
@@ -18,10 +60,39 @@
             formControlName="password"
             type="password"
           />
+          <div>
+            <span
+              *ngIf="
+                errorsDirty('password') &&
+                form.controls.password.errors?.required
+              "
+            >
+              Required
+            </span>
+            <span>&#8204;</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <input
+            class="form-control"
+            formControlName="confirmPassword"
+            type="password"
+          />
+          <div>
+            <span *ngIf="form.errors?.validatePasswordMatch">
+              Passwords do not match
+            </span>
+            <span>&#8204;</span>
+          </div>
         </div>
       </fieldset>
       <div class="form-buttons">
-        <button class="btn btn-primary btn-block" (click)="createTraveler()">
+        <button
+          class="btn btn-primary btn-block"
+          (click)="createTraveler()"
+          [disabled]="form.invalid"
+        >
           OK
         </button>
       </div>

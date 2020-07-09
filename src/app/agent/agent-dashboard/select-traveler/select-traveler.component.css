@@ -1,11 +1,13 @@
-.create-traveler {
+
+.select-existing-traveler {
   margin-top: 2rem;
   margin-left: auto;
   margin-right: auto;
   max-width: 500px;
 }
 
-.select-traveler .create-traveler {
+.select-traveler .select-existing-traveler {
+  display: flex;
   margin-left: auto;
   margin-right: auto;
   padding: 2rem 3rem;
@@ -14,7 +16,7 @@
 }
 
 .select-traveler legend {
-  color: rgba(44, 62, 80);
-  text-align: center;
-  padding-bottom: 1rem;
-}
+    color: rgba(44, 62, 80);
+    text-align: center;
+    padding-bottom: 1rem;
+} 
