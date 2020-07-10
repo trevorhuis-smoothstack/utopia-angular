@@ -52,7 +52,6 @@ export class CounterCancellationComponent implements OnInit {
         (error: any) =>
           alert("Error getting flights: Status " + error.error.status)
       );
-      debugger;
   }
 
   getAirportName(airportId: number) {
