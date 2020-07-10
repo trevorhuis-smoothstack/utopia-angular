@@ -2,16 +2,7 @@ import {
   Component,
   OnInit,
   Input,
-  Output,
-  EventEmitter,
-  HostListener,
 } from "@angular/core";
-import {
-  FormGroup,
-  FormControl,
-  Validators,
-  FormBuilder,
-} from "@angular/forms";
 import { Flight } from "../../../common/entities/Flight";
 import { AgentUtopiaService } from "src/app/common/h/agent-utopia.service";
 import { environment } from "src/environments/environment";
@@ -19,8 +10,8 @@ import { NgbDateStruct, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Agent } from "../../../common/entities/Agent";
 import { Airport } from "../../../common/entities/Airport";
 import { Traveler } from "../../../common/entities/Traveler";
-import * as moment from "moment";
 import { Elements, Element, StripeService } from "ngx-stripe";
+import {ToastsService} from "../../../common/s/service/toasts.service";
 @Component({
   selector: "app-agent-create-booking",
   templateUrl: "./create-booking.component.html",
@@ -56,7 +47,8 @@ export class CreateBookingComponent implements OnInit {
   constructor(
     private service: AgentUtopiaService,
     private modalService: NgbModal,
-    private stripe: StripeService
+    private stripe: StripeService,
+    private toastService: ToastsService
   ) {}
 
   ngOnInit() {
@@ -82,9 +74,8 @@ export class CreateBookingComponent implements OnInit {
       (elements) => {
         this.card = elements.create("card", {});
       },
-
       (error) => {
-        alert(error);
+        this.toastService.showError("We are having an error processing credit charges at the moment. You will not be able to book a flight. Please try again later or contact IT if the problem continues.", "Internal Error");
       }
     );
   }
@@ -101,7 +92,7 @@ export class CreateBookingComponent implements OnInit {
           
         },
         (error) => {
-          alert(error);
+          this.toastService.showError("There is an error connecting to our data. Please try again or contact IT if the problem continues.", "No Flights Found");
         }
       );
   }

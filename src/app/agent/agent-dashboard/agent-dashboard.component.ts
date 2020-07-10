@@ -4,6 +4,7 @@ import { AgentAuthService } from "src/app/common/h/service/AgentAuthService";
 import { Router } from "@angular/router";
 import * as moment from "moment";
 import { environment } from "src/environments/environment";
+import { ToastsService } from 'src/app/common/s/service/toasts.service';
 import {
   FormGroup,
   FormControl,
@@ -34,7 +35,8 @@ export class AgentDashboardComponent implements OnInit {
     private service: AgentUtopiaService,
     private authService: AgentAuthService,
     private modalService: NgbModal,
-    private router: Router
+    private router: Router,
+    private toastService: ToastsService
   ) {}
 
   ngOnInit() {
@@ -63,6 +65,10 @@ export class AgentDashboardComponent implements OnInit {
   @HostListener("window:resize", ["$event"])
   onResize(event) {
     this.adjustForMobile(event.target.innerWidth);
+  }
+
+  ngOnDestroy() {
+    document.getElementById("nav-agent").classList.remove("active");
   }
 
   adjustForMobile(width) {
@@ -103,6 +109,9 @@ export class AgentDashboardComponent implements OnInit {
       .subscribe((result: Agent) => {
         this.agent.name = result.name;
         this.agent.userId = result.userId;
+      },
+      (error) =>{
+        this.toastService.showError("We are having an error reading your information. Please try again later or call IT if the problem continues.", "Internal Error");
       });
   }
 
@@ -117,7 +126,7 @@ export class AgentDashboardComponent implements OnInit {
         });
       }),
       (error) => {
-        alert(error);
+        this.toastService.showError("We are having an error reading flight information. Please try again later or call IT if the problem continues.", "Internal Error");
       };
   }
 

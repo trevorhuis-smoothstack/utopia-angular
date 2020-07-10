@@ -17,7 +17,8 @@ export class AgentLoginComponent implements OnInit {
 
   constructor(private fb:FormBuilder, 
     private authService: AgentAuthService, 
-    private router: Router) {
+    private router: Router,
+    private toastService: ToastsService) {
 
   this.form = this.fb.group({
   username: ['',Validators.required],
@@ -26,9 +27,14 @@ export class AgentLoginComponent implements OnInit {
   }
 
   ngOnInit() {
+    document.getElementById("nav-agent").classList.add("active");
     if(this.authService.isLoggedIn()) {
       this.router.navigate(['/agent/dashboard']);
     }
+  }
+
+  ngOnDestroy() {
+    document.getElementById("nav-agent").classList.remove("active");
   }
 
   login() {
@@ -49,7 +55,7 @@ export class AgentLoginComponent implements OnInit {
           if (error.error.status == 401) {
             this.setInvalidLogin();
           } else {
-            alert(error);
+            this.toastService.showError("We are having an error with our login. Please try again later or call IT if the problem continues.", "Internal Error");
           }
           
         })
