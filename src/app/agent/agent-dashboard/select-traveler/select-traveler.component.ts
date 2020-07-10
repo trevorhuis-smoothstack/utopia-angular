@@ -53,18 +53,7 @@ export class SelectTravelerComponent implements OnInit {
       ]),
       email: new FormControl(null, [
         Validators.required,
-        Validators.maxLength(45),
-      ]),
-    });
-  }
-
-  // *************************
-  // SELECT A TRAVELER
-  // *************************
-
-  createSelectTravelerForm() {
-    this.selectTravelerForm = this.formBuilder.group({
-      username: "",
+        Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]),
     });
   }
 

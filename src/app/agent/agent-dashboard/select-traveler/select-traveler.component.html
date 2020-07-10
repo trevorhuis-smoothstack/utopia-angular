@@ -96,14 +96,15 @@
             class="form-control"
             formControlName="email"
             type="email"
+            ngModel email="true"
           />
           <span
               *ngIf="
               errorsDirtyCreateTraveler('email') &&
-                createTravelerForm.controls.email.errors?.maxlength
+                createTravelerForm.controls.email.errors?.pattern
               "
             >
-              Maximum length is 45 characters
+              Not a valid email
             </span>
             <span
               *ngIf="
