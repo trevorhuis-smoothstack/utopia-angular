@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, AfterViewInit, OnDestroy } from "@angular/core";
 import { Router } from "@angular/router";
 import { CounterHttpService } from "src/app/common/counter/service/counter-http.service";
 import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
@@ -11,7 +11,8 @@ import { Elements, Element, StripeService } from "ngx-stripe";
   templateUrl: "./counter-booking.component.html",
   styleUrls: ["./counter-booking.component.css"],
 })
-export class CounterBookingComponent implements OnInit {
+export class CounterBookingComponent
+  implements OnInit, AfterViewInit, OnDestroy {
   minPrice = 0;
   maxPrice = 10000;
   customPrice = 10000;
@@ -61,6 +62,15 @@ export class CounterBookingComponent implements OnInit {
         alert(error);
       }
     );
+  }
+
+  ngAfterViewInit() {
+    document.getElementById("cancel").classList.remove("side-link-active");
+    document.getElementById("book").classList.add("side-link-active");
+  }
+
+  ngOnDestroy() {
+    document.getElementById("book").classList.remove("side-link-active");
   }
 
   getFlights() {
