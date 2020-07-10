@@ -1,3 +1,21 @@
+.airport-selectors {
+  display: grid;
+}
+
+.arrive-select,
+.depart-select {
+  margin: 0px 10px;
+  margin-bottom: 15px;
+  grid-row: 2;
+}
+
+.depart-select {
+  grid-column: 1;
+}
+
+.arrive-select {
+  grid-column: 2;
+}
 .date-picker {
   display: block;
   width: 150px;

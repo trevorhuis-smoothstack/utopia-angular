@@ -45,6 +45,7 @@ import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
 import { TravelerLoginComponent } from "./traveler/traveler-login/traveler-login.component";
 import { CounterDateFilterPipe } from "./common/counter/pipe/counter-date-filter.pipe";
 import { CounterPriceFilterPipe } from "./common/counter/pipe/counter-price-filter.pipe";
+import { CounterAirportFilterPipe } from "./common/counter/pipe/counter-airport-filter.pipe";
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import { CounterPriceFilterPipe } from "./common/counter/pipe/counter-price-filt
     CounterBookingComponent,
     TravelerComponent,
     TravelerLoginComponent,
+    CounterAirportFilterPipe,
     CounterDateFilterPipe,
     CounterPriceFilterPipe,
   ],

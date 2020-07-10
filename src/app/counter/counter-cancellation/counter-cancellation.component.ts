@@ -20,6 +20,8 @@ export class CounterCancellationComponent
   airports: any[];
   flights: any[];
   flight: any;
+  departAirport: any;
+  arriveAirport: any;
 
   constructor(
     private modalService: NgbModal,
