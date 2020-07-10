@@ -57,29 +57,31 @@ export class TravelerComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadAirports();
-    this.initializeFormGroup();
 
     this.username = localStorage.getItem('username');
-    if (!localStorage.getItem('username')) {
+    if (!this.username) {
       this.router.navigate(['/traveler/login']);
     }
 
-    // this.authService.checkAuth().subscribe(
-    //   () => (this.authorized = true),
-    //   (error) => {
-    //     if (![401, 403].includes(error.error.status)) {
-    //       alert('Error checking authorization: Status ' + error.error.status);
-    //     }
-    //     this.router.navigate(['/traveler/login']);
-    //   }
-    // );
+    this.authorizeUser();
 
     // this.loadCurrentUser();
     this.currentUser = this.travelerDataService.getCurrentUser();
-    if (this.currentUser === undefined) {
-      this.router.navigate(['/traveler/login']);
-    }
+
+    this.loadAirports();
+    this.initializeFormGroup();
+  }
+
+  authorizeUser() {
+    this.authService.checkAuth().subscribe(
+      () => (this.authorized = true),
+      (error) => {
+        if (![401, 403].includes(error.error.status)) {
+          alert('Error checking authorization: Status ' + error.error.status);
+        }
+        this.router.navigate(['/traveler/login']);
+      }
+    );
   }
 
   loadCurrentUser() {

@@ -47,7 +47,8 @@ export class TravelerLoginComponent implements OnInit {
       expires: localStorage.getItem('expires_at')
     };
 
-    if (this.travelerDataService.getCurrentUser()) {
+    if (this.authService.isLoggedIn()) {
+      this.loadCurrentUser(this.traveler.username);
       this.router.navigate(['/traveler/dashboard']);
     }
 
@@ -61,20 +62,40 @@ export class TravelerLoginComponent implements OnInit {
       this.authService.login(val.username, val.password).then(
         (response: any) => {
           const expiresAt = moment().add(response.headers.get('expires'), 'second');
-
           localStorage.setItem('username', val.username);
           localStorage.setItem('token', response.headers.get('Authorization'));
           localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
-
-          this.loadCurrentUser(val.username);
-
-
+          this.travelerService
+          .get(`${environment.travelerBackendUrl}${environment.usernameUri}/${val.username}`)
+          .subscribe((res) => {
+            this.travelerDataService.setCurrentUser(res);
+            localStorage.setItem('username', val.username);
+            localStorage.setItem('token', response.headers.get('Authorization'));
+            localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
+            this.router.navigate(['/traveler/dashboard']);
+          },
+          (error) => {
+            // TODO: chanage alert to logging service call.
+            if (error.error.status === 401) {
+              this.setInvalidLogin();
+              this.toastsService.showError('incorrect username or password', 'login error');
+            } else if (error.error.status === 403) {
+              this.setInvalidLogin();
+              this.toastsService.showError('Account must be a traveler to login', 'login error');
+            } else {
+              this.toastsService.showError('Servers may be down. Please contact support for more information', 'server error');
+            }
+          }
+          );
         }).catch(error => {
           if (error.error.status === 401) {
             this.setInvalidLogin();
             this.toastsService.showError('incorrect username or password', 'login error');
+          } else if (error.error.status === 403) {
+            this.setInvalidLogin();
+            this.toastsService.showError('Account must be a traveler to login', 'login error');
           } else {
-            this.toastsService.showError('Servers may be down. Contact support for more information.', 'Server error');
+            this.toastsService.showError('Servers may be down. Please contact support for more information', 'server error');
           }
         });
     }
@@ -126,7 +147,9 @@ export class TravelerLoginComponent implements OnInit {
     },
     (error) => {
       // TODO: chanage alert to logging service call.
-      alert(error);
+      if (error.error.status === 403) {
+        this.toastsService.showError('Account must be a traveler to login', 'login error');
+      }
     }
     );
   }
