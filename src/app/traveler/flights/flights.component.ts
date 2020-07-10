@@ -123,12 +123,10 @@ export class FlightsComponent implements OnInit {
             );
           },
           (error) => {
-            this.modalService.dismissAll();
             this.toastsService.showError('Something went wrong booking flight', 'Error');
           }
         );
     } else if (result.error) {
-      this.modalService.dismissAll();
       this.toastsService.showError('Incorrect card information.', 'Error');
     }
   });
