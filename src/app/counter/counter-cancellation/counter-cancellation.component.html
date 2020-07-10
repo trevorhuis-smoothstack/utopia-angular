@@ -100,7 +100,11 @@
   </thead>
   <tbody>
     <tr
-      *ngFor="let flight of flights | counterDateFilter: minDate:maxDate"
+      *ngFor="
+        let flight of flights
+          | counterDateFilter: minDate:maxDate
+          | slice: (currentPage - 1) * rowsPerPage:currentPage * rowsPerPage
+      "
       style="cursor: pointer;"
       (click)="openCancellationModal(flight, cancellationModal)"
     >
@@ -111,6 +115,13 @@
     </tr>
   </tbody>
 </table>
+<ngb-pagination
+  *ngIf="flights && flights.length"
+  [collectionSize]="flights ? flights.length : 0"
+  [(page)]="currentPage"
+  [pageSize]="rowsPerPage"
+>
+</ngb-pagination>
 
 <ng-template #cancellationModal let-close="close">
   <div class="modal-dialog">

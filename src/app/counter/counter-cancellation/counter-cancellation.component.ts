@@ -12,6 +12,8 @@ import { environment } from "src/environments/environment";
 })
 export class CounterCancellationComponent
   implements OnInit, AfterViewInit, OnDestroy {
+  currentPage = 1;
+  rowsPerPage = 10;
   minDate: any;
   maxDate: any;
   traveler: any;
