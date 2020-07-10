@@ -73,7 +73,6 @@ export class CounterCreateTravelerComponent implements OnInit {
   }
 
   validatePasswordMatch(form: FormGroup) {
-    // debugger;
     return form.value.password === form.value.confirmPassword
       ? null
       : { validatePasswordMatch: true };
