@@ -13,6 +13,8 @@ import { Elements, Element, StripeService } from "ngx-stripe";
 })
 export class CounterBookingComponent
   implements OnInit, AfterViewInit, OnDestroy {
+  minDate: any;
+  maxDate: any;
   minPrice = 0;
   maxPrice = 10000;
   customPrice = 10000;
@@ -92,6 +94,15 @@ export class CounterBookingComponent
   getAirportName(airportId: number) {
     return this.airports.find((airport) => airport.airportId === airportId)
       .name;
+  }
+
+  getCurrentDate() {
+    const now = new Date();
+    return {
+      year: now.getFullYear(),
+      month: now.getMonth() + 1,
+      day: now.getDate(),
+    };
   }
 
   openBookingModal(flight: any, modal: any) {

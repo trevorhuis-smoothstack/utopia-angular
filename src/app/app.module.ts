@@ -43,6 +43,7 @@ import { TravelerComponent } from "./traveler/traveler.component";
 import { TravelerService } from "./common/s/service/traveler.service";
 import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
 import { TravelerLoginComponent } from "./traveler/traveler-login/traveler-login.component";
+import { CounterDateFilterPipe } from "./common/counter/pipe/counter-date-filter.pipe";
 import { CounterPriceFilterPipe } from "./common/counter/pipe/counter-price-filter.pipe";
 
 @NgModule({
@@ -70,6 +71,7 @@ import { CounterPriceFilterPipe } from "./common/counter/pipe/counter-price-filt
     CounterBookingComponent,
     TravelerComponent,
     TravelerLoginComponent,
+    CounterDateFilterPipe,
     CounterPriceFilterPipe,
   ],
   imports: [
