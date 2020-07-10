@@ -26,3 +26,8 @@
       text-align: center;
       padding-bottom: 1rem;
   }
+
+  .btn-block {
+    margin: 5px;
+    margin-left: 0px;
+  }
