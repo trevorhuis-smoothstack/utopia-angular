@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import * as moment from 'moment';
 import { StripeService, Element, Elements } from 'ngx-stripe';
 import { ToastsService } from 'src/app/common/s/service/toasts.service';
+import { TravelerDataService } from 'src/app/common/s/service/traveler-data.service';
 
 @Component({
   selector: 'app-flights',
@@ -37,6 +38,7 @@ export class FlightsComponent implements OnInit {
   filterMetadata = { count: 0 };
 
   constructor(
+    private travelerDataService: TravelerDataService,
     private toastsService: ToastsService,
     private travelerService: TravelerService,
     private formBuilder: FormBuilder,
@@ -56,14 +58,30 @@ export class FlightsComponent implements OnInit {
         alert(error);
       }
     );
-    // this.stripe.setKey(
-    //   "pk_test_51GvUChBYMFlMJbBRvrWM7yZJHJhVExdReQ2A5K0uaKTidkmqRcnY48fr6VmnK9csVNOwkiH0xetgz36Gcvql6IF20098oe4tpg"
-    // );
     this.flights = new Array();
 
     this.airportsMap = new Map();
 
-    this.loadFlights();
+    if (!this.user) {
+      this.loadCurrentUser();
+    } else {
+      this.loadFlights();
+    }
+  }
+
+  loadCurrentUser() {
+    const username = localStorage.getItem('username');
+    this.travelerService
+    .get(`${environment.travelerBackendUrl}${environment.usernameUri}/${username}`)
+    .subscribe((res) => {
+      this.user = res;
+      this.travelerDataService.setCurrentUser(this.user);
+      this.loadFlights();
+    },
+    (error) => {
+      this.toastsService.showError('login error', 'Error');
+    }
+    );
   }
 
   loadFlights() {

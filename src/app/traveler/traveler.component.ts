@@ -65,7 +65,7 @@ export class TravelerComponent implements OnInit {
 
     this.authorizeUser();
 
-    // this.loadCurrentUser();
+    this.loadCurrentUser();
     this.currentUser = this.travelerDataService.getCurrentUser();
 
     this.loadAirports();
