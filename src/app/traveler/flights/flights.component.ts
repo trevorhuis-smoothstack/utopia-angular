@@ -145,7 +145,7 @@ export class FlightsComponent implements OnInit {
           }
         );
     } else if (result.error) {
-      this.toastsService.showError('Incorrect card information.', 'Error');
+      this.toastsService.showError('There was a problem processing the transaction', 'Payment Error');
     }
   });
 }
