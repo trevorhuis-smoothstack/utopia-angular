@@ -15,15 +15,24 @@ export const environment = {
   agentAirportsUri: "/airports",
   agentBookingUri: "/booking",
   travelerBackendUrl: 'http://localhost:8080/traveler',
+  counterUrl: 'http://localhost:8080/counter',
+  loginUrl: 'http://localhost:8080/login',
   readTravelerAirports: '/airports',
   usernameUri: '/users',
   userUri: '/users',
   CheckAuthUri: '/authorized',
+  counterAirportUri: '/airports',
+  bookingsUri: '/bookings',
+  flightsUri: '/flights',
+  travelersUri: '/travelers',
+  bookingUri: '/bookings',
+<<<<<<< HEAD
+  travelerCheckAuthUri: '/authorized',
+=======
   counterUrl: "http://localhost:8080/counter",
   loginUrl: "http://localhost:8080/login",
   counterCancellablyBookedUri: "/flights/cancellable/traveler/",
   counterCancelUri: "/bookings",
-  counterAirportUri: "/airports",
   counterBookableUri: "/flights/bookable",
   counterBookUri: "/booking",
   counterCheckAuthUri: "/authorized",
@@ -31,6 +40,7 @@ export const environment = {
   counterGetUserUri: "/users/",
   counterTravelerUri: "/traveler/",
   counterUsernameUri: "/user/",
+>>>>>>> 8a3ffa5ba6f45e2bf009e656aaad8ec7f7bf51df
 };
 
 /*

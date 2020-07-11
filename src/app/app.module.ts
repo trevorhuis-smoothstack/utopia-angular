@@ -39,6 +39,17 @@ import { CounterTravelerComponent } from "./counter/counter-traveler/counter-tra
 import { CounterCreateTravelerComponent } from "./counter/counter-create-traveler/counter-create-traveler.component";
 import { CounterCancellationComponent } from "./counter/counter-cancellation/counter-cancellation.component";
 import { CounterBookingComponent } from "./counter/counter-booking/counter-booking.component";
+import { FlightsComponent } from './traveler/flights/flights.component';
+import { BookingsComponent } from './traveler/bookings/bookings.component';
+import { TravelerAuthInterceptor } from './common/s/service/TravelerAuthInterceptor';
+import {
+  SortFlightsByDepartureAirport,
+  SortFlightsByArrivalAirport,
+  SortByDepartureDate,
+  SortByFlightPrice
+} from './common/h/sort-flights-airports';
+import { TravelerDataService } from './common/s/service/traveler-data.service';
+import { TravelerAuthService } from './common/s/service/traveler-auth-service.service';
 import { TravelerComponent } from "./traveler/traveler.component";
 import { TravelerService } from "./common/s/service/traveler.service";
 import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
@@ -65,13 +76,18 @@ import { CounterAirportFilterPipe } from "./common/counter/pipe/counter-airport-
     SelectTravelerComponent,
     CounterLoginComponent,
     CounterSelectTravelerComponent,
-    CounterComponent,
-    CounterTravelerComponent,
     CounterCreateTravelerComponent,
+    CounterComponent,
     CounterCancellationComponent,
     CounterBookingComponent,
     TravelerComponent,
     TravelerLoginComponent,
+    FlightsComponent,
+    BookingsComponent,
+    SortFlightsByDepartureAirport,
+    SortFlightsByArrivalAirport,
+    SortByDepartureDate,
+    SortByFlightPrice,
     CounterAirportFilterPipe,
     CounterDateFilterPipe,
     CounterPriceFilterPipe,
@@ -94,9 +110,17 @@ import { CounterAirportFilterPipe } from "./common/counter/pipe/counter-airport-
       useClass: AgentAuthInterceptor,
       multi: true,
     },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TravelerAuthInterceptor,
+      multi: true,
+    },
     AgentUtopiaService,
     TravelerService,
     CounterHttpService,
+    TravelerDataService,
+    TravelerAuthInterceptor,
+    TravelerAuthService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: CounterInterceptionService,

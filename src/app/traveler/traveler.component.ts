@@ -10,6 +10,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TravelerAuthService } from '../common/s/service/traveler-auth-service.service';
+import { TravelerDataService } from '../common/s/service/traveler-data.service';
 
 @Component({
   selector: 'app-traveler',
@@ -31,13 +32,17 @@ export class TravelerComponent implements OnInit {
   departure: any;
   authorized = false;
   username: string;
+  showFlights = true;
 
 
   constructor(
+    private travelerDataService: TravelerDataService,
+    private authService: TravelerAuthService,
     private travelerService: TravelerService,
     private travelerAuthService: TravelerAuthService,
     private router: Router
   ) {
+    this.loadAirports();
     this.dropdownSettings = {
       singleSelection: true,
       textField: 'name',
@@ -52,13 +57,41 @@ export class TravelerComponent implements OnInit {
 
     this.username = localStorage.getItem('username');
     if (!localStorage.getItem('username')) {
-      console.log(localStorage.getItem('username'));
       this.router.navigate(['/traveler/login']);
     }
+<<<<<<< HEAD
+
+    // this.authService.checkAuth().subscribe(
+    //   () => (this.authorized = true),
+    //   (error) => {
+    //     if (![401, 403].includes(error.error.status)) {
+    //       alert('Error checking authorization: Status ' + error.error.status);
+    //     }
+    //     this.router.navigate(['/traveler/login']);
+    //   }
+    // );
+
+    // this.loadCurrentUser();
+    this.currentUser = this.travelerDataService.getCurrentUser();
+    if (this.currentUser === undefined) {
+      this.router.navigate(['/traveler/login']);
+    }
+=======
+    this.loadCurrentUser();
+>>>>>>> 7995af5cdccb88d426cb2287c81f7acc1551a208
   }
 
   loadCurrentUser() {
-
+    this.travelerService
+    .get(`${environment.travelerBackendUrl}${environment.usernameUri}/${this.username}`)
+    .subscribe((res) => {
+      this.currentUser = res;
+      this.travelerDataService.setCurrentUser(this.currentUser);
+    },
+    (error) => {
+      alert(error);
+    }
+    );
   }
 
   loadAirports() {
@@ -67,7 +100,6 @@ export class TravelerComponent implements OnInit {
       .subscribe(
         (res) => {
           this.airports = res;
-          console.log(res);
         },
         (error) => {
           alert(error);
@@ -84,21 +116,8 @@ export class TravelerComponent implements OnInit {
     });
   }
 
-  showArrivalDeparture() {
-    console.log(this.arrival);
-    console.log(this.departure);
-  }
-
-  loadFlights() {
-
-  }
-
-  loadActiveFlights() {
-
-  }
-
-  loadPreviousFlights() {
-
+  toggleFlights() {
+    this.showFlights = !this.showFlights;
   }
 
   logout() {
