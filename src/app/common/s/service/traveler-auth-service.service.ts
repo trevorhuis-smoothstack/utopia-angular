@@ -48,7 +48,7 @@ export class TravelerAuthService {
 
   checkAuth() {
     return this.httpService.get(
-      environment.travelerBackendUrl + environment.counterCheckAuthUri
+      environment.travelerBackendUrl + environment.travelerCheckAuthUri
     );
   }
 

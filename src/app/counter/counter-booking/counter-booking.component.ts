@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, AfterViewInit, OnDestroy } from "@angular/core";
 import { Router } from "@angular/router";
 import { CounterHttpService } from "src/app/common/counter/service/counter-http.service";
 import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
@@ -11,7 +11,15 @@ import { Elements, Element, StripeService } from "ngx-stripe";
   templateUrl: "./counter-booking.component.html",
   styleUrls: ["./counter-booking.component.css"],
 })
-export class CounterBookingComponent implements OnInit {
+export class CounterBookingComponent
+  implements OnInit, AfterViewInit, OnDestroy {
+  currentPage = 1;
+  rowsPerPage = 10;
+  minDate: any;
+  maxDate: any;
+  minPrice = 0;
+  maxPrice = 10000;
+  customPrice = 10000;
   elements: Elements;
   card: Element;
   counter = this.dataService.getCounter();
@@ -60,6 +68,15 @@ export class CounterBookingComponent implements OnInit {
     );
   }
 
+  ngAfterViewInit() {
+    document.getElementById("cancel").classList.remove("side-link-active");
+    document.getElementById("book").classList.add("side-link-active");
+  }
+
+  ngOnDestroy() {
+    document.getElementById("book").classList.remove("side-link-active");
+  }
+
   getFlights() {
     this.httpService
       .get(
@@ -79,6 +96,15 @@ export class CounterBookingComponent implements OnInit {
   getAirportName(airportId: number) {
     return this.airports.find((airport) => airport.airportId === airportId)
       .name;
+  }
+
+  getCurrentDate() {
+    const now = new Date();
+    return {
+      year: now.getFullYear(),
+      month: now.getMonth() + 1,
+      day: now.getDate(),
+    };
   }
 
   openBookingModal(flight: any, modal: any) {
