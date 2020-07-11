@@ -33,12 +33,7 @@ export class TravelerAuthService {
   }
 
   public isLoggedIn() {
-    if (moment().isBefore(this.getExpiration())) {
-      moment().isBefore(this.getExpiration().add(1, 'hours'));
-      return true;
-    } else {
-      return false;
-    }
+    return moment().isBefore(this.getExpiration().add(1, 'hours'));
   }
 
   isLoggedOut() {
