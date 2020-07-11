@@ -36,7 +36,6 @@ export class TravelerComponent implements OnInit {
   showFlights = true;
   flightButtonText = 'My Bookings';
 
-
   constructor(
     private modalService: NgbModal,
     private travelerDataService: TravelerDataService,
@@ -60,6 +59,22 @@ export class TravelerComponent implements OnInit {
 
     this.username = localStorage.getItem('username');
     if (!localStorage.getItem('username')) {
+      this.router.navigate(['/traveler/login']);
+    }
+
+    // this.authService.checkAuth().subscribe(
+    //   () => (this.authorized = true),
+    //   (error) => {
+    //     if (![401, 403].includes(error.error.status)) {
+    //       alert('Error checking authorization: Status ' + error.error.status);
+    //     }
+    //     this.router.navigate(['/traveler/login']);
+    //   }
+    // );
+
+    // this.loadCurrentUser();
+    this.currentUser = this.travelerDataService.getCurrentUser();
+    if (this.currentUser === undefined) {
       this.router.navigate(['/traveler/login']);
     }
 
