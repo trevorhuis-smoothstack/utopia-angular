@@ -11,6 +11,7 @@ import {
 import { Router } from '@angular/router';
 import { TravelerAuthService } from '../common/s/service/traveler-auth-service.service';
 import { TravelerDataService } from '../common/s/service/traveler-data.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-traveler',
@@ -33,9 +34,10 @@ export class TravelerComponent implements OnInit {
   authorized = false;
   username: string;
   showFlights = true;
-
+  flightButtonText = 'My Bookings';
 
   constructor(
+    private modalService: NgbModal,
     private travelerDataService: TravelerDataService,
     private authService: TravelerAuthService,
     private travelerService: TravelerService,
@@ -59,7 +61,6 @@ export class TravelerComponent implements OnInit {
     if (!localStorage.getItem('username')) {
       this.router.navigate(['/traveler/login']);
     }
-<<<<<<< HEAD
 
     // this.authService.checkAuth().subscribe(
     //   () => (this.authorized = true),
@@ -76,9 +77,22 @@ export class TravelerComponent implements OnInit {
     if (this.currentUser === undefined) {
       this.router.navigate(['/traveler/login']);
     }
-=======
-    this.loadCurrentUser();
->>>>>>> 7995af5cdccb88d426cb2287c81f7acc1551a208
+
+    // this.authService.checkAuth().subscribe(
+    //   () => (this.authorized = true),
+    //   (error) => {
+    //     if (![401, 403].includes(error.error.status)) {
+    //       alert('Error checking authorization: Status ' + error.error.status);
+    //     }
+    //     this.router.navigate(['/traveler/login']);
+    //   }
+    // );
+
+    // this.loadCurrentUser();
+    this.currentUser = this.travelerDataService.getCurrentUser();
+    if (this.currentUser === undefined) {
+      this.router.navigate(['/traveler/login']);
+    }
   }
 
   loadCurrentUser() {
@@ -118,10 +132,19 @@ export class TravelerComponent implements OnInit {
 
   toggleFlights() {
     this.showFlights = !this.showFlights;
+    if (this.showFlights) {
+      this.flightButtonText = 'My Bookings';
+    } else {
+      this.flightButtonText = 'Search Flights';
+    }
   }
 
   logout() {
     this.travelerAuthService.logout();
     this.router.navigate(['/traveler/login']);
+  }
+
+  openLogoutModal(modal: any) {
+    this.modalService.open(modal);
   }
 }

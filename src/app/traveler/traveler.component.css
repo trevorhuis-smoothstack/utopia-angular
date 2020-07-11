@@ -1,4 +1,4 @@
-#agent-sidebar {
+#traveler-sidebar {
     position: fixed;
     width: 200px;
     height: 100%;
@@ -9,29 +9,47 @@
     transition: all 400ms linear;
     overflow: hidden;
   }
+
+  #traveler-logout {
+      left: 0px;
+  }
   
-  #agent-sidebar.active {
+  #traveler-sidebar.active {
     left: 0px;
   }
   
-  #agent-sidebar ul {
+  .flights-container {
+    margin-top: 2rem;
+    margin-left: calc(10vh + 200px);
+    margin-right: 10vh;
+  }
+
+  #traveler-side-top {
+    padding-top: 100px;
+  }
+
+  #traveler-sidebar ul {
     padding-inline-start: 0;
   }
   
-  .agent-logout {
-    padding: 0px 10px 15px 10px;
+  #traveler-logout-button {
+    min-width: 150px;
+  }
+
+  .traveler-logout {
+    padding: 10px 10px 15px 10px;
   }
   
-  .agent-data {
+  .traveler-data {
     padding: 5px 10px;
     padding: 1rem;
   }
   
-  #agent-side-top {
+  #traveler-side-top {
     padding-top: 100px;
   }
   
-  .agent-data h5 {
+  .traveler-data h5 {
     line-height: 1.5rem;
   }
   
@@ -40,7 +58,7 @@
     border-bottom: 1px solid #ffffff;
   }
   
-  .side-link {
+  .traveler-link {
     color: #ffffff;
     list-style: none;
     padding: 15px 10px;
@@ -48,28 +66,32 @@
     margin-left: auto;
   }
   
-  .agent-features {
+  .traveler-features {
     padding: 15px 10px;
     color: #ffffff;
   }
   
-  .side-link-active {
+  .traveler-link-active {
     background-color: #ffffff;
     color: #18bc9c;
   }
   
-  .agent-container {
+  .traveler-container {
     margin-top: 2rem;
     margin-left: calc(10vh + 200px);
     margin-right: 10vh;
   }
   
+  #logoutAgentModal {
+      z-index: 1;
+  }
+  
   @media (max-width: 600px) {
-    #agent-sidebar {
+    #traveler-sidebar {
       display: none;
     }
   
-    .agent-container {
+    .traveler-container {
       margin-left: 0;
       margin-right: 0;
     }

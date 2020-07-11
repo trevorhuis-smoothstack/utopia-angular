@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { TravelerService } from 'src/app/common/s/service/traveler.service';
 import { environment } from 'src/environments/environment';
 import * as moment from 'moment';
+import { StripeService } from 'ngx-stripe';
 
 @Component({
   selector: 'app-bookings',
@@ -14,7 +15,7 @@ export class BookingsComponent implements OnInit {
   bookings: any[];
   airportsMap: Map<number, string>;
 
-  constructor(private service: TravelerService) { }
+  constructor(private service: TravelerService, private stripe: StripeService) { }
 
   ngOnInit() {
     this.airportsMap = new Map();

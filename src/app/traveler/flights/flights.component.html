@@ -103,8 +103,8 @@
   <thead>
     <tr>
       <th scope="col">Depart From</th>
-      <th scope="col">Arrive At</th>
-      <th scope="col">Departure Time</th>
+      <th scope="col">Arrive To</th>
+      <th scope="col">Depart Time</th>
       <th scope="col">Price</th>
       <th scope="col">Book</th>
     </tr>
@@ -113,10 +113,10 @@
     <tr
       *ngFor="
         let f of flights
-          | sortFlightsByDepartureAirport: selectedDeparture:filterMetadata
-          | sortFlightsByArrivalAirport: selectedArrival:filterMetadata
-          | sortByFlightPrice: customPrice:filterMetadata
-          | sortByDepartureDate: date:filterMetadata
+          | filterFlightsByDepartureAirport: selectedDeparture:filterMetadata
+          | filterFlightsByArrivalAirport: selectedArrival:filterMetadata
+          | filterByFlightPrice: customPrice:filterMetadata
+          | filterByDepartureDate: date:filterMetadata
           | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize
       "
     >
@@ -176,7 +176,7 @@
               <td>{{ selectedFlight.arriveAirport }}</td>
             </tr>
             <tr class="table-dark">
-              <th scope="row">Departure Time:</th>
+              <th scope="row">Flight Time:</th>
               <td>{{ selectedFlight.departTimeFormatted }}</td>
             </tr>
             <tr class="table-dark">
@@ -186,7 +186,10 @@
           </table>
 
           <h5 class="text-center">Enter credit or debit card</h5>
-          <form [formGroup]="creditCardForm">
+          <form>
+            <div id="card" class="field"></div>
+          </form>
+          <!-- <form [formGroup]="creditCardForm">
             <input
               type="text"
               class="form-control credit-info"
@@ -214,7 +217,7 @@
               placeholder="CVC"
               formControlName="cvc"
             />
-          </form>
+          </form> -->
         </div>
         <div class="modal-footer">
           <button
@@ -227,7 +230,7 @@
           <button
             class="btn btn-success"
             type="button"
-            (click)="bookFlight(); close()"
+            (click)="bookFlight();"
           >
             Book Flight
           </button>
