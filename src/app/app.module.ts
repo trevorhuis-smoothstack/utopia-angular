@@ -80,7 +80,7 @@ import { CounterAirportFilterPipe } from "./common/counter/pipe/counter-airport-
     TravelerLoginComponent,
     FlightsComponent,
     BookingsComponent,
-    CounterTravelerComponent
+    CounterTravelerComponent,
     SortFlightsByDepartureAirport,
     SortFlightsByArrivalAirport,
     SortByDepartureDate,
