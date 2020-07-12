@@ -49,7 +49,6 @@ import { TravelerAuthInterceptor } from './common/s/service/TravelerAuthIntercep
 
 import { TravelerDataService } from './common/s/service/traveler-data.service';
 import { TravelerAuthService } from './common/s/service/traveler-auth-service.service';
-import { TravelerLoginComponent } from "./traveler/traveler-login/traveler-login.component";
 import { CounterDateFilterPipe } from "./common/counter/pipe/counter-date-filter.pipe";
 import { CounterPriceFilterPipe } from "./common/counter/pipe/counter-price-filter.pipe";
 import { CounterAirportFilterPipe } from "./common/counter/pipe/counter-airport-filter.pipe";
