@@ -9,7 +9,11 @@ import { CounterHttpService } from "src/app/common/counter/service/counter-http.
 import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
 import { environment } from "src/environments/environment";
 import { Router } from "@angular/router";
-import { maxLength } from "src/app/common/counter/counter-globals";
+import { ToastrService } from "ngx-toastr";
+import {
+  maxLength,
+  uncheckedErrorMessage,
+} from "src/app/common/counter/counter-globals";
 import { of } from "rxjs";
 import { map, catchError } from "rxjs/operators";
 
@@ -24,8 +28,9 @@ export class CounterSelectTravelerComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private toastr: ToastrService,
     private httpService: CounterHttpService,
-    private dataService: CounterDataService,
+    private dataService: CounterDataService
   ) {}
 
   ngOnInit() {
@@ -59,7 +64,11 @@ export class CounterSelectTravelerComponent implements OnInit {
           this.dataService.setTraveler(result);
           this.router.navigate(["/counter/booking"]);
         },
-        (error) => alert("Error getting traveler: Status " + error.error.status)
+        (error) =>
+          this.toastr.error(
+            uncheckedErrorMessage,
+            "Error getting traveler: Status " + error.error.status
+          )
       );
   }
 
