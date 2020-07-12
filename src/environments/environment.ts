@@ -29,7 +29,7 @@ export const environment = {
   flightsUri: '/flights',
   travelersUri: '/travelers',
   bookingUri: '/bookings',
-  counterCreateUserUri: '/traveler',
+  counterCreateUserUri: '/user',
   travelerCheckAuthUri: '/authorized',
   counterCancellablyBookedUri: "/flights/cancellable/traveler/",
   counterCancelUri: "/bookings",
