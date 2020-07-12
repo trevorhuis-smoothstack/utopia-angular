@@ -62,7 +62,7 @@ export class CounterSelectTravelerComponent implements OnInit {
       .subscribe(
         (result) => {
           this.dataService.setTraveler(result);
-          this.router.navigate(["/counter"]);
+          this.router.navigate(["/counter/booking"]);
         },
         (error) =>
           this.toastr.error(

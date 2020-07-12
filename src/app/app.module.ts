@@ -1,12 +1,12 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { BrowserModule } from "@angular/platform-browser";
+import { NgModule } from "@angular/core";
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { AgentLoginComponent } from './agent/agent-login/agent-login.component';
+import { AppRoutingModule } from "./app-routing.module";
+import { AppComponent } from "./app.component";
+import { AgentLoginComponent } from "./agent/agent-login/agent-login.component";
 import { NgxStripeModule } from "ngx-stripe";
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import { ReactiveFormsModule } from "@angular/forms";
 import { AgentAuthService } from "./common/h/service/AgentAuthService";
 import { AgentAuthInterceptor } from "./common/h/service/AgentAuthInterceptor";
 import { AgentDashboardComponent } from "./agent/agent-dashboard/agent-dashboard.component";
@@ -38,12 +38,14 @@ import { CounterSelectTravelerComponent } from "./counter/counter-select-travele
 import { CounterComponent } from "./counter/counter/counter.component";
 import { CounterTravelerComponent } from "./counter/counter-traveler/counter-traveler.component";
 import { CounterCreateTravelerComponent } from "./counter/counter-create-traveler/counter-create-traveler.component";
-import { CounterCancellationComponent } from './counter/counter-cancellation/counter-cancellation.component';
+import { CounterCancellationComponent } from "./counter/counter-cancellation/counter-cancellation.component";
 import { CounterBookingComponent } from "./counter/counter-booking/counter-booking.component";
-import { TravelerComponent } from './traveler/traveler.component';
-import { TravelerService } from './common/s/service/traveler.service';
-import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import { TravelerLoginComponent } from './traveler/traveler-login/traveler-login.component';
+import { TravelerComponent } from "./traveler/traveler.component";
+import { TravelerService } from "./common/s/service/traveler.service";
+import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
+import { TravelerLoginComponent } from "./traveler/traveler-login/traveler-login.component";
+import { CounterDateFilterPipe } from "./common/counter/pipe/counter-date-filter.pipe";
+import { CounterPriceFilterPipe } from "./common/counter/pipe/counter-price-filter.pipe";
 
 @NgModule({
   declarations: [
@@ -70,6 +72,8 @@ import { TravelerLoginComponent } from './traveler/traveler-login/traveler-login
     CounterBookingComponent,
     TravelerComponent,
     TravelerLoginComponent,
+    CounterDateFilterPipe,
+    CounterPriceFilterPipe,
   ],
   imports: [
     BrowserModule,

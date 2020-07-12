@@ -15,6 +15,8 @@ import {
 } from "src/app/common/counter/counter-globals";
 import { map, catchError } from "rxjs/operators";
 import { of } from "rxjs";
+import { routerNgProbeToken } from "@angular/router/src/router_module";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-counter-create-traveler",
@@ -42,6 +44,7 @@ export class CounterCreateTravelerComponent implements OnInit {
 
   constructor(
     private toastr: ToastrService,
+    private router: Router,
     private httpService: CounterHttpService,
     private dataService: CounterDataService
   ) {}
@@ -58,7 +61,10 @@ export class CounterCreateTravelerComponent implements OnInit {
     this.httpService
       .post(environment.counterUrl + environment.counterCreateUserUri, traveler)
       .subscribe(
-        (result) => this.dataService.setTraveler(result.body),
+        (result) => {
+          this.dataService.setTraveler(result.body);
+          this.router.navigate(["/counter/booking"]);
+        },
         (error) =>
           this.toastr.error(
             uncheckedErrorMessage,
@@ -81,7 +87,6 @@ export class CounterCreateTravelerComponent implements OnInit {
   }
 
   validatePasswordMatch(form: FormGroup) {
-    // debugger;
     return form.value.password === form.value.confirmPassword
       ? null
       : { validatePasswordMatch: true };
