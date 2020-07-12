@@ -27,6 +27,7 @@ import {
   FilterByDepartureDatePipe,
 } from "./common/h/filter-bookings";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { ToastrModule } from 'ngx-toastr';
 import { CancelBookingComponent } from "./agent/agent-dashboard/cancel-booking/cancel-booking.component";
 import { CreateBookingComponent } from "./agent/agent-dashboard/create-booking/create-booking.component";
 import { SelectTravelerComponent } from "./agent/agent-dashboard/select-traveler/select-traveler.component";
@@ -96,6 +97,7 @@ import { CounterAirportFilterPipe } from "./common/counter/pipe/counter-airport-
     NgbModule,
     FormsModule,
     BrowserAnimationsModule,
+    ToastrModule.forRoot({positionClass:'toast-bottom-right'}),
     NgxStripeModule.forRoot(),
     NgMultiSelectDropDownModule,
   ],
