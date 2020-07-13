@@ -43,11 +43,32 @@
           </div>
         </div>
       </form>
+      <div
+        class="custom-control custom-switch"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title=""
+        data-original-title="Tooltip on bottom"
+      >
+        <input
+          type="checkbox"
+          class="custom-control-input"
+          id="customSwitch1"
+          [(ngModel)]="flexibleDeparture"
+        />
+        <label class="custom-control-label" for="customSwitch1"
+          >Flexible Departure</label
+        >
+        <span class="tooltiptext"
+          >Add two days before and after departure date</span
+        >
+      </div>
     </div>
     <div class="price-slider">
       <fieldset class="form-group">
         <label for="customRange1"
-          >Price Filter<br>Max Price - {{ customPrice | currency: "USD" }}</label
+          >Price Filter<br />Max Price -
+          {{ customPrice | currency: "USD" }}</label
         >
         <input
           type="range"
@@ -73,8 +94,8 @@
         [(ngModel)]="selectedDeparture"
         (change)="page = 1"
       >
-        <option selected="All Branches">All Airports</option>
-        <option *ngFor="let airport of airports" value="{{ airport.name }}">
+        <option>All Airports</option>
+        <option *ngFor="let airport of airports; let i = index" [value]="i">
           {{ airport.name }}
         </option>
       </select>
@@ -88,14 +109,18 @@
         [(ngModel)]="selectedArrival"
         (change)="page = 1"
       >
-        <option selected="All Branches">All Airports</option>
-        <option *ngFor="let airport of airports" value="{{ airport.name }}">
+        <option>All Airports</option>
+        <option *ngFor="let airport of airports; let i = index" [value]="i">
           {{ airport.name }}
         </option>
       </select>
     </div>
   </div>
+  <div class="btn-update">
+    <button class="btn btn-primary" (click)="updateButton()">Search Flights</button>
+  </div>
 </div>
+
 <table class="table table-hover">
   <thead>
     <tr>
@@ -110,17 +135,13 @@
     <tr
       *ngFor="
         let f of flights
-          | filterFlightsByDepartureAirport: selectedDeparture:filterMetadata
-          | filterFlightsByArrivalAirport: selectedArrival:filterMetadata
-          | filterByFlightPrice: customPrice:filterMetadata
-          | filterByDepartureDate: date:filterMetadata
           | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize
       "
     >
       <th scope="row">{{ f.departAirport }}</th>
       <td>{{ f.arriveAirport }}</td>
-      <td>{{ f.departTime| date: "medium" }}</td>
-      <td> {{ f.price | currency: "USD" }}</td>
+      <td>{{ f.departTime | date: "medium" }}</td>
+      <td>{{ f.price | currency: "USD" }}</td>
       <td>
         <button
           type="button"
@@ -146,8 +167,8 @@
     >
       <th scope="row">{{ f.departAirport }}</th>
       <td>{{ f.arriveAirport }}</td>
-      <td>{{ f.departTime| date: "medium" }}</td>
-      <td> {{ f.price | currency: "USD" }}</td>
+      <td>{{ f.departTime | date: "medium" }}</td>
+      <td>{{ f.price | currency: "USD" }}</td>
     </tr>
   </tbody>
 </table>
@@ -175,7 +196,7 @@
 
       <div class="modal-body">
         <div class="alert alert-success" *ngIf="flightBooked">
-          <strong>Flight Booked!</strong> 
+          <strong>Flight Booked!</strong>
         </div>
         <div class="form-group credit-card-form">
           <h5 class="text-center" *ngIf="!flightBooked">
@@ -235,5 +256,3 @@
     </div>
   </div>
 </ng-template>
-
-

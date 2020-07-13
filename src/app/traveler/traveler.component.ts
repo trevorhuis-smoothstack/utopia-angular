@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { TravelerAuthService } from '../common/s/service/traveler-auth-service.service';
 import { TravelerDataService } from '../common/s/service/traveler-data.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastsService } from '../common/s/service/toasts.service';
 
 @Component({
   selector: 'app-traveler',
@@ -37,6 +38,7 @@ export class TravelerComponent implements OnInit {
   flightButtonText = 'My Bookings';
 
   constructor(
+    private toastsService: ToastsService,
     private modalService: NgbModal,
     private travelerDataService: TravelerDataService,
     private authService: TravelerAuthService,
@@ -54,45 +56,30 @@ export class TravelerComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadAirports();
-    this.initializeFormGroup();
 
     this.username = localStorage.getItem('username');
-    if (!localStorage.getItem('username')) {
+    if (!this.username) {
       this.router.navigate(['/traveler/login']);
     }
 
-    // this.authService.checkAuth().subscribe(
-    //   () => (this.authorized = true),
-    //   (error) => {
-    //     if (![401, 403].includes(error.error.status)) {
-    //       alert('Error checking authorization: Status ' + error.error.status);
-    //     }
-    //     this.router.navigate(['/traveler/login']);
-    //   }
-    // );
+    this.authorizeUser();
 
-    // this.loadCurrentUser();
+    this.loadCurrentUser();
     this.currentUser = this.travelerDataService.getCurrentUser();
-    if (this.currentUser === undefined) {
-      this.router.navigate(['/traveler/login']);
-    }
+    this.loadAirports();
+    this.initializeFormGroup();
+  }
 
-    // this.authService.checkAuth().subscribe(
-    //   () => (this.authorized = true),
-    //   (error) => {
-    //     if (![401, 403].includes(error.error.status)) {
-    //       alert('Error checking authorization: Status ' + error.error.status);
-    //     }
-    //     this.router.navigate(['/traveler/login']);
-    //   }
-    // );
-
-    // this.loadCurrentUser();
-    this.currentUser = this.travelerDataService.getCurrentUser();
-    if (this.currentUser === undefined) {
-      this.router.navigate(['/traveler/login']);
-    }
+  authorizeUser() {
+    this.authService.checkAuth().subscribe(
+      () => (this.authorized = true),
+      (error) => {
+        if (![401, 403, 500].includes(error.error.status)) {
+          this.toastsService.showError('Error checking authorization: Status ' + error.error.status, 'Login Error');
+        }
+        this.router.navigate(['/traveler/login']);
+      }
+    );
   }
 
   loadCurrentUser() {
@@ -103,7 +90,7 @@ export class TravelerComponent implements OnInit {
       this.travelerDataService.setCurrentUser(this.currentUser);
     },
     (error) => {
-      alert(error);
+      this.toastsService.showError('login error', 'Error');
     }
     );
   }
@@ -116,7 +103,7 @@ export class TravelerComponent implements OnInit {
           this.airports = res;
         },
         (error) => {
-          alert(error);
+          this.toastsService.showError('problem loading airports', 'Database Error');
         }
       );
   }
