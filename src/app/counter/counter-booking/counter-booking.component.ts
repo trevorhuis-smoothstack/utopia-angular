@@ -1,17 +1,27 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, AfterViewInit, OnDestroy } from "@angular/core";
 import { Router } from "@angular/router";
 import { CounterHttpService } from "src/app/common/counter/service/counter-http.service";
 import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
 import { environment } from "src/environments/environment";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { ToastrService } from "ngx-toastr";
 import { Elements, Element, StripeService } from "ngx-stripe";
+import { uncheckedErrorMessage } from "src/app/common/counter/counter-globals";
 
 @Component({
   selector: "app-counter-booking",
   templateUrl: "./counter-booking.component.html",
   styleUrls: ["./counter-booking.component.css"],
 })
-export class CounterBookingComponent implements OnInit {
+export class CounterBookingComponent
+  implements OnInit, AfterViewInit, OnDestroy {
+  currentPage = 1;
+  rowsPerPage = 10;
+  minDate: any;
+  maxDate: any;
+  minPrice = 0;
+  maxPrice = 10000;
+  customPrice = 10000;
   elements: Elements;
   card: Element;
   counter = this.dataService.getCounter();
@@ -25,6 +35,7 @@ export class CounterBookingComponent implements OnInit {
   constructor(
     private modalService: NgbModal,
     private router: Router,
+    private toastr: ToastrService,
     private stripe: StripeService,
     private httpService: CounterHttpService,
     private dataService: CounterDataService
@@ -44,20 +55,26 @@ export class CounterBookingComponent implements OnInit {
       .subscribe(
         (result: any[]) => (this.airports = result),
         (error: any) =>
-          alert("Error getting airports: Status " + error.error.status)
+          this.toastr.error(
+            uncheckedErrorMessage,
+            "Error getting airports: Status " + error.error.status
+          )
       );
     this.stripe.setKey(
       "pk_test_51GwErbJwa8c7tq3ON61IURqOXTi3Lcqlyx7wBTUR0ClnuHPjOMhLZqJhxG0nFwq04Svaxa6p768cb1Mg8IF6NO2n00TlRmCn9i"
     );
-    this.stripe.elements().subscribe(
-      (elements) => {
-        this.card = elements.create("card", {});
-      },
+    this.stripe.elements().subscribe((elements) => {
+      this.card = elements.create("card", {});
+    });
+  }
 
-      (error) => {
-        alert(error);
-      }
-    );
+  ngAfterViewInit() {
+    document.getElementById("cancel").classList.remove("side-link-active");
+    document.getElementById("book").classList.add("side-link-active");
+  }
+
+  ngOnDestroy() {
+    document.getElementById("book").classList.remove("side-link-active");
   }
 
   getFlights() {
@@ -68,7 +85,10 @@ export class CounterBookingComponent implements OnInit {
       .subscribe(
         (result: any[]) => (this.flights = result),
         (error: any) =>
-          alert("Error getting flights: Status " + error.error.status)
+          this.toastr.error(
+            uncheckedErrorMessage,
+            "Error getting flights: Status " + error.error.status
+          )
       );
   }
 
@@ -79,6 +99,15 @@ export class CounterBookingComponent implements OnInit {
   getAirportName(airportId: number) {
     return this.airports.find((airport) => airport.airportId === airportId)
       .name;
+  }
+
+  getCurrentDate() {
+    const now = new Date();
+    return {
+      year: now.getFullYear(),
+      month: now.getMonth() + 1,
+      day: now.getDate(),
+    };
   }
 
   openBookingModal(flight: any, modal: any) {
@@ -103,19 +132,23 @@ export class CounterBookingComponent implements OnInit {
           .subscribe(
             () => {
               this.modalService.dismissAll();
-              alert("Ticket booked");
+              this.toastr.success("Ticket booked", "Success");
               this.flights = this.flights.filter(
                 (flight) => flight !== this.flight
               );
             },
             (error) => {
-              this.modalService.dismissAll();
-              alert("Error booking ticket: Status " + error.error.status);
+              this.toastr.error(
+                uncheckedErrorMessage,
+                "Error booking ticket: Status " + error.error.status
+              );
             }
           );
       } else if (result.error) {
-        this.modalService.dismissAll();
-        alert("Error processing payment: Token creation failed.");
+        this.toastr.error(
+          uncheckedErrorMessage,
+          "Error processing payment: Token creation failed."
+        );
       }
     });
   }

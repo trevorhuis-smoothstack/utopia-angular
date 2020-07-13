@@ -1,7 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { CounterAuthService } from "src/app/common/counter/service/counter-auth.service";
 import { Router } from "@angular/router";
+import { ToastrService } from "ngx-toastr";
 import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
+import { uncheckedErrorMessage } from "src/app/common/counter/counter-globals";
 
 @Component({
   selector: "app-counter",
@@ -15,6 +17,7 @@ export class CounterComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private toastr: ToastrService,
     private dataService: CounterDataService,
     private authService: CounterAuthService
   ) {}
@@ -22,10 +25,15 @@ export class CounterComponent implements OnInit {
   ngOnInit() {
     this.counter = this.dataService.getCounter();
     this.authService.checkAuth().subscribe(
-      () => (this.authorized = true),
+      () => {
+        this.authorized = true;
+      },
       (error) => {
-        if (![401, 403].includes(error.error.status))
-          alert("Error checking authorization: Status " + error.error.status);
+        if (![401, 403, 500].includes(error.error.status))
+          this.toastr.error(
+            uncheckedErrorMessage,
+            "Error checking authorization: Status " + error.error.status
+          );
         this.router.navigate(["/counter/login"]);
       }
     );
@@ -39,18 +47,4 @@ export class CounterComponent implements OnInit {
     this.dataService.setCounter(null);
   }
 
-  startBook() {
-    document.getElementById("cancel").classList.remove("side-link-active");
-    document.getElementById("book").classList.add("side-link-active");
-  }
-
-  startCancel() {
-    document.getElementById("book").classList.remove("side-link-active");
-    document.getElementById("cancel").classList.add("side-link-active");
-  }
-
-  resetLinks() {
-    document.getElementById("book").classList.remove("side-link-active");
-    document.getElementById("cancel").classList.remove("side-link-active");
-  }
 }

@@ -1,0 +1,32 @@
+<Div>
+<h2 class="text-center">My Flights</h2>
+  <table class="table table-hover booked-flights-table">
+    <thead>
+      <tr>
+        <th scope="col">Flight ID</th>
+        <th scope="col">Departure Airport</th>
+        <th scope="col">Arrive Airport</th>
+        <th scope="col">Departure Time</th>
+        <th scope="col">Cancel Flight</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let b of bookings">
+        <th scope="row">{{ b.flightId }}</th>
+        <td>{{ b.flight.departAirport }}</td>
+        <td>{{ b.flight.arriveAirport }}</td>
+        <td>{{ b.flight.departTimeFormatted }}</td>
+        <td> <!-- TODO give a yes no to cancel booking -->
+          <button
+            *ngIf="b.active"
+            type="button"
+            class="btn btn-secondary"
+            (click)="cancelFlight(b)"
+          >
+            Cancel Flight
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</Div>
