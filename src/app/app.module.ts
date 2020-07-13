@@ -54,6 +54,7 @@ import { ToastsService } from './common/s/service/toasts.service';
 import { CounterDateFilterPipe } from "./common/counter/pipe/counter-date-filter.pipe";
 import { CounterPriceFilterPipe } from "./common/counter/pipe/counter-price-filter.pipe";
 import { CounterAirportFilterPipe } from "./common/counter/pipe/counter-airport-filter.pipe";
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -89,6 +90,7 @@ import { CounterAirportFilterPipe } from "./common/counter/pipe/counter-airport-
     CounterAirportFilterPipe,
     CounterDateFilterPipe,
     CounterPriceFilterPipe,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
