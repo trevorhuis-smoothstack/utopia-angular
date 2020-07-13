@@ -3,29 +3,11 @@ import { Agent } from "../../../common/entities/Agent";
 import { AgentUtopiaService } from "src/app/common/h/agent-utopia.service";
 import { environment } from "src/environments/environment";
 import { Airport } from "../../../common/entities/Airport";
-import * as moment from "moment";
 import { Booking } from "../../../common/entities/Booking";
 import { Flight } from "../../../common/entities/Flight";
-import { mergeMap, tap, concatMap, delay, map } from "rxjs/operators";
-import { Observable, of, forkJoin } from "rxjs";
 import { Traveler } from '../../../common/entities/Traveler';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
-  // WHAT I WANT
-  
-  // STEP 1) USE AGENT ID TO GET ALL BOOKINGS CREATED BY AGENT
-  // RETURNS AN ARRAY OF BOOKINGS
-
-  // STEP 2) PERFORM A FOR EACH ON THE BOOKINGS TO GET DATA ABOUT EACH ONE
-
-    // STEP 2-A) FOR EACH BOOKING USE TRAVELER ID TO GET NAME OF TRAVELER
-
-    // STEP 2-B) FOR EACH BOOKING USE FLIGHT ID TO GET DATA ABOUT EACH FLIGHT
-    
-    // STEP 2-C) FOR EACH BOOKING USE THE FLIGHT AIRPORT IDS WITH A MAP OF AIRPORTS TO GET AIRPORT NAMES
-    // AIRPORT MAP IS ALREADY CREATED AT THIS POINT
-
-    // STEP 3) PUSH THE BOOKING WITH ALL INFORMATION TO BE DISPLAYED
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: "app-agent-cancel-booking",
@@ -50,7 +32,8 @@ export class CancelBookingComponent implements OnInit {
     filterMetadata = { count: 0 };
 
   constructor(private service: AgentUtopiaService,
-    private modalService: NgbModal,) {}
+    private modalService: NgbModal,
+    private toastService: ToastrService) {}
 
   ngOnInit() {
     this.airportsMap = new Map();
@@ -89,7 +72,7 @@ export class CancelBookingComponent implements OnInit {
         });
       },
       (error) => {
-        alert(error);
+        this.toastService.error("We are having an error loading booking information. Please try again later or call IT if the problem continues.", "Internal Error")
       }
     )
   }
@@ -112,7 +95,7 @@ export class CancelBookingComponent implements OnInit {
           this.loadBookings();
         },
         (error) => {
-          alert(error);
+          this.toastService.error("We are having an error cancelling that booking. Please try again later or call IT if the problem continues.", "Internal Error")
         }
       );
   }
