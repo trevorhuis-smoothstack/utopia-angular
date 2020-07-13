@@ -37,7 +37,6 @@ export class TravelerComponent implements OnInit {
   showFlights = true;
   flightButtonText = 'My Bookings';
 
-
   constructor(
     private toastsService: ToastsService,
     private modalService: NgbModal,
@@ -67,7 +66,6 @@ export class TravelerComponent implements OnInit {
 
     this.loadCurrentUser();
     this.currentUser = this.travelerDataService.getCurrentUser();
-
     this.loadAirports();
     this.initializeFormGroup();
   }
