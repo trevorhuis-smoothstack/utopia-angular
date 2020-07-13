@@ -13,6 +13,7 @@ export const environment = {
   agentUserUri: "/user",
   agentTravelerUri: "/traveler",
   agentFlightUri: "/flight",
+  agentPremierUri: "/premier",
   agentBookingsUri: "/bookings",
   agentFlightsUri: "/flights",
   agentAirportsUri: "/airports",
