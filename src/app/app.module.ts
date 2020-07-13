@@ -47,9 +47,11 @@ import { TravelerLoginComponent } from './traveler/traveler-login/traveler-login
 import { FlightsComponent } from './traveler/flights/flights.component';
 import { BookingsComponent } from './traveler/bookings/bookings.component';
 import { TravelerAuthInterceptor } from './common/s/service/TravelerAuthInterceptor';
+import { ToastrModule } from 'ngx-toastr';
 
 import { TravelerDataService } from './common/s/service/traveler-data.service';
 import { TravelerAuthService } from './common/s/service/traveler-auth-service.service';
+import { ToastsService } from './common/s/service/toasts.service';
 import { TravelerLoginComponent } from "./traveler/traveler-login/traveler-login.component";
 import { CounterDateFilterPipe } from "./common/counter/pipe/counter-date-filter.pipe";
 import { CounterPriceFilterPipe } from "./common/counter/pipe/counter-price-filter.pipe";
@@ -101,6 +103,7 @@ import { CounterAirportFilterPipe } from "./common/counter/pipe/counter-airport-
     ToastrModule.forRoot({positionClass:'toast-bottom-right'}),
     NgxStripeModule.forRoot(),
     NgMultiSelectDropDownModule,
+    ToastrModule.forRoot()
   ],
   providers: [
     AgentAuthService,
@@ -120,6 +123,7 @@ import { CounterAirportFilterPipe } from "./common/counter/pipe/counter-airport-
     TravelerDataService,
     TravelerAuthInterceptor,
     TravelerAuthService,
+    ToastsService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: CounterInterceptionService,

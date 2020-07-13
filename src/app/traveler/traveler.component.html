@@ -1,12 +1,12 @@
 <div id="traveler-sidebar" class="active">
   <ul id="traveler-sidebar-list">   
-    <li id="traveler-side-top" class="traveler-logout">
-      <button id="traveler-logout-button" type="button" class="btn btn-primary" (click)="toggleFlights()">
+    <li id="traveler-side-top" class="traveler-bookings">
+      <button id="view-bookings-button" type="button" class="btn btn-primary btn-block" (click)="toggleFlights()">
         {{flightButtonText}}
       </button>
     </li>
     <li class="traveler-logout">
-      <button type="button" class="btn btn-danger" id="traveler-logout-button"(click)="openLogoutModal(logoutTravelerModal)">
+      <button type="button" class="btn btn-primary btn-block" id="traveler-logout-button"(click)="openLogoutModal(logoutTravelerModal)">
         Logout
       </button>
     </li>
@@ -14,7 +14,7 @@
 </div>
 
 <div>
-  <h1 class="text-center">Welcome {{username}}</h1>
+  <h1 class="text-center">Welcome, {{username}}</h1>
   <div class="container flights-container">
     <app-bookings  *ngIf="!showFlights" [user]="currentUser" [airports]="airports"></app-bookings>
     <app-flights   *ngIf="showFlights" [user]="currentUser" [airports]="airports"></app-flights>

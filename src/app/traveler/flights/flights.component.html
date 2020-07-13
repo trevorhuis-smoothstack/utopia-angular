@@ -104,7 +104,7 @@
     <tr>
       <th scope="col">Depart From</th>
       <th scope="col">Arrive To</th>
-      <th scope="col">Depart Time</th>
+      <th scope="col">Departure Time</th>
       <th scope="col">Price</th>
       <th scope="col">Book</th>
     </tr>
@@ -176,7 +176,7 @@
               <td>{{ selectedFlight.arriveAirport }}</td>
             </tr>
             <tr class="table-dark">
-              <th scope="row">Flight Time:</th>
+              <th scope="row">Flight Departs:</th>
               <td>{{ selectedFlight.departTimeFormatted }}</td>
             </tr>
             <tr class="table-dark">
@@ -189,35 +189,6 @@
           <form>
             <div id="card" class="field"></div>
           </form>
-          <!-- <form [formGroup]="creditCardForm">
-            <input
-              type="text"
-              class="form-control credit-info"
-              placeholder="Credit Card #"
-              formControlName="cardNumber"
-            />
-
-            <input
-              type="text"
-              class="form-control credit-info"
-              placeholder="Expiration Month"
-              formControlName="expMonth"
-            />
-
-            <input
-              type="text"
-              class="form-control credit-info"
-              placeholder="Expiration Year"
-              formControlName="expYear"
-            />
-
-            <input
-              type="text"
-              class="form-control credit-info"
-              placeholder="CVC"
-              formControlName="cvc"
-            />
-          </form> -->
         </div>
         <div class="modal-footer">
           <button
