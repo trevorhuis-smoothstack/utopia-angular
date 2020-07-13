@@ -3,14 +3,11 @@ import { Agent } from "../../../common/entities/Agent";
 import { AgentUtopiaService } from "src/app/common/h/agent-utopia.service";
 import { environment } from "src/environments/environment";
 import { Airport } from "../../../common/entities/Airport";
-import * as moment from "moment";
 import { Booking } from "../../../common/entities/Booking";
 import { Flight } from "../../../common/entities/Flight";
-import { mergeMap, tap, concatMap, delay, map } from "rxjs/operators";
-import { Observable, of, forkJoin } from "rxjs";
 import { Traveler } from '../../../common/entities/Traveler';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ToastsService } from 'src/app/common/s/service/toasts.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: "app-agent-cancel-booking",
@@ -36,7 +33,7 @@ export class CancelBookingComponent implements OnInit {
 
   constructor(private service: AgentUtopiaService,
     private modalService: NgbModal,
-    private toastService: ToastsService) {}
+    private toastService: ToastrService) {}
 
   ngOnInit() {
     this.airportsMap = new Map();
@@ -75,7 +72,7 @@ export class CancelBookingComponent implements OnInit {
         });
       },
       (error) => {
-        this.toastService.showError("We are having an error loading booking information. Please try again later or call IT if the problem continues.", "Internal Error")
+        this.toastService.error("We are having an error loading booking information. Please try again later or call IT if the problem continues.", "Internal Error")
       }
     )
   }
@@ -98,7 +95,7 @@ export class CancelBookingComponent implements OnInit {
           this.loadBookings();
         },
         (error) => {
-          this.toastService.showError("We are having an error cancelling that booking. Please try again later or call IT if the problem continues.", "Internal Error")
+          this.toastService.error("We are having an error cancelling that booking. Please try again later or call IT if the problem continues.", "Internal Error")
         }
       );
   }

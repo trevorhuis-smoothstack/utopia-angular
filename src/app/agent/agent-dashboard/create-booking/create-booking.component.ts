@@ -11,8 +11,9 @@ import { Agent } from "../../../common/entities/Agent";
 import { Airport } from "../../../common/entities/Airport";
 import { Traveler } from "../../../common/entities/Traveler";
 import { Elements, Element, StripeService } from "ngx-stripe";
-import {ToastsService} from "../../../common/s/service/toasts.service";
+import { ToastrService } from "ngx-toastr";
 import { FlightQuery } from "src/app/common/entities/FlightQuery";
+import * as moment from 'moment';
 @Component({
   selector: "app-agent-create-booking",
   templateUrl: "./create-booking.component.html",
@@ -52,7 +53,7 @@ export class CreateBookingComponent implements OnInit {
     private service: AgentUtopiaService,
     private modalService: NgbModal,
     private stripe: StripeService,
-    private toastService: ToastsService
+    private toastService: ToastrService
   ) {}
 
   ngOnInit() {
@@ -80,7 +81,7 @@ export class CreateBookingComponent implements OnInit {
         this.card = elements.create("card", {});
       },
       (error) => {
-        this.toastService.showError("We are having an error processing credit charges at the moment. You will not be able to book a flight. Please try again later or contact IT if the problem continues.", "Internal Error");
+        this.toastService.error("We are having an error processing credit charges at the moment. You will not be able to book a flight. Please try again later or contact IT if the problem continues.", "Internal Error");
       }
     );
   }
@@ -129,7 +130,7 @@ export class CreateBookingComponent implements OnInit {
         this.changePaginationCount();
       },
       (error) => {
-        alert(error);
+        this.toastService.error("There is an error connecting to our data. Please try again or contact IT if the problem continues.", "No Flights Found");
       }
     );
   }
@@ -145,7 +146,6 @@ export class CreateBookingComponent implements OnInit {
           this.flights = result;
           
           if (this.flights == null) {
-            console.log("no flights");
             // Turn into a toast
             return;
           }
@@ -153,7 +153,7 @@ export class CreateBookingComponent implements OnInit {
           this.changePaginationCount();
         },
         (error) => {
-          this.toastService.showError("There is an error connecting to our data. Please try again or contact IT if the problem continues.", "No Flights Found");
+          this.toastService.error("There is an error connecting to our data. Please try again or contact IT if the problem continues.", "No Flights Found");
         }
       );
   }
@@ -199,12 +199,12 @@ export class CreateBookingComponent implements OnInit {
             },
             (error) => {
               this.modalService.dismissAll();
-              alert("Error booking ticket: Status " + error.error.status);
+              this.toastService.error("There was an error booking your flight. Please try again or contact IT if the problem continues.", "Flight not booked.")
             }
           );
       } else if (result.error) {
         this.modalService.dismissAll();
-        alert("Error processing payment: Token creation failed.");
+        this.toastService.error("There was an error confirming your credit card, check your card and try to book your flight again.", "Credit Card Not Accepted");
       }
     });
   }
