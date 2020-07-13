@@ -54,7 +54,6 @@ export class FlightsComponent implements OnInit {
       },
 
       (error) => {
-        // TODO: log in logging service instead of usign alert.
         this.toastsService.showError('There was a problem connecting to the payment service', 'Unknown Error!');
       }
     );

@@ -75,7 +75,7 @@ export class TravelerComponent implements OnInit {
       () => (this.authorized = true),
       (error) => {
         if (![401, 403, 500].includes(error.error.status)) {
-          this.toastsService.showError('Error checking authorization: Status ', error.error.status);
+          this.toastsService.showError('Error checking authorization: Status ' + error.error.status, 'Login Error');
         }
         this.router.navigate(['/traveler/login']);
       }
