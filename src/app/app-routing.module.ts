@@ -29,6 +29,7 @@ const routes: Routes = [
       { path: "booking", component: CounterBookingComponent },
     ],
   },
+  { path: '',   redirectTo: '/home', pathMatch: 'full' }
 ];
 
 @NgModule({

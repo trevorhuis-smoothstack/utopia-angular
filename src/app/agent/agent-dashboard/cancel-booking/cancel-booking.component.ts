@@ -25,6 +25,10 @@ export class CancelBookingComponent implements OnInit {
   displayBookings: boolean;
   selectedBooking: any;
   cancelledBooking: boolean;
+  date: any;
+  selectedDeparture: any;
+  selectedArrival: any;
+
 
     // Pagination
     page = 1;
