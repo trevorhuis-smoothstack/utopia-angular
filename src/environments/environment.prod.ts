@@ -1,9 +1,9 @@
 export const environment = {
   production: true,
-  agentBackendUrl: "http://127.0.0.1:8080/agent",
-  travelerBackendUrl: 'http://localhost:8080/traveler',
-  counterUrl: 'http://localhost:8080/counter',
-  loginUrl: 'http://localhost:8080/login',
+  agentBackendUrl: "http://3.135.107.110:8080/agent",
+  travelerBackendUrl: 'http://3.135.107.110:8080/traveler',
+  counterUrl: 'http://3.135.107.110:8080/counter',
+  loginUrl: 'http://3.135.107.110:8080/login',
   agentUserIdUri: "/user/id",
   agentUsernameUri: "/user/username",
   agentUserUri: "/user",
