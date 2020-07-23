@@ -19,7 +19,7 @@ export class TravelerAuthService {
 
   login(username: string, password: string) {
     return this.http.post(
-      'http://127.0.0.1:8080/login',
+      'http://3.135.107.110:8080/login',
       { username, password },
       { observe: 'response' }
     ).toPromise();
