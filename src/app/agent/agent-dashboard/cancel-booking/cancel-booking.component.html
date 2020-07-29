@@ -78,7 +78,7 @@
     </div>
   </div>
 </div>
-<table class="table table-hover cancel-flight-table">
+<table class="table table-hover cancel-flight-table" *ngIf="bookings">
   <thead>
     <tr>
       <th scope="col">Flight ID</th>
@@ -90,25 +90,6 @@
     </tr>
   </thead>
   <tbody *ngIf="mobile">
-    <tr
-      *ngFor="
-        let b of selectedTravelerBookings
-          | filterBookingsByDepartureAirportPipe
-            : selectedDeparture
-            : filterMetadata
-          | filterBookingsByArrivalAirportPipe: selectedArrival:filterMetadata
-          | filterByDepartureDatePipe: date:filterMetadata
-          | filterBookingsByTravelerPipe: travelerSearch:filterMetadata
-          | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize
-      "
-      class="table-active"
-      (click)="openCancelBookingModal(cancelBookingModal ,b)"
-    >
-      <th scope="row">{{ b.flightId }}</th>
-      <td>{{ b.name }}</td>
-      <td>{{ b.flight.departAirport }}</td>
-      <td>{{ b.flight.departTimeFormatted }}</td>
-    </tr>
     <tr
       *ngFor="
         let b of bookings
@@ -129,36 +110,6 @@
     </tr>
   </tbody>
   <tbody *ngIf="!mobile">
-    <tr
-      *ngFor="
-        let b of selectedTravelerBookings
-          | filterBookingsByDepartureAirportPipe
-            : selectedDeparture
-            : filterMetadata
-          | filterBookingsByArrivalAirportPipe: selectedArrival:filterMetadata
-          | filterByDepartureDatePipe: date:filterMetadata
-          | filterBookingsByTravelerPipe: travelerSearch:filterMetadata
-          | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize
-      "
-      class="table-active"
-    >
-      <th scope="row">{{ b.flightId }}</th>
-      <td>{{ b.name }}</td>
-      <td>{{ b.flight.departAirport }}</td>
-      <td>{{ b.flight.arriveAirport }}</td>
-      <td>{{ b.flight.departTime| date: "medium" }}</td>
-      <td>
-        <button
-          *ngIf="b.active"
-          type="button"
-          class="btn btn-secondary"
-          (click)="openCancelBookingModal(cancelBookingModal ,b)"
-        >
-          Cancel Flight
-        </button>
-        <p class="text-danger" *ngIf="!b.active">Booking Cancelled</p>
-      </td>
-    </tr>
     <tr
       *ngFor="
         let b of bookings

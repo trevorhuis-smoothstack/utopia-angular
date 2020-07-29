@@ -17,10 +17,10 @@ import { ToastrService } from 'ngx-toastr';
 export class CancelBookingComponent implements OnInit {
   @Input() agent: Agent;
   @Input() traveler: Traveler;
-  @Input() airports: Airport[];
   @Input() mobile: boolean;
   selectedTravelerBookings: Booking[];
   bookings: Booking[];
+  airports: Airport[];
   airportsMap: Map<Number, string>;
   displayBookings: boolean;
   selectedBooking: any;
@@ -36,18 +36,36 @@ export class CancelBookingComponent implements OnInit {
     private toastService: ToastrService) {}
 
   ngOnInit() {
-    this.airportsMap = new Map();
-
-    this.airports.forEach((element) => {
-      this.airportsMap.set(element.airportId, element.name);
-    });
-
-    this.loadBookings();
+    this.initDataStructs();
   }
 
-  loadBookings() {
+  ngAfterViewInit() {
+    this.loadBookings();
+    this.loadAirports();
+  }
+
+  initDataStructs() {
+    this.airportsMap = new Map();
     this.bookings = new Array();
-    this.selectedTravelerBookings = new Array();
+  }
+
+  loadAirports() {
+    this.service
+      .get(`${environment.agentBackendUrl}${environment.agentAirportsUri}`)
+      .subscribe((result: Airport[]) => {
+        this.airports = result;
+
+        this.airports.forEach((element) => {
+          this.airportsMap.set(element.airportId, element.name);
+        });
+      }),
+      (error) => {
+        this.toastService.error("We are having an error reading flight information. Please try again later or call IT if the problem continues.", "Internal Error");
+      };
+  }
+
+
+  loadBookings() {
     this.service
       .get(
         `${environment.agentBackendUrl}${environment.agentFlightsUri}/${this.agent.userId}${environment.agentTravelerUri}/${this.traveler.userId}`
