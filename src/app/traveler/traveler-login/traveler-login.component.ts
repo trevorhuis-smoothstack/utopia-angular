@@ -142,7 +142,9 @@ export class TravelerLoginComponent implements OnInit {
     this.travelerService
     .get(`${environment.travelerBackendUrl}${environment.usernameUri}/${username}`)
     .subscribe((res) => {
+      this.toggleCreateTraveler();
       this.travelerDataService.setCurrentUser(res);
+      this.traveler = res;
       this.router.navigate(['/traveler/dashboard']);
     },
     (error) => {
