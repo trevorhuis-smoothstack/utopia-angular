@@ -26,30 +26,25 @@ export class CancelBookingComponent implements OnInit {
   selectedBooking: any;
   cancelledBooking: boolean;
 
-    // Pagination
-    page = 1;
-    pageSize = 10;
-    filterMetadata = { count: 0 };
+  // Pagination
+  page = 1;
+  pageSize = 10;
+  filterMetadata = { count: 0 };
 
   constructor(private service: AgentUtopiaService,
     private modalService: NgbModal,
     private toastService: ToastrService) {}
 
   ngOnInit() {
-    this.initDataStructs();
   }
 
   ngAfterViewInit() {
     this.loadBookings();
     this.loadAirports();
   }
-
-  initDataStructs() {
-    this.airportsMap = new Map();
-    this.bookings = new Array();
-  }
-
+  
   loadAirports() {
+    this.airportsMap = new Map();
     this.service
       .get(`${environment.agentBackendUrl}${environment.agentAirportsUri}`)
       .subscribe((result: Airport[]) => {
@@ -66,6 +61,7 @@ export class CancelBookingComponent implements OnInit {
 
 
   loadBookings() {
+    this.bookings = new Array();
     this.service
       .get(
         `${environment.agentBackendUrl}${environment.agentFlightsUri}/${this.agent.userId}${environment.agentTravelerUri}/${this.traveler.userId}`
@@ -74,7 +70,6 @@ export class CancelBookingComponent implements OnInit {
         result.forEach((flight: Flight) => {
           flight.arriveAirport = this.airportsMap.get(flight.arriveId);
           flight.departAirport = this.airportsMap.get(flight.departId);
-
           let booking: Booking = {
             travelerId: this.traveler.userId,
             flightId: flight.flightId,

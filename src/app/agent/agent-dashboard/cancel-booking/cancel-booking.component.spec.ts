@@ -13,10 +13,10 @@ import { NgbModule, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { AgentUtopiaService } from 'src/app/common/h/agent-utopia.service';
-import { mockAirports, mockBookings, mockAgent } from '../../mock-data';
-import { of } from 'rxjs';
+import { mockAirports, mockBookings, mockAgent, mockFlights, mockTraveler } from '../../mock-data';
 import { Agent } from 'src/app/common/entities/Agent';
-
+import { Traveler } from 'src/app/common/entities/Traveler';
+import { of } from 'rxjs';
 
 describe("CancelBookingComponent", () => {
   let component: CancelBookingComponent;
@@ -24,7 +24,6 @@ describe("CancelBookingComponent", () => {
   let fixture: ComponentFixture<CancelBookingComponent>;
   let modalService: NgbModal;
   let toastService: ToastrService;
-  
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -38,6 +37,7 @@ describe("CancelBookingComponent", () => {
         FilterBookingsByDepartureAirportPipe,
       ],
       imports: [FormsModule, NgbModule, HttpClientTestingModule, ToastrModule.forRoot()],
+      providers: [AgentUtopiaService],
     }).compileComponents();
     service = new AgentUtopiaService(null);
     modalService = TestBed.get(NgbModal);
@@ -45,33 +45,37 @@ describe("CancelBookingComponent", () => {
   }));
 
   beforeEach(() => {
-    const fixture = TestBed.createComponent(CancelBookingComponent);
+    fixture = TestBed.createComponent(CancelBookingComponent);
     const component = fixture.debugElement.componentInstance;
     const agent: Agent = mockAgent;
+    const traveler: Traveler = mockTraveler;
     component.agent = agent;
+    component.traveler = traveler;
   });
 
   it("should create", () => {
-    spyOn(service, "get").and.returnValues(mockBookings);
+    spyOn(service, "get").and.returnValues(mockFlights);
     expect(component).toBeTruthy();
   });
 
   it("should change the pagination count", () => {
-    spyOn(service, "get").and.returnValues(mockBookings);
+    // Setup
     component.ngOnInit();
-    component.filterMetadata.count = 12;
+    component.filterMetadata = {count: 12};
+    component.bookings = [];
+
     expect(component.filterMetadata.count).toEqual(12);
     component.bookings[10] = null;
     component.changePaginationCount();
     expect(component.filterMetadata.count).toEqual(11);
   });
 
-  it("should create the data structures", () => {
-    expect(typeof component.airportsMap).toEqual("undefined");
-    expect(typeof component.bookings).toEqual("undefined");
-    component.initDataStructs();
-    expect(typeof component.airportsMap).toEqual("object");
-    expect(typeof component.bookings).toEqual("object");
-  })
+  it("should load the bookings", () => {
+    spyOn(service, "get").and.returnValue(of(mockFlights));
+    component.agent = mockAgent;
+    component.traveler = mockTraveler;
+    component.loadBookings();
+    expect(component.bookings).toEqual(mockBookings);
+  });
 
 });

@@ -50,26 +50,33 @@ export const mockFlights: Flight[] = [
 ]
 
 export const mockBookings: Booking[] = [
-    
     {
         travelerId: 1,
         flightId: 1,
         bookerId: 1,
         active: true,
-        stripeId: "String",
+        stripeId: "secret",
         name: "Trevor Huis in 't Veld",
-        flight: null
+        flight: mockFlights[0]
     },
     {
         travelerId: 1,
         flightId: 2,
         bookerId: 1,
         active: true,
-        stripeId: "String",
+        stripeId: "secret",
         name: "Trevor Huis in 't Veld",
-        flight: null
+        flight: mockFlights[1]
+    },
+    {
+        travelerId: 1,
+        flightId: 3,
+        bookerId: 1,
+        active: true,
+        stripeId: "secret",
+        name: "Trevor Huis in 't Veld",
+        flight: mockFlights[2]
     }
-    
 ]
 
 export const mockAgent: Agent = {
