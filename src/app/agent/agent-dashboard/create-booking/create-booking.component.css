@@ -103,3 +103,7 @@
   visibility: visible;
   opacity: 1;
 }
+
+.ad-image {
+  background-image: url("../../../../assets/images/ad/miami_ad.JPG");
+}
