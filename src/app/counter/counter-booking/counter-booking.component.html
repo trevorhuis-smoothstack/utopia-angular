@@ -164,7 +164,14 @@
   </tbody>
 </table>
 <ngb-pagination
-  *ngIf="flights && flights.length"
+  *ngIf="
+    flights &&
+    (
+      flights
+      | counterDateFilter: minDate:maxDate
+      | counterPriceFilter: customPrice
+    ).length
+  "
   [collectionSize]="
     flights
       ? (
