@@ -56,7 +56,7 @@ export class CreateBookingComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.ads = true;
+    this.ads = false;
 
     this.flexibleDeparture = false;
     this.flights = new Array();
