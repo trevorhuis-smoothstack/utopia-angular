@@ -113,9 +113,9 @@ export class AgentDashboardComponent implements OnInit {
     this.service
       .get(`${environment.agentBackendUrl}${environment.agentAirportsUri}`)
       .subscribe((result) => {
-        this.airports = result;
+        this.childInput.airports = result;
 
-        this.airports.forEach((element) => {
+        this.childInput.airports.forEach((element) => {
           this.airportsMap.set(element.airportId, element.name);
         });
       }),

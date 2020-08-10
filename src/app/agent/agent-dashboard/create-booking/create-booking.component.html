@@ -95,7 +95,7 @@
         (change)="page = 1"
       >
         <option>All Airports</option>
-        <option *ngFor="let airport of airports; let i = index" [value]="i">
+        <option *ngFor="let airport of childInput.airports; let i = index" [value]="i">
           {{ airport.name }}
         </option>
       </select>
