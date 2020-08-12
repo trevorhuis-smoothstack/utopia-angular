@@ -45,7 +45,7 @@
       </form>
     </div>
   </div>
-  <div class="airport-select row" *ngIf="airports">
+  <div class="airport-select row" *ngIf="childInput.airports">
     <div class="departure-select">
       <label class="col-form-label" for="inputDefault">
         Departure Airport
@@ -56,7 +56,7 @@
         (change)="page = 1"
       >
         <option selected="All Branches">All Airports</option>
-        <option *ngFor="let airport of airports" value="{{ airport.name }}">
+        <option *ngFor="let airport of childInput.airports" value="{{ airport.name }}">
           {{ airport.name }}
         </option>
       </select>
@@ -71,7 +71,7 @@
         (change)="page = 1"
       >
         <option selected="All Branches">All Airports</option>
-        <option *ngFor="let airport of airports" value="{{ airport.name }}">
+        <option *ngFor="let airport of childInput.airports" value="{{ airport.name }}">
           {{ airport.name }}
         </option>
       </select>

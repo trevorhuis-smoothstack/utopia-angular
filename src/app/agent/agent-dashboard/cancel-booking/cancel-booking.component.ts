@@ -15,12 +15,9 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ["./cancel-booking.component.css"],
 })
 export class CancelBookingComponent implements OnInit {
-  @Input() agent: Agent;
-  @Input() traveler: Traveler;
-  @Input() mobile: boolean;
+  @Input() childInput: any;
   selectedTravelerBookings: Booking[];
   bookings: Booking[];
-  airports: Airport[];
   airportsMap: Map<Number, string>;
   displayBookings: boolean;
   selectedBooking: any;
@@ -36,49 +33,38 @@ export class CancelBookingComponent implements OnInit {
     private toastService: ToastrService) {}
 
   ngOnInit() {
+    this.airportsMap = new Map();
+
+    this.childInput.airports.forEach((element) => {
+      this.airportsMap.set(element.airportId, element.name);
+    });
   }
 
   ngAfterViewInit() {
     this.loadBookings();
-    this.loadAirports();
-  }
-  
-  loadAirports() {
-    this.airportsMap = new Map();
-    this.service
-      .get(`${environment.agentBackendUrl}${environment.agentAirportsUri}`)
-      .subscribe((result: Airport[]) => {
-        this.airports = result;
-
-        this.airports.forEach((element) => {
-          this.airportsMap.set(element.airportId, element.name);
-        });
-      }),
-      (error) => {
-        this.toastService.error("We are having an error reading flight information. Please try again later or call IT if the problem continues.", "Internal Error");
-      };
   }
 
   loadBookings() {
     this.bookings = new Array();
     this.service
       .get(
-        `${environment.agentBackendUrl}${environment.agentFlightsUri}/${this.agent.userId}${environment.agentTravelerUri}/${this.traveler.userId}`
+        `${environment.agentBackendUrl}${environment.agentFlightsUri}/${this.childInput.agent.userId}${environment.agentTravelerUri}/${this.childInput.traveler.userId}`
       )
       .subscribe((result: Flight[]) => {
         result.forEach((flight: Flight) => {
           flight.arriveAirport = this.airportsMap.get(flight.arriveId);
           flight.departAirport = this.airportsMap.get(flight.departId);
           let booking: Booking = {
-            travelerId: this.traveler.userId,
+            travelerId: this.childInput.traveler.userId,
             flightId: flight.flightId,
             active: true,
             stripeId: "secret",
-            bookerId: this.agent.userId,
-            name: this.traveler.name,
+            bookerId: this.childInput.agent.userId,
+            name: this.childInput.traveler.name,
             flight: flight
           }
           this.bookings.push(booking);
+          console.log(booking);
           this.changePaginationCount();
           
         });

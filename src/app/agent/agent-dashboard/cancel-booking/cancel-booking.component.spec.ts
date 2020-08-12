@@ -55,6 +55,12 @@ describe("CancelBookingComponent", () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(CancelBookingComponent);
+    component.childInput = {
+      agent: mockAgent,
+      traveler: mockTraveler,
+      airports: mockAirports,
+      mobile: false,
+    }
   });
 
   it("should create", () => {
@@ -75,10 +81,8 @@ describe("CancelBookingComponent", () => {
 
   it("should load components and call life cycle methods", () => {
     spyOn(component, "loadBookings");
-    spyOn(component, "loadAirports");
     component.ngAfterViewInit();
     expect(component.loadBookings).toHaveBeenCalled;
-    expect(component.loadAirports).toHaveBeenCalled;
   });
 
   it("should open a modal window", () => {
@@ -104,15 +108,4 @@ describe("CancelBookingComponent", () => {
     expect(component.cancelledBooking).toEqual(true);
 
   });
-
-  // it("should load the bookings", () => {
-  //   spyOn(service, "get").and.returnValue(of(mockFlights));
-  //   component.agent = mockAgent;
-  //   component.traveler = mockTraveler;
-  //   component.loadBookings();
-  //   expect(component.bookings).toEqual(mockBookings);
-  // });
-
-  
-
 });

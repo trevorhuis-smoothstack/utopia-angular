@@ -23,6 +23,13 @@ export class AgentDashboardComponent implements OnInit {
   username: any;
   mobile: boolean;
 
+  childInput: any = {
+    agent: this.agent,
+    traveler: this.traveler,
+    airports: this.airports,
+    mobile: this.mobile,
+  };
+
   constructor(
     private service: AgentUtopiaService,
     private authService: AgentAuthService,
@@ -53,29 +60,24 @@ export class AgentDashboardComponent implements OnInit {
     this.adjustForMobile(window.innerWidth);
   }
 
-  // RESPONSIVE DESIGN
-  @HostListener("window:resize", ["$event"])
-  onResize(event) {
-    this.adjustForMobile(event.target.innerWidth);
-  }
-
   ngOnDestroy() {
     document.getElementById("nav-agent").classList.remove("active");
   }
 
+  // RESPONSIVE DESIGN
+  @HostListener("window:resize", ["$event"])
+  onResize(event) {
+    this.adjustForMobile(event.target.innerWidth);
+  } 
+
   adjustForMobile(width) {
     if(width < 992) {
       this.mobile = true;
-      this.moveSidebarToNav();
     } else if (width > 992){
       this.mobile = false;
     }
   }
-
-  moveSidebarToNav() {
-    let nav = document.getElementById("navbar-utopia");
-  }
-
+  
   logout() {
     this.authService.logout();
     this.router.navigate(["/agent/login"]);
@@ -111,9 +113,9 @@ export class AgentDashboardComponent implements OnInit {
     this.service
       .get(`${environment.agentBackendUrl}${environment.agentAirportsUri}`)
       .subscribe((result) => {
-        this.airports = result;
+        this.childInput.airports = result;
 
-        this.airports.forEach((element) => {
+        this.childInput.airports.forEach((element) => {
           this.airportsMap.set(element.airportId, element.name);
         });
       }),
