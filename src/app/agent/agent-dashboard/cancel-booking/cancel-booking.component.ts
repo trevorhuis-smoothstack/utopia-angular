@@ -59,7 +59,6 @@ export class CancelBookingComponent implements OnInit {
       };
   }
 
-
   loadBookings() {
     this.bookings = new Array();
     this.service
