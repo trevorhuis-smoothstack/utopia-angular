@@ -19,6 +19,11 @@ export const mockAirports: Airport[] = [
     }
 ]
 
+export const mockAirportMap = new Map();
+mockAirportMap.set(1, mockAirports[0].name);
+mockAirportMap.set(2, mockAirports[1].name);
+mockAirportMap.set(3, mockAirports[2].name);
+
 export const mockFlights: Flight[] = [
     {
         departTime: " ",
@@ -48,6 +53,34 @@ export const mockFlights: Flight[] = [
         flightId: 3
     }
 ]
+
+export const mockFlightsPreFormat: Flight[] = [{
+    departTime: " ",
+    arriveId: 1,
+    departId: 2,
+    arriveAirport: "",
+    departAirport: "",
+    price: 10.0,
+    flightId: 1
+},
+{
+    departTime: " ",
+    arriveId: 2,
+    departId: 3,
+    arriveAirport: "",
+    departAirport: "",
+    price: 15.0,
+    flightId: 2
+},
+{
+    departTime: " ",
+    arriveId: 3,
+    departId: 1,
+    arriveAirport: "",
+    departAirport: "",
+    price: 20.0,
+    flightId: 3
+}]
 
 export const mockBookings: Booking[] = [
     {

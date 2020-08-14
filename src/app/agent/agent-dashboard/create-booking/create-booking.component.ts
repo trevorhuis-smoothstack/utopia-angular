@@ -56,24 +56,23 @@ export class CreateBookingComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    // Set defaults
     this.ads = false;
-
     this.flexibleDeparture = false;
-    this.flights = new Array();
-
-    this.airportsMap = new Map();
-
     //slider
     this.minValue = 1;
     this.maxValue = 1;
     this.customPrice = 10000;
 
+    this.createDataStructs();
+    this.setupStripe();
+  }
+
+  ngAfterViewInit() {
     this.loadPremierFlights();
+  }
 
-    this.childInput.airports.forEach((element) => {
-      this.airportsMap.set(element.airportId, element.name);
-    });
-
+  setupStripe() {
     this.stripe.setKey(
       "pk_test_51Guj65Fb3TAD5KLT94lDvAoFWPcLphSSna40tyv7hCbT8m14pxaItIRXf4y5N33ZaYEU8cqVjXJ7I8lteoAUrmrE00E3zXAfTw"
     );
@@ -87,6 +86,15 @@ export class CreateBookingComponent implements OnInit {
     );
   }
 
+  createDataStructs() {
+    this.flights = new Array();
+    this.airportsMap = new Map();
+    
+    this.childInput.airports.forEach((element) => {
+      this.airportsMap.set(element.airportId, element.name);
+    });
+  }
+
   updateButton() {
     let params = {
       params: {
@@ -97,6 +105,11 @@ export class CreateBookingComponent implements OnInit {
         dateEnd: ""
       },
     };
+    let flightSearchInput = this.customizeParams(params);
+    this.loadFlights(flightSearchInput);
+  }
+
+  customizeParams(params) {
     if(this.selectedArrival != undefined && this.selectedArrival != "All Airports") {
       params.params.arriveId = (parseInt(this.selectedArrival) + 1).toString();
     }
@@ -118,7 +131,7 @@ export class CreateBookingComponent implements OnInit {
         dateEnd.add(1, 'days');
       params.params.dateEnd = `${dateEnd.year()}-${(dateEnd.month() + 1)}-${dateEnd.date()}`;
     }
-    this.loadFlights(params);
+    return params;
   }
 
   loadPremierFlights() {
@@ -213,6 +226,10 @@ export class CreateBookingComponent implements OnInit {
   openBookFlightModal(modal: any, flight: any) {
     this.selectedFlight = flight;
     this.modalService.open(modal);
+    this.mountCard();
+  }
+
+  mountCard() {
     this.card.mount("#card");
   }
 }
