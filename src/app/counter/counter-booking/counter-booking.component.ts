@@ -13,9 +13,9 @@ import { Elements, Element, StripeService } from "ngx-stripe";
 })
 export class CounterBookingComponent
   implements OnInit, AfterViewInit, OnDestroy {
-  minPrice = 0;
-  maxPrice = 10000;
-  customPrice = 10000;
+  minPrice: number;
+  maxPrice: number;
+  customPrice: number;
   elements: Elements;
   card: Element;
   counter = this.dataService.getCounter();

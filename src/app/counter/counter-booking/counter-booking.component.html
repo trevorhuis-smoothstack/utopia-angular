@@ -1,6 +1,6 @@
 <h2 class="text-center">Book Ticket</h2>
 <div class="price-date-select">
-  <div class="price-slider">
+  <div class="price-slider" *ngIf="flights">
     <fieldset class="form-group">
       <label for="custom-price"
         >Max Price: {{ customPrice | currency: "USD" }}</label
