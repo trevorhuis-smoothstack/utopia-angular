@@ -74,12 +74,19 @@ export class CounterBookingComponent
   }
 
   getFlights() {
+    let prices;
     this.httpService
       .get(
         `${environment.counterUrl}${environment.counterBookableUri}/departure/${this.departAirport.airportId}/arrival/${this.arriveAirport.airportId}/traveler/${this.traveler.userId}`
       )
       .subscribe(
-        (result: any[]) => (this.flights = result),
+        (result: any[]) => {
+          this.flights = result;
+          prices = this.flights.map((flight) => flight.price);
+          this.minPrice = Math.min(...prices);
+          this.maxPrice = Math.max(...prices);
+          this.customPrice = this.maxPrice;
+        },
         (error: any) =>
           alert("Error getting flights: Status " + error.error.status)
       );
