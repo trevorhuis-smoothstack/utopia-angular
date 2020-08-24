@@ -9,6 +9,7 @@ import {
 import { environment } from "src/environments/environment";
 import { Traveler } from "../../../common/entities/Traveler";
 import { AgentUtopiaService } from "src/app/common/h/agent-utopia.service";
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: "app-agent-select-traveler",
@@ -28,7 +29,8 @@ export class SelectTravelerComponent implements OnInit {
 
   constructor(
     private service: AgentUtopiaService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private toastService: ToastrService
   ) {
   }
 
@@ -57,6 +59,10 @@ export class SelectTravelerComponent implements OnInit {
     });
   }
 
+  changeTraveler(traveler: Traveler) {
+    this.travelerChanged.emit(traveler);
+  }
+
   checkTraveler() {
     let travelerBody = {
       name: " ",
@@ -81,7 +87,7 @@ export class SelectTravelerComponent implements OnInit {
           this.invalidLogin = true;
         },
         (error) => {
-          alert(error);
+          this.toastService.error("We are having an error reading traveler information. Please try again later or call IT if the problem continues.", "Internal Error");
         }
       );
   }
@@ -121,20 +127,17 @@ export class SelectTravelerComponent implements OnInit {
                 this.changeTraveler(this.traveler);
               },
               (error) => {
-                alert(error);
+                this.toastService.error("We are having an error creating a new traveler. Please try again later or call IT if the problem continues.", "Internal Error");
               }
             );
         },
         (error) => {
-          alert(error);
+          this.toastService.error("We are having an error reading traveler information. Please try again later or call IT if the problem continues.", "Internal Error");
         }
       );
   }
 
-  changeTraveler(traveler: Traveler) {
-    this.travelerChanged.emit(traveler);
-  }
-
+ 
   errorsDirtySelectTraveler(field: string) {
     return this.selectTravelerForm.controls[field].errors && this.selectTravelerForm.controls[field].dirty;
   }

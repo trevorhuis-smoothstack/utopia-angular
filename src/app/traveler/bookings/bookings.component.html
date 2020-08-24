@@ -1,0 +1,71 @@
+<Div>
+<h2 class="text-center">My Flights</h2>
+  <table class="table table-hover booked-flights-table">
+    <thead>
+      <tr>
+        <th scope="col">Flight ID</th>
+        <th scope="col">Departure Airport</th>
+        <th scope="col">Arrive Airport</th>
+        <th scope="col">Departure Time</th>
+        <th scope="col">Cancel Flight</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let b of bookings">
+        <th scope="row">{{ b.flightId }}</th>
+        <td>{{ b.flight.departAirport }}</td>
+        <td>{{ b.flight.arriveAirport }}</td>
+        <td>{{ b.flight.departTimeFormatted }}</td>
+        <td>
+          <button
+            *ngIf="b.active"
+            type="button"
+            class="btn btn-secondary"
+            (click)="openCancelModal(cancelFlightModal, b)"
+          >
+            Cancel Flight
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</Div>
+
+<ng-template #cancelFlightModal let-close="close">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4>Refund Ticket</h4>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="close();"
+        >
+          <span>&#215;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+          <h5 class="text-center" >
+            Are you sure you want to refund this ticket?
+          </h5>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn-secondary"
+            type="button"
+            (click)="close();"
+          >
+            No
+          </button>
+          <button
+            class="btn btn-success"
+            type="button"
+            (click)="cancelFlight(); close();"
+          >
+            Yes
+          </button>
+        </div>
+      </div>
+    </div>
+</ng-template>

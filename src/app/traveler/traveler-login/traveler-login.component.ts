@@ -5,6 +5,8 @@ import { TravelerService } from '../../common/s/service/traveler.service';
 import * as moment from 'moment';
 import { TravelerAuthService } from 'src/app/common/s/service/traveler-auth-service.service';
 import { environment } from 'src/environments/environment';
+import { TravelerDataService } from 'src/app/common/s/service/traveler-data.service';
+import { ToastsService } from 'src/app/common/s/service/toasts.service';
 
 @Component({
   selector: 'app-traveler-login',
@@ -18,21 +20,14 @@ export class TravelerLoginComponent implements OnInit {
   usernameTaken = false;
   createTraveler = false;
   traveler: any;
-
-  travelerLoginForm = new FormGroup({
-    username: new FormControl('', [Validators.required as any, Validators.minLength(1) as any]),
-    password: new FormControl('', [Validators.required as any, Validators.minLength(1) as any]),
-  });
-
-
-  createTravelerForm = new FormGroup({
-    name: new FormControl('', [Validators.required as any, Validators.minLength(1) as any]),
-    username: new FormControl('', [Validators.required as any, Validators.minLength(1) as any]),
-    password: new FormControl('', [Validators.required as any, Validators.minLength(1) as any]),
-    passwordCheck: new FormControl('', [Validators.required as any, Validators.minLength(1) as any]),
-  });
+  maxLength = 45;
+  minLength = 1;
+  travelerLoginForm: FormGroup;
+  createTravelerForm: FormGroup;
 
   constructor(
+    private toastsService: ToastsService,
+    private travelerDataService: TravelerDataService,
     private fb: FormBuilder,
     private authService: TravelerAuthService,
     private travelerService: TravelerService,
@@ -52,10 +47,12 @@ export class TravelerLoginComponent implements OnInit {
       expires: localStorage.getItem('expires_at')
     };
 
-    console.log(this.traveler.username);
-    if (this.traveler.username) {
+    if (this.authService.isLoggedIn()) {
+      this.loadCurrentUser(this.traveler.username);
       this.router.navigate(['/traveler/dashboard']);
     }
+
+    this.initializeFormGroups();
   }
 
   login() {
@@ -65,21 +62,72 @@ export class TravelerLoginComponent implements OnInit {
       this.authService.login(val.username, val.password).then(
         (response: any) => {
           const expiresAt = moment().add(response.headers.get('expires'), 'second');
-
           localStorage.setItem('username', val.username);
           localStorage.setItem('token', response.headers.get('Authorization'));
           localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
-
-          console.log('login!?');
-          this.router.navigate(['/traveler/dashboard']);
+          this.travelerService
+          .get(`${environment.travelerBackendUrl}${environment.usernameUri}/${val.username}`)
+          .subscribe((res) => {
+            this.travelerDataService.setCurrentUser(res);
+            localStorage.setItem('username', val.username);
+            localStorage.setItem('token', response.headers.get('Authorization'));
+            localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
+            this.router.navigate(['/traveler/dashboard']);
+          },
+          (error) => {
+            // TODO: chanage alert to logging service call.
+            if (error.error.status === 401) {
+              this.setInvalidLogin();
+              this.toastsService.showError('incorrect username or password', 'login error');
+            } else if (error.error.status === 403) {
+              this.setInvalidLogin();
+              this.toastsService.showError('Account must be a traveler to login', 'login error');
+            } else {
+              this.toastsService.showError('Servers may be down. Please contact support for more information', 'server error');
+            }
+          }
+          );
         }).catch(error => {
           if (error.error.status === 401) {
             this.setInvalidLogin();
+            this.toastsService.showError('incorrect username or password', 'login error');
+          } else if (error.error.status === 403) {
+            this.setInvalidLogin();
+            this.toastsService.showError('Account must be a traveler to login', 'login error');
           } else {
-            alert(error);
+            this.toastsService.showError('Servers may be down. Please contact support for more information', 'server error');
           }
         });
     }
+  }
+
+  initializeFormGroups() {
+    this.travelerLoginForm = new FormGroup({
+      username: new FormControl('', [Validators.required as any]),
+      password: new FormControl('', [Validators.required as any]),
+    });
+
+    this.createTravelerForm = new FormGroup({
+     name: new FormControl(null, [
+        Validators.required,
+        Validators.maxLength(this.maxLength),
+        Validators.minLength(this.minLength)
+      ]),
+      username: new FormControl(
+        null,
+        [
+          Validators.required,
+          Validators.required, Validators.maxLength(this.maxLength),
+          Validators.minLength(this.minLength)
+        ],
+      ),
+      password: new FormControl(null, [Validators.required]),
+      confirmPassword: new FormControl(null, [
+        Validators.required,
+      ]),
+    },
+    // { validators: this.validatePasswordMatch }
+    );
   }
 
   toggleCreateTraveler() {
@@ -88,6 +136,22 @@ export class TravelerLoginComponent implements OnInit {
 
   setInvalidLogin() {
     this.invalidLogin = true;
+  }
+
+  loadCurrentUser(username: string) {
+    this.travelerService
+    .get(`${environment.travelerBackendUrl}${environment.usernameUri}/${username}`)
+    .subscribe((res) => {
+      this.travelerDataService.setCurrentUser(res);
+      this.router.navigate(['/traveler/dashboard']);
+    },
+    (error) => {
+      // TODO: chanage alert to logging service call.
+      if (error.error.status === 403) {
+        this.toastsService.showError('Account must be a traveler to login', 'login error');
+      }
+    }
+    );
   }
 
   createNewTraveler() {
@@ -102,6 +166,7 @@ export class TravelerLoginComponent implements OnInit {
       (result: any) => {
         if (result != null) {
           this.usernameTaken = true;
+          this.toastsService.showError('Username taken', 'Error');
           return;
         }
 
@@ -109,14 +174,22 @@ export class TravelerLoginComponent implements OnInit {
           (result: any) => {
             this.traveler = result;
             this.toggleCreateTraveler();
+            this.toastsService.showSuccess('Account created. Login with your new credentials', 'Yay!');
           }, (error => {
-            alert(error);
+            this.toastsService.showError('Username taken', 'Error');
           })
         );
       },
       (error) => {
+        // TODO: log error in logging service.
         alert(error);
       }
     );
   }
+
+  // validatePasswordMatch(form: FormGroup) {
+  //   return form.value.password === form.value.confirmPassword
+  //     ? null
+  //     : { validatePasswordMatch: true };
+  // }
 }

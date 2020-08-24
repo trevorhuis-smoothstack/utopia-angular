@@ -7,10 +7,16 @@ import {
   Validators,
   AbstractControl,
 } from "@angular/forms";
+import { ToastrService } from "ngx-toastr";
 import { environment } from "src/environments/environment";
-import { maxLength } from "src/app/common/counter/counter-globals";
+import {
+  maxLength,
+  uncheckedErrorMessage,
+} from "src/app/common/counter/counter-globals";
 import { map, catchError } from "rxjs/operators";
 import { of } from "rxjs";
+import { routerNgProbeToken } from "@angular/router/src/router_module";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-counter-create-traveler",
@@ -37,6 +43,8 @@ export class CounterCreateTravelerComponent implements OnInit {
   );
 
   constructor(
+    private toastr: ToastrService,
+    private router: Router,
     private httpService: CounterHttpService,
     private dataService: CounterDataService
   ) {}
@@ -53,9 +61,15 @@ export class CounterCreateTravelerComponent implements OnInit {
     this.httpService
       .post(environment.counterUrl + environment.counterCreateUserUri, traveler)
       .subscribe(
-        (result) => this.dataService.setTraveler(result.body),
+        (result) => {
+          this.dataService.setTraveler(result.body);
+          this.router.navigate(["/counter/booking"]);
+        },
         (error) =>
-          alert("Error creating traveler: Status " + error.error.status)
+          this.toastr.error(
+            uncheckedErrorMessage,
+            "Error creating traveler: Status " + error.error.status
+          )
       );
   }
 

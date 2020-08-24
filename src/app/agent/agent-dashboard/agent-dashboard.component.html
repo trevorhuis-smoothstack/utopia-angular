@@ -88,16 +88,13 @@
 
   <div *ngIf="traveler">
     <app-agent-create-booking
-      [agent]="agent"
-      [airports]="airports"
-      [traveler]="traveler"
-      [mobile]="mobile"
+      [childInput]="childInput"
     ></app-agent-create-booking>
   </div>
 </div>
 
 <div class="container agent-container" *ngIf="cancelFlightPage">
-  <h2 *ngIf="!mobile" class="text-center">Cancel Traveler's Flights</h2>
+  <h2 *ngIf="!mobile" class="text-center">Cancel Traveler Bookings</h2>
 
   <div class="container traveler-header" *ngIf="mobile">
     <h5 class="text-center" *ngIf="traveler">
@@ -122,10 +119,7 @@
 
   <div *ngIf="traveler">
     <app-agent-cancel-booking
-      [agent]="agent"
-      [airports]="airports"
-      [traveler]="traveler"
-      [mobile]="mobile"
+    [childInput]="childInput"
     ></app-agent-cancel-booking>
   </div>
 </div>

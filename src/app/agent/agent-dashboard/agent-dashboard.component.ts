@@ -2,18 +2,11 @@ import { Component, OnInit, HostListener } from "@angular/core";
 import { AgentUtopiaService } from "src/app/common/h/agent-utopia.service";
 import { AgentAuthService } from "src/app/common/h/service/AgentAuthService";
 import { Router } from "@angular/router";
-import * as moment from "moment";
 import { environment } from "src/environments/environment";
-import {
-  FormGroup,
-  FormControl,
-  FormBuilder,
-  Validators,
-  NgForm,
-} from "@angular/forms";
-import { NgbDateStruct, NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import {  NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Agent } from "../../common/entities/Agent";
 import { Traveler } from "../../common/entities/Traveler";
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: "app-agent-dashboard",
@@ -30,11 +23,19 @@ export class AgentDashboardComponent implements OnInit {
   username: any;
   mobile: boolean;
 
+  childInput: any = {
+    agent: this.agent,
+    traveler: this.traveler,
+    airports: this.airports,
+    mobile: this.mobile,
+  };
+
   constructor(
     private service: AgentUtopiaService,
     private authService: AgentAuthService,
     private modalService: NgbModal,
-    private router: Router
+    private router: Router,
+    private toastService: ToastrService
   ) {}
 
   ngOnInit() {
@@ -59,25 +60,24 @@ export class AgentDashboardComponent implements OnInit {
     this.adjustForMobile(window.innerWidth);
   }
 
+  ngOnDestroy() {
+    document.getElementById("nav-agent").classList.remove("active");
+  }
+
   // RESPONSIVE DESIGN
   @HostListener("window:resize", ["$event"])
   onResize(event) {
     this.adjustForMobile(event.target.innerWidth);
-  }
+  } 
 
   adjustForMobile(width) {
     if(width < 992) {
       this.mobile = true;
-      this.moveSidebarToNav();
     } else if (width > 992){
       this.mobile = false;
     }
   }
-
-  moveSidebarToNav() {
-    let nav = document.getElementById("navbar-utopia");
-  }
-
+  
   logout() {
     this.authService.logout();
     this.router.navigate(["/agent/login"]);
@@ -103,6 +103,9 @@ export class AgentDashboardComponent implements OnInit {
       .subscribe((result: Agent) => {
         this.agent.name = result.name;
         this.agent.userId = result.userId;
+      },
+      (error) =>{
+        this.toastService.error("We are having an error reading your information. Please try again later or call IT if the problem continues.", "Internal Error");
       });
   }
 
@@ -110,14 +113,14 @@ export class AgentDashboardComponent implements OnInit {
     this.service
       .get(`${environment.agentBackendUrl}${environment.agentAirportsUri}`)
       .subscribe((result) => {
-        this.airports = result;
+        this.childInput.airports = result;
 
-        this.airports.forEach((element) => {
+        this.childInput.airports.forEach((element) => {
           this.airportsMap.set(element.airportId, element.name);
         });
       }),
       (error) => {
-        alert(error);
+        this.toastService.error("We are having an error reading flight information. Please try again later or call IT if the problem continues.", "Internal Error");
       };
   }
 

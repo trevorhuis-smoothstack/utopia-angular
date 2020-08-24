@@ -3,29 +3,11 @@ import { Agent } from "../../../common/entities/Agent";
 import { AgentUtopiaService } from "src/app/common/h/agent-utopia.service";
 import { environment } from "src/environments/environment";
 import { Airport } from "../../../common/entities/Airport";
-import * as moment from "moment";
 import { Booking } from "../../../common/entities/Booking";
 import { Flight } from "../../../common/entities/Flight";
-import { mergeMap, tap, concatMap, delay, map } from "rxjs/operators";
-import { Observable, of, forkJoin } from "rxjs";
 import { Traveler } from '../../../common/entities/Traveler';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
-  // WHAT I WANT
-  
-  // STEP 1) USE AGENT ID TO GET ALL BOOKINGS CREATED BY AGENT
-  // RETURNS AN ARRAY OF BOOKINGS
-
-  // STEP 2) PERFORM A FOR EACH ON THE BOOKINGS TO GET DATA ABOUT EACH ONE
-
-    // STEP 2-A) FOR EACH BOOKING USE TRAVELER ID TO GET NAME OF TRAVELER
-
-    // STEP 2-B) FOR EACH BOOKING USE FLIGHT ID TO GET DATA ABOUT EACH FLIGHT
-    
-    // STEP 2-C) FOR EACH BOOKING USE THE FLIGHT AIRPORT IDS WITH A MAP OF AIRPORTS TO GET AIRPORT NAMES
-    // AIRPORT MAP IS ALREADY CREATED AT THIS POINT
-
-    // STEP 3) PUSH THE BOOKING WITH ALL INFORMATION TO BE DISPLAYED
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: "app-agent-cancel-booking",
@@ -33,10 +15,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ["./cancel-booking.component.css"],
 })
 export class CancelBookingComponent implements OnInit {
-  @Input() agent: Agent;
-  @Input() traveler: Traveler;
-  @Input() airports: Airport[];
-  @Input() mobile: boolean;
+  @Input() childInput: any;
   selectedTravelerBookings: Booking[];
   bookings: Booking[];
   airportsMap: Map<Number, string>;
@@ -50,12 +29,13 @@ export class CancelBookingComponent implements OnInit {
     filterMetadata = { count: 0 };
 
   constructor(private service: AgentUtopiaService,
-    private modalService: NgbModal,) {}
+    private modalService: NgbModal,
+    private toastService: ToastrService) {}
 
   ngOnInit() {
     this.airportsMap = new Map();
 
-    this.airports.forEach((element) => {
+    this.childInput.airports.forEach((element) => {
       this.airportsMap.set(element.airportId, element.name);
     });
 
@@ -67,7 +47,7 @@ export class CancelBookingComponent implements OnInit {
     this.selectedTravelerBookings = new Array();
     this.service
       .get(
-        `${environment.agentBackendUrl}${environment.agentFlightsUri}/${this.agent.userId}${environment.agentTravelerUri}/${this.traveler.userId}`
+        `${environment.agentBackendUrl}${environment.agentFlightsUri}/${this.childInput.agent.userId}${environment.agentTravelerUri}/${this.childInput.traveler.userId}`
       )
       .subscribe((result: Flight[]) => {
         result.forEach((flight: Flight) => {
@@ -75,21 +55,22 @@ export class CancelBookingComponent implements OnInit {
           flight.departAirport = this.airportsMap.get(flight.departId);
 
           let booking: Booking = {
-            travelerId: this.traveler.userId,
+            travelerId: this.childInput.traveler.userId,
             flightId: flight.flightId,
             active: true,
             stripeId: "secret",
-            bookerId: this.agent.userId,
-            name: this.traveler.name,
+            bookerId: this.childInput.agent.userId,
+            name: this.childInput.traveler.name,
             flight: flight
           }
           this.bookings.push(booking);
+          console.log(booking);
           this.changePaginationCount();
           
         });
       },
       (error) => {
-        alert(error);
+        this.toastService.error("We are having an error loading booking information. Please try again later or call IT if the problem continues.", "Internal Error")
       }
     )
   }
@@ -112,7 +93,7 @@ export class CancelBookingComponent implements OnInit {
           this.loadBookings();
         },
         (error) => {
-          alert(error);
+          this.toastService.error("We are having an error cancelling that booking. Please try again later or call IT if the problem continues.", "Internal Error")
         }
       );
   }
