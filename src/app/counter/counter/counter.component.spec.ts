@@ -24,7 +24,7 @@ describe("CounterComponent", () => {
   let component: CounterComponent;
   let fixture: ComponentFixture<CounterComponent>;
   let router: Router,
-    toastrService: ToastrService,
+    toastr: ToastrService,
     authService: CounterAuthService,
     dataService: CounterDataService;
 
@@ -39,12 +39,12 @@ describe("CounterComponent", () => {
       ],
     }).compileComponents();
     router = TestBed.get(Router);
-    toastrService = TestBed.get(ToastrService);
+    toastr = TestBed.get(ToastrService);
     authService = new CounterAuthService(null);
     dataService = new CounterDataService();
     component = new CounterComponent(
       router,
-      toastrService,
+      toastr,
       dataService,
       authService
     );
@@ -85,18 +85,22 @@ describe("CounterComponent", () => {
     expect(component.traveler).toEqual(mockTraveler);
   });
 
-  it("should navigate to the login page and not authorize the user", () => {
+  it("should navigate to the login page, not display an error toast, and not authorize the user", () => {
     spyOn(authService, "checkAuth").and.returnValues(
       throwError({ error: { status: 401 } }),
       throwError({ error: { status: 403 } }),
       throwError({ error: { status: 500 } })
     );
     spyOn(router, "navigate");
+    spyOn(toastr, "error");
     component.ngOnInit();
     component.ngOnInit();
     component.ngOnInit();
     expect(component.authorized).toEqual(false);
     expect(router.navigate).toHaveBeenCalledTimes(3);
     expect(router.navigate).toHaveBeenCalledWith(["/counter/login"]);
+    expect(toastr.error).not.toHaveBeenCalled()
   });
+
+  xit("should navigate to the login page, display an error toast and not authorize the user")
 });
