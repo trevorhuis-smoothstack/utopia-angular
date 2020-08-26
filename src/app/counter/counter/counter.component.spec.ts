@@ -60,8 +60,7 @@ describe("CounterComponent", () => {
   });
 
   it("should clear data on logout", fakeAsync(() => {
-    spyOn(authService, "checkAuth").and.returnValue(of(null));
-    dataService.setCounter(mockCounter)
+    dataService.setCounter(mockCounter);
     dataService.setTraveler(mockTraveler);
     localStorage.setItem("token", "Mock Token");
     expect(dataService.getCounter).toBeTruthy();
@@ -72,5 +71,4 @@ describe("CounterComponent", () => {
     expect(dataService.getTraveler()).toBeNull();
     expect(localStorage.getItem("token")).toBeNull();
   }));
-
 });
