@@ -14,6 +14,7 @@ import {
   mockCounter,
   mockTraveler,
 } from "src/app/common/counter/counter-mock-data";
+import { uncheckedErrorMessage } from "src/app/common/counter/counter-globals";
 import { CounterAuthService } from "src/app/common/counter/service/counter-auth.service";
 import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
 import { of, throwError } from "rxjs";
@@ -107,5 +108,9 @@ describe("CounterComponent", () => {
     expect(router.navigate).toHaveBeenCalledTimes(1);
     expect(router.navigate).toHaveBeenCalledWith(["/counter/login"]);
     expect(toastr.error).toHaveBeenCalledTimes(1);
+    expect(toastr.error).toHaveBeenCalledWith(
+      uncheckedErrorMessage,
+      "Error checking authorization: Status 400"
+    );
   });
 });
