@@ -2,9 +2,9 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { CounterComponent } from "./counter.component";
 import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
-import { RouterModule } from "@angular/router";
 import { ToastrModule } from "ngx-toastr";
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from "@angular/common/http";
+import { RouterTestingModule } from "@angular/router/testing";
 
 describe("CounterComponent", () => {
   let component: CounterComponent;
@@ -16,7 +16,7 @@ describe("CounterComponent", () => {
       declarations: [CounterComponent],
       imports: [
         HttpClientModule,
-        RouterModule.forRoot([]),
+        RouterTestingModule.withRoutes([{ path: "**", redirectTo: "" }]),
         ToastrModule.forRoot(),
       ],
     }).compileComponents();
