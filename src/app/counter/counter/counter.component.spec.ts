@@ -71,4 +71,17 @@ describe("CounterComponent", () => {
     expect(dataService.getTraveler()).toBeNull();
     expect(localStorage.getItem("token")).toBeNull();
   }));
+
+  it("should authorize the user, initialize the counter, and subscribe to the traveler observable", () => {
+    spyOn(authService, "checkAuth").and.returnValue(of({}));
+    spyOn(dataService, "getCounter").and.returnValue(mockCounter);
+    expect(component.authorized).toBeFalsy();
+    expect(component.counter).toBeFalsy();
+    component.ngOnInit();
+    expect(component.authorized).toEqual(true);
+    expect(component.counter).toEqual(mockCounter);
+    expect(component.traveler).toBeFalsy();
+    dataService.setTraveler(mockTraveler)
+    expect(component.traveler).toEqual(mockTraveler);
+  });
 });
