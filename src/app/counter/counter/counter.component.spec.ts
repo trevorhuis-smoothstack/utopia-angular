@@ -42,12 +42,7 @@ describe("CounterComponent", () => {
     toastr = TestBed.get(ToastrService);
     authService = new CounterAuthService(null);
     dataService = new CounterDataService();
-    component = new CounterComponent(
-      router,
-      toastr,
-      dataService,
-      authService
-    );
+    component = new CounterComponent(router, toastr, dataService, authService);
   }));
 
   beforeEach(() => {
@@ -99,8 +94,19 @@ describe("CounterComponent", () => {
     expect(component.authorized).toEqual(false);
     expect(router.navigate).toHaveBeenCalledTimes(3);
     expect(router.navigate).toHaveBeenCalledWith(["/counter/login"]);
-    expect(toastr.error).not.toHaveBeenCalled()
+    expect(toastr.error).not.toHaveBeenCalled();
   });
 
-  xit("should navigate to the login page, display an error toast and not authorize the user")
+  it("should navigate to the login page, display an error toast and not authorize the user", () => {
+    spyOn(authService, "checkAuth").and.returnValue(
+      throwError({ error: { status: 400 } })
+    );
+    spyOn(router, "navigate");
+    spyOn(toastr, "error");
+    component.ngOnInit();
+    expect(component.authorized).toEqual(false);
+    expect(router.navigate).toHaveBeenCalledTimes(1);
+    expect(router.navigate).toHaveBeenCalledWith(["/counter/login"]);
+    expect(toastr.error).toHaveBeenCalledTimes(1);
+  });
 });
