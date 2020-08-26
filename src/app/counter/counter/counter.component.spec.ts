@@ -17,7 +17,7 @@ import {
 } from "src/app/common/counter/counter-mock-data";
 import { CounterAuthService } from "src/app/common/counter/service/counter-auth.service";
 import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
-import { of } from "rxjs";
+import { of, throwError } from "rxjs";
 import { Router } from "@angular/router";
 
 describe("CounterComponent", () => {
@@ -81,7 +81,22 @@ describe("CounterComponent", () => {
     expect(component.authorized).toEqual(true);
     expect(component.counter).toEqual(mockCounter);
     expect(component.traveler).toBeFalsy();
-    dataService.setTraveler(mockTraveler)
+    dataService.setTraveler(mockTraveler);
     expect(component.traveler).toEqual(mockTraveler);
+  });
+
+  it("should navigate to the login page and not authorize the user", () => {
+    spyOn(authService, "checkAuth").and.returnValues(
+      throwError({ error: { status: 401 } }),
+      throwError({ error: { status: 403 } }),
+      throwError({ error: { status: 500 } })
+    );
+    spyOn(router, "navigate");
+    component.ngOnInit();
+    component.ngOnInit();
+    component.ngOnInit();
+    expect(component.authorized).toEqual(false);
+    expect(router.navigate).toHaveBeenCalledTimes(3);
+    expect(router.navigate).toHaveBeenCalledWith(["/counter/login"]);
   });
 });
