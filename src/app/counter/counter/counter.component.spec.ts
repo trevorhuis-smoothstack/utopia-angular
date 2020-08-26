@@ -51,7 +51,6 @@ describe("CounterComponent", () => {
   }));
 
   beforeEach(() => {
-    // spyOn(dataService, "getCounter").and.returnValue(mockCounter);
     fixture = TestBed.createComponent(CounterComponent);
     fixture.detectChanges();
   });
