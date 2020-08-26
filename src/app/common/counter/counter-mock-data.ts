@@ -1,4 +1,4 @@
-const mockCounter = {
+export const mockCounter = {
     userId: 1,
     name: "Mock Counter",
     username: "MockCounter",
