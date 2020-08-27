@@ -144,7 +144,7 @@ describe("CounterLoginComponent", () => {
     expect(toastr.error).not.toHaveBeenCalled();
   });
 
-  it("should send a login request, recognize the credentials as invalid, not store a token or a counter, not display an error toast, and not navigate to another URI", () => {
+  it("should send a login request, consider the credentials invalid, not store a token or a counter, not display an error toast, and not navigate to another URI", () => {
     spyOn(httpService, "post").and.returnValue(
       of({
         headers: { get: () => mockToken },
