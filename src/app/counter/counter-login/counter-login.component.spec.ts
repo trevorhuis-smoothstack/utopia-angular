@@ -14,6 +14,7 @@ import { uncheckedErrorMessage } from "src/app/common/counter/counter-globals";
 import {
   mockCounter,
   mockTraveler,
+  mockToken,
 } from "src/app/common/counter/counter-mock-data";
 
 describe("CounterLoginComponent", () => {
@@ -109,11 +110,10 @@ describe("CounterLoginComponent", () => {
   });
 
   it("should recognize the credentials as valid, store the token and the counter, set the traveler to null, navigate to the root counter component, and not display an error toast", () => {
-    const token = "Mock Token";
     dataService.setTraveler(mockTraveler);
     spyOn(httpService, "post").and.returnValue(
       of({
-        headers: { get: () => token },
+        headers: { get: () => mockToken },
       })
     );
     spyOn(httpService, "get").and.returnValue(of(mockCounter));
@@ -123,7 +123,7 @@ describe("CounterLoginComponent", () => {
     expect(dataService.getTraveler()).toBeTruthy();
     component.logIn();
     expect(component.badCreds).toBe(false);
-    expect(localStorage.getItem("token")).toBe(token);
+    expect(localStorage.getItem("token")).toBe(mockToken);
     expect(dataService.getCounter()).toEqual(mockCounter);
     expect(dataService.getTraveler()).toBeNull();
     expect(toastr.error).not.toHaveBeenCalled();
