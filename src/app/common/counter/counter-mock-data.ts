@@ -1,6 +1,6 @@
-export const token = "Mock Token",
-  username = "Mock Username",
-  password = "Mock Password",
+export const mockToken = "Mock Token",
+  mockUsername = "Mock Username",
+  mockPassword = "Mock Password",
   mockCounter = {
     userId: 1,
     name: "Mock Counter",
