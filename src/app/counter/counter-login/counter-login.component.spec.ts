@@ -9,7 +9,8 @@ import { CounterDataService } from "src/app/common/counter/service/counter-data.
 import { CounterHttpService } from "src/app/common/counter/service/counter-http.service";
 import { HttpClientModule } from "@angular/common/http";
 import { RouterTestingModule } from "@angular/router/testing";
-import { of } from "rxjs";
+import { of, throwError } from "rxjs";
+import { uncheckedErrorMessage } from "src/app/common/counter/counter-globals";
 
 describe("CounterLoginComponent", () => {
   let component: CounterLoginComponent;
@@ -61,12 +62,44 @@ describe("CounterLoginComponent", () => {
     spyOn(authService, "checkAuth").and.returnValue(of({}));
     spyOn(router, "navigate");
     spyOn(toastr, "error");
-    expect(authService.checkAuth).not.toHaveBeenCalled()
+    expect(authService.checkAuth).not.toHaveBeenCalled();
     component.ngOnInit();
     expect(component.authorized).toBe(true);
     expect(router.navigate).toHaveBeenCalledTimes(1);
     expect(router.navigate).toHaveBeenCalledWith(["/counter"]);
-    expect(authService.checkAuth).toHaveBeenCalled()
+    expect(authService.checkAuth).toHaveBeenCalled();
     expect(toastr.error).not.toHaveBeenCalled();
+  });
+
+  it("should not authorize the user nor navigate to another URI nor display an error toast", () => {
+    spyOn(authService, "checkAuth").and.returnValues(
+      throwError({ error: { status: 401 } }),
+      throwError({ error: { status: 403 } }),
+      throwError({ error: { status: 500 } })
+    );
+    spyOn(router, "navigate");
+    spyOn(toastr, "error");
+    component.ngOnInit();
+    component.ngOnInit();
+    component.ngOnInit();
+    expect(component.authorized).toBe(false);
+    expect(router.navigate).not.toHaveBeenCalled();
+    expect(toastr.error).not.toHaveBeenCalled();
+  });
+
+  it("should displa an error toast, and not authorize the user nor navigate to another URI", () => {
+    spyOn(authService, "checkAuth").and.returnValue(
+      throwError({ error: { status: 400 } })
+    );
+    spyOn(router, "navigate");
+    spyOn(toastr, "error");
+    component.ngOnInit();
+    expect(component.authorized).toBe(false);
+    expect(router.navigate).not.toHaveBeenCalled();
+    expect(toastr.error).toHaveBeenCalledTimes(1);
+    expect(toastr.error).toHaveBeenCalledWith(
+      uncheckedErrorMessage,
+      "Error checking authorization: Status 400"
+    );
   });
 });
