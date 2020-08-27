@@ -36,14 +36,20 @@ export class SelectTravelerComponent implements OnInit {
 
   ngOnInit() {
     this.createTraveler = false;
-    
+    this.setupSelectTravelerForm();
+    this.setupCreateTravelerForm();
+  }
+
+  setupSelectTravelerForm() {
     this.selectTravelerForm = new FormGroup({
       username: new FormControl(null, [
         Validators.required,
         Validators.maxLength(45),
       ]),
     });
+  }
 
+  setupCreateTravelerForm() {
     this.createTravelerForm = new FormGroup({
       name: new FormControl(null, [
         Validators.required,
@@ -92,7 +98,7 @@ export class SelectTravelerComponent implements OnInit {
       );
   }
 
-  setupCreateTraveler() {
+  setCreateTraveler() {
     this.createTraveler = true;
   }
 
@@ -110,6 +116,7 @@ export class SelectTravelerComponent implements OnInit {
       )
       .subscribe(
         (result: any) => {
+          let tempObj = result;
           if (result != null) {
             this.usernameTaken = true;
             return;
