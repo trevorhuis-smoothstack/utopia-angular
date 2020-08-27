@@ -167,4 +167,33 @@ describe("CounterLoginComponent", () => {
     expect(toastr.error).not.toHaveBeenCalled();
     expect(router.navigate).not.toHaveBeenCalled();
   });
+
+  it("should send a login request, display an error toast, not consider the credentials invalid, not store a token or a counter or a traveler, and not navigate to another URI", () => {
+    const mockStatus = 400;
+    spyOn(httpService, "post").and.returnValue(
+      of({
+        headers: { get: () => mockToken },
+      })
+    );
+    spyOn(httpService, "get").and.returnValue(
+      throwError({ error: { status: mockStatus } })
+    );
+    spyOn(router, "navigate");
+    spyOn(toastr, "error");
+    component.logIn();
+    expect(component.badCreds).toBe(false);
+    expect(httpService.post).toHaveBeenCalledWith(environment.loginUrl, {
+      username: mockUsername,
+      password: mockPassword,
+    });
+    expect(localStorage.getItem("token")).toBeNull();
+    expect(dataService.getCounter()).toBeUndefined();
+    expect(dataService.getTraveler()).toBeUndefined();
+    expect(toastr.error).toHaveBeenCalledWith(
+      uncheckedErrorMessage,
+      "Error getting user: Status " + mockStatus
+    );
+    expect(toastr.error).toHaveBeenCalledTimes(1);
+    expect(router.navigate).not.toHaveBeenCalled();
+  });
 });
