@@ -15,7 +15,10 @@ import {
   mockCounter,
   mockTraveler,
   mockToken,
+  mockUsername,
+  mockPassword,
 } from "src/app/common/counter/counter-mock-data";
+import { environment } from "src/environments/environment";
 
 describe("CounterLoginComponent", () => {
   let component: CounterLoginComponent;
@@ -56,8 +59,12 @@ describe("CounterLoginComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(CounterLoginComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    [component.form.value.username, component.form.value.password] = [
+      mockUsername,
+      mockPassword,
+    ];
     localStorage.clear();
+    fixture.detectChanges();
   });
 
   it("should create", () => {
@@ -124,6 +131,10 @@ describe("CounterLoginComponent", () => {
     expect(dataService.getTraveler()).toBeTruthy();
     component.logIn();
     expect(component.badCreds).toBe(false);
+    expect(httpService.post).toHaveBeenCalledWith(environment.loginUrl, {
+      username: mockUsername,
+      password: mockPassword,
+    });
     expect(localStorage.getItem("token")).toBe(mockToken);
     expect(dataService.getCounter()).toEqual(mockCounter);
     expect(dataService.getTraveler()).toBeNull();
