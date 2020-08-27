@@ -40,8 +40,8 @@ describe("CounterComponent", () => {
     }).compileComponents();
     router = TestBed.get(Router);
     toastr = TestBed.get(ToastrService);
-    authService = new CounterAuthService(null);
-    dataService = new CounterDataService();
+    authService = TestBed.get(CounterAuthService);
+    dataService = TestBed.get(CounterDataService);
     component = new CounterComponent(router, toastr, dataService, authService);
   }));
 
