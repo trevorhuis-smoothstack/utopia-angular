@@ -7,8 +7,9 @@ import { ToastrService, ToastrModule } from "ngx-toastr";
 import { CounterAuthService } from "src/app/common/counter/service/counter-auth.service";
 import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
 import { CounterHttpService } from "src/app/common/counter/service/counter-http.service";
-import { HttpClientModule } from '@angular/common/http';
-import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientModule } from "@angular/common/http";
+import { RouterTestingModule } from "@angular/router/testing";
+import { of } from "rxjs";
 
 describe("CounterLoginComponent", () => {
   let component: CounterLoginComponent;
@@ -34,8 +35,8 @@ describe("CounterLoginComponent", () => {
     toastr = TestBed.get(ToastrService);
     router = TestBed.get(Router);
     httpService = TestBed.get(CounterHttpService);
-    authService = new CounterAuthService(null);
-    dataService = new CounterDataService();
+    authService = TestBed.get(CounterAuthService);
+    dataService = TestBed.get(CounterDataService);
     component = new CounterLoginComponent(
       fb,
       router,
@@ -54,5 +55,18 @@ describe("CounterLoginComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("should navigate to the counter dashboard", () => {
+    spyOn(authService, "checkAuth").and.returnValue(of({}));
+    spyOn(router, "navigate");
+    spyOn(toastr, "error");
+    expect(authService.checkAuth).not.toHaveBeenCalled()
+    component.ngOnInit();
+    expect(component.authorized).toBe(true);
+    expect(router.navigate).toHaveBeenCalledTimes(1);
+    expect(router.navigate).toHaveBeenCalledWith(["/counter"]);
+    expect(authService.checkAuth).toHaveBeenCalled()
+    expect(toastr.error).not.toHaveBeenCalled();
   });
 });

@@ -33,6 +33,7 @@ export class CounterLoginComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log("hello")
     this.authService.checkAuth().subscribe(
       () => this.router.navigate(["/counter"]),
       (error) => {
