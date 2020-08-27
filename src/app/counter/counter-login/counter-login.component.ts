@@ -74,12 +74,12 @@ export class CounterLoginComponent implements OnInit {
               (getUserError) => {
                 if (getUserError.error.status === 403) {
                   this.badCreds = true;
-                  localStorage.removeItem("token");
                 } else
                   this.toastr.error(
                     uncheckedErrorMessage,
                     "Error getting user: Status " + getUserError.error.status
                   );
+                localStorage.removeItem("token");
               }
             );
         },
