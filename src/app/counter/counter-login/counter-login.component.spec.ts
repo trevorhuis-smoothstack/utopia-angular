@@ -139,12 +139,12 @@ describe("CounterLoginComponent", () => {
     expect(localStorage.getItem("token")).toBe(mockToken);
     expect(dataService.getCounter()).toEqual(mockCounter);
     expect(dataService.getTraveler()).toBeNull();
-    expect(router.navigate).toHaveBeenCalledWith(['/counter/traveler'])
-    expect(router.navigate).toHaveBeenCalledTimes(1)
+    expect(router.navigate).toHaveBeenCalledWith(["/counter/traveler"]);
+    expect(router.navigate).toHaveBeenCalledTimes(1);
     expect(toastr.error).not.toHaveBeenCalled();
   });
 
-  it("should send a login request, consider the credentials invalid, not store a token or a counter, not display an error toast, and not navigate to another URI", () => {
+  it("should send a login request, consider the credentials invalid, not store a token or a counter or a traveler, not display an error toast, and not navigate to another URI", () => {
     spyOn(httpService, "post").and.returnValue(
       of({
         headers: { get: () => mockToken },
@@ -167,5 +167,4 @@ describe("CounterLoginComponent", () => {
     expect(toastr.error).not.toHaveBeenCalled();
     expect(router.navigate).not.toHaveBeenCalled();
   });
-
 });
