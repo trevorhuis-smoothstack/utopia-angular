@@ -108,7 +108,7 @@ describe("CounterLoginComponent", () => {
     );
   });
 
-  it("should store the token and the counter, set the traveler to null, and navigate to the root counter component", () => {
+  it("should store the token and the counter, set the traveler to null, navigate to the root counter component, and not display an error toast", () => {
     const token = "Mock Token";
     dataService.setTraveler(mockTraveler);
     spyOn(httpService, "post").and.returnValue(
@@ -127,5 +127,4 @@ describe("CounterLoginComponent", () => {
     expect(dataService.getTraveler()).toBeNull();
     expect(toastr.error).not.toHaveBeenCalled();
   });
-
 });
