@@ -117,7 +117,7 @@ describe("CounterLoginComponent", () => {
     );
   });
 
-  it("should send a login request, recognize the credentials as valid, store the token and the counter, set the traveler to null, navigate to the root counter component, and not display an error toast", () => {
+  it("should send a login request, not consider the credentials invalid, store the token and the counter, set the traveler to null, navigate to the root counter component, and not display an error toast", () => {
     dataService.setTraveler(mockTraveler);
     spyOn(httpService, "post").and.returnValue(
       of({
@@ -167,4 +167,5 @@ describe("CounterLoginComponent", () => {
     expect(toastr.error).not.toHaveBeenCalled();
     expect(router.navigate).not.toHaveBeenCalled();
   });
+
 });
