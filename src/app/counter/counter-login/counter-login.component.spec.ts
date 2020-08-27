@@ -11,6 +11,10 @@ import { HttpClientModule } from "@angular/common/http";
 import { RouterTestingModule } from "@angular/router/testing";
 import { of, throwError } from "rxjs";
 import { uncheckedErrorMessage } from "src/app/common/counter/counter-globals";
+import {
+  mockCounter,
+  mockTraveler,
+} from "src/app/common/counter/counter-mock-data";
 
 describe("CounterLoginComponent", () => {
   let component: CounterLoginComponent;
@@ -52,13 +56,14 @@ describe("CounterLoginComponent", () => {
     fixture = TestBed.createComponent(CounterLoginComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    localStorage.clear();
   });
 
   it("should create", () => {
     expect(component).toBeTruthy();
   });
 
-  it("should navigate to the counter dashboard", () => {
+  it("should recognize the user is authorized and navigate to the counter dashboard", () => {
     spyOn(authService, "checkAuth").and.returnValue(of({}));
     spyOn(router, "navigate");
     spyOn(toastr, "error");
@@ -87,7 +92,7 @@ describe("CounterLoginComponent", () => {
     expect(toastr.error).not.toHaveBeenCalled();
   });
 
-  it("should displa an error toast, and not authorize the user nor navigate to another URI", () => {
+  it("should display an error toast, and not authorize the user nor navigate to another URI", () => {
     spyOn(authService, "checkAuth").and.returnValue(
       throwError({ error: { status: 400 } })
     );
@@ -102,4 +107,25 @@ describe("CounterLoginComponent", () => {
       "Error checking authorization: Status 400"
     );
   });
+
+  it("should store the token and the counter, set the traveler to null, and navigate to the root counter component", () => {
+    const token = "Mock Token";
+    dataService.setTraveler(mockTraveler);
+    spyOn(httpService, "post").and.returnValue(
+      of({
+        headers: { get: () => token },
+      })
+    );
+    spyOn(httpService, "get").and.returnValue(of(mockCounter));
+    spyOn(toastr, "error");
+    expect(localStorage.getItem("token")).toBeFalsy();
+    expect(dataService.getCounter()).toBeFalsy();
+    expect(dataService.getTraveler()).toBeTruthy();
+    component.logIn();
+    expect(localStorage.getItem("token")).toBe(token);
+    expect(dataService.getCounter()).toEqual(mockCounter);
+    expect(dataService.getTraveler()).toBeNull();
+    expect(toastr.error).not.toHaveBeenCalled();
+  });
+
 });
