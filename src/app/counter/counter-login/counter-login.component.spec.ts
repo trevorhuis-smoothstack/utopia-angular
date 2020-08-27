@@ -94,8 +94,9 @@ describe("CounterLoginComponent", () => {
   });
 
   it("should display an error toast, and not authorize the user nor navigate to another URI", () => {
+    const mockStatus = 400;
     spyOn(authService, "checkAuth").and.returnValue(
-      throwError({ error: { status: 400 } })
+      throwError({ error: { status: mockStatus } })
     );
     spyOn(router, "navigate");
     spyOn(toastr, "error");
@@ -105,7 +106,7 @@ describe("CounterLoginComponent", () => {
     expect(toastr.error).toHaveBeenCalledTimes(1);
     expect(toastr.error).toHaveBeenCalledWith(
       uncheckedErrorMessage,
-      "Error checking authorization: Status 400"
+      "Error checking authorization: Status " + mockStatus
     );
   });
 
