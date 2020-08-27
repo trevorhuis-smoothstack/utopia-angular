@@ -108,7 +108,7 @@ describe("CounterLoginComponent", () => {
     );
   });
 
-  it("should store the token and the counter, set the traveler to null, navigate to the root counter component, and not display an error toast", () => {
+  it("should recognize the credentials as valid, store the token and the counter, set the traveler to null, navigate to the root counter component, and not display an error toast", () => {
     const token = "Mock Token";
     dataService.setTraveler(mockTraveler);
     spyOn(httpService, "post").and.returnValue(
@@ -122,6 +122,7 @@ describe("CounterLoginComponent", () => {
     expect(dataService.getCounter()).toBeFalsy();
     expect(dataService.getTraveler()).toBeTruthy();
     component.logIn();
+    expect(component.badCreds).toBe(false);
     expect(localStorage.getItem("token")).toBe(token);
     expect(dataService.getCounter()).toEqual(mockCounter);
     expect(dataService.getTraveler()).toBeNull();
