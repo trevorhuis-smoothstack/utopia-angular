@@ -1,4 +1,10 @@
-import { async, ComponentFixture, TestBed, fakeAsync, tick } from "@angular/core/testing";
+import {
+  async,
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  tick,
+} from "@angular/core/testing";
 
 import { SelectTravelerComponent } from "./select-traveler.component";
 import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
@@ -8,8 +14,8 @@ import { ToastrService, ToastrModule } from "ngx-toastr";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { HttpClientModule } from "@angular/common/http";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { mockTraveler } from '../../mock-data';
-import { of } from 'rxjs/internal/observable/of';
+import { mockTraveler } from "../../mock-data";
+import { of, throwError } from "rxjs";
 
 describe("SelectTravelerComponent", () => {
   let component: SelectTravelerComponent;
@@ -33,14 +39,15 @@ describe("SelectTravelerComponent", () => {
       providers: [AgentUtopiaService],
     }).compileComponents();
     service = new AgentUtopiaService(null);
+    toastService = TestBed.get(ToastrService);
     fb = new FormBuilder();
     component = new SelectTravelerComponent(service, fb, toastService);
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SelectTravelerComponent);
-    component = fixture.componentInstance;
     fixture.detectChanges();
+    
   });
 
   it("should create", () => {
@@ -55,23 +62,111 @@ describe("SelectTravelerComponent", () => {
   });
 
   it("should emit a new traveler", () => {
+    spyOn(component.travelerChanged, "emit");
     component.changeTraveler(mockTraveler);
-    expect(component.travelerChanged.emit).toHaveBeenCalled;
+    expect(component.travelerChanged.emit).toHaveBeenCalled();
   });
 
-  // it('should try to create a new traveler but username is taken', fakeAsync(() => {
-  //   spyOn(service, "get").and.returnValue(
-  //       of({log: "This is the output."})
-  //     );
-  //   component.ngOnInit();
-  //   component.createTravelerForm.value.name = mockTraveler.name;
-  //   component.createTravelerForm.value.username = "trevorhuis";
-  //   component.createNewTraveler();
-  //   tick();
-  //   expect(component.usernameTaken).toEqual(true);
-  // }));
+  it("should try to create a new traveler but username is taken", fakeAsync(() => {
+    component.ngOnInit();
+    spyOn(service, "get").and.returnValues(of({}));
+    component.createTravelerForm.value.name = mockTraveler.name;
+    component.createTravelerForm.value.username = "trevorhuis";
+    component.createNewTraveler();
+    tick();
+    expect(component.usernameTaken).toEqual(true);
+  }));
 
-  // it("should setup create traveler form", () => {
+  it("should try to see that username is available and call helper function", fakeAsync(() => {
+    component.ngOnInit();
+    spyOn(service, "get").and.returnValues(of(null));
+    spyOn(component, "createNewTravelerHelper").and.callFake(() => {});
+    component.createTravelerForm.value.name = mockTraveler.name;
+    component.createTravelerForm.value.username = "trevorhuis";
+    component.createNewTraveler();
+    tick();
+    expect(component.createNewTravelerHelper).toHaveBeenCalled();
+  }));
 
-  // });
+  it("should try to see that username is available but get an error in get call and call toaster", fakeAsync(() => {
+    component.ngOnInit();
+    spyOn(service, "get").and.returnValue(throwError({status: 404}));
+    spyOn(toastService, "error");
+    component.createTravelerForm.value.name = mockTraveler.name;
+    component.createTravelerForm.value.username = "trevorhuis";
+    component.createNewTraveler();
+    tick();
+    expect(toastService.error).toHaveBeenCalled();
+  }));
+
+  it("should use a post request to create and retrieve a new traveler", fakeAsync(() => {
+    component.ngOnInit();
+    let travelerBody = {
+      name: mockTraveler.name,
+      username: "trevorhuis",
+      password: "",
+      role: "TRAVELER",
+    };
+
+    spyOn(service, "post").and.returnValue(of(mockTraveler));
+    component.createNewTravelerHelper(travelerBody);
+    tick();
+    expect(component.createTraveler).toEqual(false);
+    expect(component.traveler).toEqual(mockTraveler);
+  }));
+
+
+  it("should use a post request to create and retrieve but handles an error", fakeAsync(() => {
+    component.ngOnInit();
+    let travelerBody = {
+      name: mockTraveler.name,
+      username: "trevorhuis",
+      password: "",
+      role: "TRAVELER",
+    };
+
+    spyOn(service, "post").and.returnValue(throwError({status: 404}));
+    spyOn(toastService, "error");
+    component.createNewTravelerHelper(travelerBody);
+    tick();
+    expect(toastService.error).toHaveBeenCalled();
+  }));
+
+  it("should check traveler and set a new one", fakeAsync(() => {
+    component.ngOnInit();
+    spyOn(service, "get").and.returnValue(of(mockTraveler));
+    component.selectTravelerForm.value.username = "trevorhuis";
+    component.checkTraveler();
+    tick();
+    expect(component.traveler).toEqual(mockTraveler);
+
+  }));
+
+  it("should check traveler and set a new one", fakeAsync(() => {
+    component.ngOnInit();
+    spyOn(service, "get").and.returnValue(of(null));
+    component.selectTravelerForm.value.username = "trevorhuis";
+    component.checkTraveler();
+    tick();
+    expect(component.invalidLogin).toEqual(true);
+    
+  }));
+
+  it("should check traveler and handle an error", fakeAsync(() => {
+    component.ngOnInit();
+    spyOn(service, "get").and.returnValue(throwError({status: 404}));
+    spyOn(toastService, "error");
+    component.selectTravelerForm.value.username = "trevorhuis";
+    component.checkTraveler();
+    tick();
+    expect(toastService.error).toHaveBeenCalled();
+  }));
+
+  it("should setup create traveler form", () => {
+    component.createTraveler = true;
+    component.setupCreateTravelerForm();
+    component.createTravelerForm.controls['username'].markAsDirty();
+    expect(component.errorsDirtyCreateTraveler('username')).toEqual(true);
+  });
+
 });
