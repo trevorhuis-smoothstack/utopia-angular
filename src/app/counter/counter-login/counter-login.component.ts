@@ -77,7 +77,7 @@ export class CounterLoginComponent implements OnInit {
                 } else
                   this.toastr.error(
                     uncheckedErrorMessage,
-                    "Error getting user: Stauts " + getUserError.error.status
+                    "Error getting user: Status " + getUserError.error.status
                   );
               }
             );
