@@ -117,7 +117,7 @@ describe("CounterLoginComponent", () => {
     );
   });
 
-  it("should recognize the credentials as valid, store the token and the counter, set the traveler to null, navigate to the root counter component, and not display an error toast", () => {
+  it("should send a login request, recognize the credentials as valid, store the token and the counter, set the traveler to null, navigate to the root counter component, and not display an error toast", () => {
     dataService.setTraveler(mockTraveler);
     spyOn(httpService, "post").and.returnValue(
       of({
@@ -125,6 +125,7 @@ describe("CounterLoginComponent", () => {
       })
     );
     spyOn(httpService, "get").and.returnValue(of(mockCounter));
+    spyOn(router, "navigate");
     spyOn(toastr, "error");
     expect(localStorage.getItem("token")).toBeFalsy();
     expect(dataService.getCounter()).toBeFalsy();
@@ -138,6 +139,8 @@ describe("CounterLoginComponent", () => {
     expect(localStorage.getItem("token")).toBe(mockToken);
     expect(dataService.getCounter()).toEqual(mockCounter);
     expect(dataService.getTraveler()).toBeNull();
+    expect(router.navigate).toHaveBeenCalledWith(['/counter/traveler'])
+    expect(router.navigate).toHaveBeenCalledTimes(1)
     expect(toastr.error).not.toHaveBeenCalled();
   });
 
