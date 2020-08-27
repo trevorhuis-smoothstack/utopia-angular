@@ -140,4 +140,28 @@ describe("CounterLoginComponent", () => {
     expect(dataService.getTraveler()).toBeNull();
     expect(toastr.error).not.toHaveBeenCalled();
   });
+
+  it("should recognize the credentials as invalid, not store a token or a counter, not display an error toast, and not navigate to another URI", () => {
+    spyOn(httpService, "post").and.returnValue(
+      of({
+        headers: { get: () => mockToken },
+      })
+    );
+    spyOn(httpService, "get").and.returnValue(
+      throwError({ error: { status: 403 } })
+    );
+    spyOn(router, "navigate");
+    spyOn(toastr, "error");
+    component.logIn();
+    expect(component.badCreds).toBe(true);
+    expect(httpService.post).toHaveBeenCalledWith(environment.loginUrl, {
+      username: mockUsername,
+      password: mockPassword,
+    });
+    expect(localStorage.getItem("token")).toBeNull();
+    expect(dataService.getCounter()).toBeUndefined();
+    expect(dataService.getTraveler()).toBeUndefined();
+    expect(toastr.error).not.toHaveBeenCalled();
+    expect(router.navigate).not.toHaveBeenCalled();
+  });
 });
