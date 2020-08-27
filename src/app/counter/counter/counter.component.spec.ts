@@ -67,9 +67,11 @@ describe("CounterComponent", () => {
     expect(localStorage.getItem("token")).toBeNull();
   }));
 
-  it("should authorize the user, initialize the counter, and subscribe to the traveler observable", () => {
+  it("should authorize the user, initialize the counter subscribe to the traveler observable, not display an error toast, and not redirect", () => {
     spyOn(authService, "checkAuth").and.returnValue(of({}));
     spyOn(dataService, "getCounter").and.returnValue(mockCounter);
+    spyOn(router, "navigate");
+    spyOn(toastr, "error");
     expect(component.authorized).toBeFalsy();
     expect(component.counter).toBeFalsy();
     component.ngOnInit();
@@ -78,6 +80,8 @@ describe("CounterComponent", () => {
     expect(component.traveler).toBeFalsy();
     dataService.setTraveler(mockTraveler);
     expect(component.traveler).toEqual(mockTraveler);
+    expect(router.navigate).not.toHaveBeenCalled();
+    expect(toastr.error).not.toHaveBeenCalled();
   });
 
   it("should navigate to the login page, not display an error toast, and not authorize the user", () => {
