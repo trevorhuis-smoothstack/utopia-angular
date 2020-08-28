@@ -87,7 +87,6 @@ describe("CounterSelectTravelerComponent", () => {
         mockControl.value
     );
     expect(httpService.get).toHaveBeenCalledTimes(2);
-    expect(mockControl.errors).toBeNull();
   });
 
   it("should check the username and register a traveler vaildation error", () => {
