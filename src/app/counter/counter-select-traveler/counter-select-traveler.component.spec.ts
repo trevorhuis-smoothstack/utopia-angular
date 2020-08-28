@@ -22,6 +22,7 @@ import { CounterDataService } from "src/app/common/counter/service/counter-data.
 import {
   mockUsername,
   mockControl,
+  mockTraveler,
 } from "src/app/common/counter/counter-mock-data";
 import { of, throwError } from "rxjs";
 import { environment } from "src/environments/environment";
@@ -112,5 +113,23 @@ describe("CounterSelectTravelerComponent", () => {
         mockControl.value
     );
     expect(httpService.get).toHaveBeenCalledTimes(1);
+  });
+
+  it("should request the traveler, give it to the data service, navigate to the booking component, and not display an error toast", () => {
+    spyOn(httpService, "get").and.returnValue(of(mockTraveler));
+    spyOn(router, "navigate");
+    spyOn(toastr, "error");
+    expect(dataService.getTraveler()).toBeFalsy();
+    component.getTraveler(mockTraveler.username);
+    expect(httpService.get).toHaveBeenCalledWith(
+      environment.counterUrl +
+        environment.counterGetUserUri +
+        mockTraveler.username
+    );
+    expect(httpService.get).toHaveBeenCalledTimes(1);
+    expect(dataService.getTraveler()).toEqual(mockTraveler);
+    expect(router.navigate).toHaveBeenCalledWith(["/counter/booking"]);
+    expect(router.navigate).toHaveBeenCalledTimes(1);
+    expect(toastr.error).not.toHaveBeenCalled();
   });
 });
