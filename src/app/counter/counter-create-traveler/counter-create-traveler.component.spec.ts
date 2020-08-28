@@ -90,4 +90,18 @@ describe("CounterCreateTravelerComponent", () => {
     ]);
     expect(httpService.getFull).toHaveBeenCalledTimes(2);
   });
+
+  it("should check the username and register a username vaildation error", () => {
+    spyOn(httpService, "getFull").and.returnValue(of({ status: 204 }));
+    component
+      .validateUsername(mockControl)
+      .subscribe((result) =>
+        expect(result).toEqual({ validateUsername: true })
+      );
+    expect(httpService.getFull).toHaveBeenCalledWith(
+      environment.counterUrl +
+        environment.counterUsernameUri +
+        mockControl.value
+    );
+  });
 });
