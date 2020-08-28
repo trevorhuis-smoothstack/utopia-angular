@@ -88,7 +88,6 @@ describe("CounterCreateTravelerComponent", () => {
           mockControl.value,
       ],
     ]);
-    expect(httpService.getFull).toHaveBeenCalledTimes(2);
   });
 
   it("should check the username and register a username vaildation error", () => {
