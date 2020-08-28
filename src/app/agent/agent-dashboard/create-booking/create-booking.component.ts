@@ -135,11 +135,9 @@ export class CreateBookingComponent implements OnInit {
   }
 
   loadPremierFlights() {
-    this.service.get(`${environment.agentBackendUrl}${environment.agentFlightsUri}${environment.agentPremierUri}`,).subscribe(
+    this.service.get(`${environment.agentBackendUrl}${environment.agentFlightsUri}${environment.agentPremierUri}`).subscribe(
       (result: any) => {
         this.flights = result;
-        
-        
         this.formatFlights();
         this.changePaginationCount();
       },
@@ -160,7 +158,7 @@ export class CreateBookingComponent implements OnInit {
           this.flights = result;
           
           if (this.flights == null) {
-            // Turn into a toast
+            this.toastService.error("There are no flights available that fit your criteria.", "No Flights Found");
             return;
           }
           this.formatFlights();
@@ -189,38 +187,42 @@ export class CreateBookingComponent implements OnInit {
   }
 
   bookFlight() {
-    let booking: any;
     this.stripe.createToken(this.card, {}).subscribe((result) => {
-      if (result.token) {
-        booking = {
-          travelerId: this.childInput.traveler.userId,
-          flightId: this.selectedFlight.flightId,
-          bookerId: this.childInput.agent.userId,
-          active: true,
-          stripeId: result.token.id,
-        };
-        this.service
-          .post(
-            `${environment.agentBackendUrl}${environment.agentBookingUri}`,
-            booking
-          )
-          .subscribe(
-            () => {
-              this.flightBooked = true;
-              this.flights = this.flights.filter(
-                (flight) => flight !== this.selectedFlight
-              );
-            },
-            (error) => {
-              this.modalService.dismissAll();
-              this.toastService.error("There was an error booking your flight. Please try again or contact IT if the problem continues.", "Flight not booked.")
-            }
-          );
-      } else if (result.error) {
-        this.modalService.dismissAll();
-        this.toastService.error("There was an error confirming your credit card, check your card and try to book your flight again.", "Credit Card Not Accepted");
-      }
+      if (result.token) { this.bookWithToken(result.token) } 
+      else if (result.error) { this.handleBadStripeToken() }
     });
+  }
+
+  bookWithToken(token) {
+    let booking = {
+      travelerId: this.childInput.traveler.userId,
+      flightId: this.selectedFlight.flightId,
+      bookerId: this.childInput.agent.userId,
+      active: true,
+      stripeId: token.id,
+    };
+    this.service
+      .post(
+        `${environment.agentBackendUrl}${environment.agentBookingUri}`,
+        booking
+      )
+      .subscribe(
+        () => {
+          this.flightBooked = true;
+          this.flights = this.flights.filter(
+            (flight) => flight !== this.selectedFlight
+          );
+        },
+        (error) => {
+          this.modalService.dismissAll();
+          this.toastService.error("There was an error booking your flight. Please try again or contact IT if the problem continues.", "Flight not booked.")
+        }
+      );
+  }
+
+  handleBadStripeToken() {
+    this.modalService.dismissAll();
+    this.toastService.error("There was an error confirming your credit card, check your card and try to book your flight again.", "Credit Card Not Accepted");
   }
 
   openBookFlightModal(modal: any, flight: any) {

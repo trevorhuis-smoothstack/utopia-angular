@@ -6,14 +6,14 @@ import { CreateBookingComponent } from "./create-booking.component";
 import { AgentUtopiaService } from 'src/app/common/h/agent-utopia.service';
 
 // External code
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { async, ComponentFixture, TestBed, fakeAsync, tick } from "@angular/core/testing";
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { NgbModule, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrModule, ToastrService } from 'ngx-toastr';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { StripeService, NgxStripeModule } from 'ngx-stripe';
 
 //Mock modal reference class
@@ -38,6 +38,7 @@ describe('CreateBookingComponent', () => {
       providers: [AgentUtopiaService],
     })
     .compileComponents();
+    toastService = TestBed.get(ToastrService);
     service = new AgentUtopiaService(null);
     modalService = TestBed.get(NgbModal);
     component = new CreateBookingComponent(service,  modalService, stripeService, toastService);
@@ -174,5 +175,108 @@ describe('CreateBookingComponent', () => {
       mockBookings[0]
     );
   });
+
+  it("should load premier flights", fakeAsync(() => {
+    spyOn(service, "get").and.returnValue(of(mockFlightsPreFormat));
+    spyOn(component, "formatFlights");
+    spyOn(component, "changePaginationCount");    
+    component.loadPremierFlights();
+    tick();
+    expect(component.formatFlights).toHaveBeenCalled();
+    expect(component.changePaginationCount).toHaveBeenCalled();
+  }));
+
+  it("should load premier flights", fakeAsync(() => {
+    spyOn(service, "get").and.returnValue(of(mockFlightsPreFormat));
+    spyOn(component, "formatFlights");
+    spyOn(component, "changePaginationCount");    
+    component.loadPremierFlights();
+    tick();
+    expect(component.formatFlights).toHaveBeenCalled();
+    expect(component.changePaginationCount).toHaveBeenCalled();
+  }));
+
+  it("should try to load premier flights and handle an error", fakeAsync(() => {
+    spyOn(service, "get").and.returnValue(throwError({status: 400}));
+    spyOn(toastService, "error");
+    component.loadPremierFlights();
+    tick();
+    expect(toastService.error).toHaveBeenCalled();
+  }));
+
+  it("should load flights with params", fakeAsync(() => {
+    spyOn(service, "getWithParams").and.returnValue(of(mockFlightsPreFormat));
+    spyOn(component, "formatFlights");
+    spyOn(component, "changePaginationCount");    
+    component.loadFlights({});
+    tick();
+    expect(component.formatFlights).toHaveBeenCalled();
+    expect(component.changePaginationCount).toHaveBeenCalled();
+  }));
+
+  it("should load flights with params but handle a null object", fakeAsync(() => {
+    spyOn(service, "getWithParams").and.returnValue(of(null));
+    spyOn(toastService, "error");
+    component.loadFlights({});
+    tick();
+    expect(toastService.error).toHaveBeenCalled();
+  }));
+
+  it("should try to load flights with params and handle an error", fakeAsync(() => {
+    spyOn(service, "getWithParams").and.returnValue(throwError({status: 400}));
+    spyOn(toastService, "error");
+    component.loadFlights({});
+    tick();
+    expect(toastService.error).toHaveBeenCalled();
+  }));
+
+  it("should try to book a flight with a stripe token", fakeAsync(() => {
+    component.selectedFlight = mockFlights[0];
+    component.flights = mockFlights;
+    component.childInput = {
+      traveler: {
+        userId: 1
+      },
+      agent: {
+        userId: 1
+      }
+    };
+
+    spyOn(service, "post").and.returnValue(of({}));
+    component.bookWithToken("testValue");
+    tick();
+    expect(component.flightBooked).toEqual(true);
+    expect(component.flights).toEqual([mockFlights[1], mockFlights[2]]);
+  }));
+
+  it("should try to book a flight with a stripe token but handle an error", fakeAsync(() => {
+    component.selectedFlight = mockFlights[0];
+    component.flights = mockFlights;
+    component.childInput = {
+      traveler: {
+        userId: 1
+      },
+      agent: {
+        userId: 1
+      }
+    };
+
+    spyOn(service, "post").and.returnValue(throwError({status: 400}));
+    spyOn(modalService, "dismissAll");
+    spyOn(toastService, "error");
+    component.bookWithToken("testValue");
+    tick();
+    expect(modalService.dismissAll).toHaveBeenCalled();
+    expect(toastService.error).toHaveBeenCalled();
+  }));
+
+  it("should handle a bad stripe token", fakeAsync(() => {
+    spyOn(modalService, "dismissAll");
+    spyOn(toastService, "error");
+    component.handleBadStripeToken();
+    tick();
+    expect(modalService.dismissAll).toHaveBeenCalled();
+    expect(toastService.error).toHaveBeenCalled();
+  }));
 
 });
