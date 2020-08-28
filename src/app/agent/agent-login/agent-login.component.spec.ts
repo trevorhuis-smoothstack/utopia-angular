@@ -1,5 +1,5 @@
 import { AgentLoginComponent } from "./agent-login.component";
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { async, ComponentFixture, TestBed, fakeAsync, tick } from "@angular/core/testing";
 import { HttpClientModule } from "@angular/common/http";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
@@ -11,6 +11,7 @@ import { AgentUtopiaService } from "src/app/common/h/agent-utopia.service";
 import { RouterModule, Routes, Router } from '@angular/router';
 import { AgentAuthService } from "src/app/common/h/service/AgentAuthService";
 import { AppRoutingModule } from "src/app/app-routing.module";
+import { RouterTestingModule } from '@angular/router/testing';
 
 //Mock modal reference class
 export class MockNgbModalRef {
@@ -36,11 +37,11 @@ describe("AgentLoginComponent", () => {
         HttpClientModule,
         HttpClientTestingModule,
         ToastrModule.forRoot(),
-        RouterModule.forRoot([]),
+        RouterTestingModule.withRoutes([{ path: "**", redirectTo: "" }]),
       ],
       providers: [AgentAuthService],
     }).compileComponents();
-
+    toastService = TestBed.get(ToastrService)
     router = TestBed.get(Router);
     service = new AgentAuthService(null, router);
     fb = new FormBuilder();
@@ -48,21 +49,7 @@ describe("AgentLoginComponent", () => {
   }));
 
   beforeEach(() => {
-    spyOn(document, "getElementById").and.callFake(function() {
-        return {
-            classList: {
-                add: () => {
-
-                },
-                remove: () => {
-
-                }
-            },
-        }
-    }); 
-
     fixture = TestBed.createComponent(AgentLoginComponent);
-    component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
@@ -76,8 +63,68 @@ describe("AgentLoginComponent", () => {
       expect(component.invalidLogin).toEqual(true);
   })
 
-  it("should recpgnize there are no login values", () => { 
+  it("should recognize there are no login values", () => { 
       component.login();
       expect(component.invalidAttempt).toEqual(true);
   });
+
+  it("should trigger router to navigate", () => {
+    spyOn(service, "isLoggedIn").and.returnValue(true);
+    spyOn(router, "navigate");
+    component.ngOnInit();
+    expect(router.navigate).toHaveBeenCalled();
+  });
+
+  it("should login a user", fakeAsync(() => {
+    let response = {
+      status: 200,
+      headers: {
+        get: (input) => {
+          if (input == "expires") return "2015-11-18T18:25:43.511Z";
+          if (input == "Authorization") return "testToken";
+        }
+      }
+    };
+    spyOn(router, "navigate");
+    spyOn(service, "login").and.returnValue(Promise.resolve(response));
+    component.loginForm.value.username = "fakeAgent";
+    component.loginForm.value.password = "fakePassword";
+    component.login();
+    tick();
+    expect(localStorage.getItem("username")).toEqual("fakeAgent");
+    expect(localStorage.getItem("token")).toEqual("testToken");
+    expect(router.navigate).toHaveBeenCalled();
+  }));
+
+  it("should try to login a user but recieve and handle an error", fakeAsync(() => {
+    let response = {
+      status: 500,
+      error: {
+        status: 500
+      }
+    };
+    spyOn(toastService, "error");
+    spyOn(service, "login").and.returnValue(Promise.reject(response));
+    component.loginForm.value.username = "fakeAgent";
+    component.loginForm.value.password = "fakePassword";
+    component.login();
+    tick();
+    expect(toastService.error).toHaveBeenCalled();
+  }));
+
+  it("should try to login a user but recognize that the credentials are invalid", fakeAsync(() => {
+    let response = {
+      status: 401,
+      error: {
+        status: 401
+      }
+    };
+    spyOn(component, "setInvalidLogin");
+    spyOn(service, "login").and.returnValue(Promise.reject(response));
+    component.loginForm.value.username = "fakeAgent";
+    component.loginForm.value.password = "fakePassword";
+    component.login();
+    tick();
+    expect(component.setInvalidLogin).toHaveBeenCalled();
+  }));
 });
