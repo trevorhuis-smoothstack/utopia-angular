@@ -115,7 +115,7 @@ describe("CounterSelectTravelerComponent", () => {
     expect(httpService.get).toHaveBeenCalledTimes(1);
   });
 
-  it("should request the traveler, give it to the data service, navigate to the booking component, and not display an error toast", () => {
+  it("should request the traveler, store it, navigate to the booking component, and not display an error toast", () => {
     spyOn(httpService, "get").and.returnValue(of(mockTraveler));
     spyOn(router, "navigate");
     spyOn(toastr, "error");
