@@ -58,9 +58,10 @@ describe("CounterSelectTravelerComponent", () => {
     component.form.controls.username.markAsDirty();
     expect(component.errorsDirty("username")).toBeFalsy();
     component.form.controls.username.markAsPristine();
-    component.form.controls.username.setErrors({});
+    component.form.controls.username.setErrors({required: true});
     expect(component.errorsDirty("username")).toBeFalsy();
     component.form.controls.username.markAsDirty();
     expect(component.errorsDirty("username")).toBeTruthy();
   });
+
 });
