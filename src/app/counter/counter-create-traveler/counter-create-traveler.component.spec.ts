@@ -48,4 +48,17 @@ describe("CounterCreateTravelerComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
+
+  it("should correctly discern when the form has errors and is dirty", () => {
+    component.form.controls.username.setErrors(null);
+    component.form.controls.username.markAsPristine();
+    expect(component.errorsDirty("username")).toBeFalsy();
+    component.form.controls.username.markAsDirty();
+    expect(component.errorsDirty("username")).toBeFalsy();
+    component.form.controls.username.markAsPristine();
+    component.form.controls.username.setErrors({ required: true });
+    expect(component.errorsDirty("username")).toBeFalsy();
+    component.form.controls.username.markAsDirty();
+    expect(component.errorsDirty("username")).toBeTruthy();
+  });
 });
