@@ -26,6 +26,7 @@ import {
 } from "src/app/common/counter/counter-mock-data";
 import { of, throwError } from "rxjs";
 import { environment } from "src/environments/environment";
+import { uncheckedErrorMessage } from "src/app/common/counter/counter-globals";
 
 describe("CounterSelectTravelerComponent", () => {
   let component: CounterSelectTravelerComponent;
@@ -131,5 +132,28 @@ describe("CounterSelectTravelerComponent", () => {
     expect(router.navigate).toHaveBeenCalledWith(["/counter/booking"]);
     expect(router.navigate).toHaveBeenCalledTimes(1);
     expect(toastr.error).not.toHaveBeenCalled();
+  });
+
+  it("should request the traveler, display an error toast, not update the traveler, and not navigate anywhere", () => {
+    const mockStatus = 418;
+    spyOn(httpService, "get").and.returnValue(
+      throwError({ error: { status: mockStatus } })
+    );
+    spyOn(router, "navigate");
+    spyOn(toastr, "error");
+    component.getTraveler(mockTraveler.username);
+    expect(httpService.get).toHaveBeenCalledWith(
+      environment.counterUrl +
+        environment.counterGetUserUri +
+        mockTraveler.username
+    );
+    expect(httpService.get).toHaveBeenCalledTimes(1);
+    expect(dataService.getTraveler()).toBeUndefined();
+    expect(toastr.error).toHaveBeenCalledTimes(1);
+    expect(toastr.error).toHaveBeenCalledWith(
+      uncheckedErrorMessage,
+      "Error getting traveler: Status " + mockStatus
+    );
+    expect(router.navigate).not.toHaveBeenCalled();
   });
 });
