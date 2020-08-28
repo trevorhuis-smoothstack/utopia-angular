@@ -58,7 +58,6 @@ describe("CounterLoginComponent", () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(CounterLoginComponent);
-    component = fixture.componentInstance;
     [component.form.value.username, component.form.value.password] = [
       mockUsername,
       mockPassword,
