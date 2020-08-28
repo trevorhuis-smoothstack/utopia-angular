@@ -1,3 +1,5 @@
+import { FormControl } from "@angular/forms";
+
 export const mockToken = "Mock Token",
   mockUsername = "Mock Counter",
   mockPassword = "Mock Password",
@@ -14,4 +16,5 @@ export const mockToken = "Mock Token",
     username: "MockTraveler",
     password: null,
     role: "TRAVELER",
-  };
+  },
+  mockControl = new FormControl(mockUsername);
