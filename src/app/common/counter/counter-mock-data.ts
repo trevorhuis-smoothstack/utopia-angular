@@ -17,4 +17,4 @@ export const mockToken = "Mock Token",
     password: null,
     role: "TRAVELER",
   },
-  mockControl = new FormControl(mockUsername);
+  mockControl = new FormControl("Mock Input");
