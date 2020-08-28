@@ -8,6 +8,9 @@ import { Router } from "@angular/router";
 import { ToastrService, ToastrModule } from "ngx-toastr";
 import { CounterHttpService } from "src/app/common/counter/service/counter-http.service";
 import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
+import { of, throwError } from "rxjs";
+import { environment } from "src/environments/environment";
+import { mockControl } from "src/app/common/counter/counter-mock-data";
 
 describe("CounterCreateTravelerComponent", () => {
   let component: CounterCreateTravelerComponent;
@@ -60,5 +63,31 @@ describe("CounterCreateTravelerComponent", () => {
     expect(component.errorsDirty("username")).toBeFalsy();
     component.form.controls.username.markAsDirty();
     expect(component.errorsDirty("username")).toBeTruthy();
+  });
+
+  it("should check the username and not register a username vaildation error", () => {
+    const httpSpy = spyOn(httpService, "getFull").and.returnValues(
+      of({ status: 200 }),
+      throwError({})
+    );
+    component
+      .validateUsername(mockControl)
+      .subscribe((result) => expect(result).toBeNull());
+    component
+      .validateUsername(mockControl)
+      .subscribe((result) => expect(result).toBeNull());
+    expect(httpSpy.calls.allArgs()).toEqual([
+      [
+        environment.counterUrl +
+          environment.counterUsernameUri +
+          mockControl.value,
+      ],
+      [
+        environment.counterUrl +
+          environment.counterUsernameUri +
+          mockControl.value,
+      ],
+    ]);
+    expect(httpService.getFull).toHaveBeenCalledTimes(2);
   });
 });
