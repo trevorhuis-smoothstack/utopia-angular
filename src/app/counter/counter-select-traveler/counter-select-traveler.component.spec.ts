@@ -9,6 +9,7 @@ import { ToastrService, ToastrModule } from "ngx-toastr";
 import { Router } from "@angular/router";
 import { CounterHttpService } from "src/app/common/counter/service/counter-http.service";
 import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
+import { mockUsername } from 'src/app/common/counter/counter-mock-data';
 
 describe("CounterSelectTravelerComponent", () => {
   let component: CounterSelectTravelerComponent;
@@ -48,5 +49,18 @@ describe("CounterSelectTravelerComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("should correctly discern when the form has errors and is dirty", () => {
+    component.form.controls.username.setErrors(null);  
+    component.form.controls.username.markAsPristine();
+    expect(component.errorsDirty("username")).toBeFalsy();
+    component.form.controls.username.markAsDirty();
+    expect(component.errorsDirty("username")).toBeFalsy();
+    component.form.controls.username.markAsPristine();
+    component.form.controls.username.setErrors({});
+    expect(component.errorsDirty("username")).toBeFalsy();
+    component.form.controls.username.markAsDirty();
+    expect(component.errorsDirty("username")).toBeTruthy();
   });
 });
