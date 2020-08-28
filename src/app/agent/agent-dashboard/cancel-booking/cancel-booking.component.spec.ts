@@ -1,7 +1,7 @@
 // My Code
 import { Agent } from 'src/app/common/entities/Agent';
 import { Traveler } from 'src/app/common/entities/Traveler';
-import { mockAirports, mockBookings, mockAgent, mockFlights, mockTraveler } from '../../mock-data';
+import { mockAirports, mockBookings, mockAgent, mockFlights, mockTraveler, mockAirportMap } from '../../mock-data';
 import { CancelBookingComponent } from "./cancel-booking.component";
 import { AgentUtopiaService } from 'src/app/common/h/agent-utopia.service';
 // Pipes
@@ -12,14 +12,14 @@ import {
   FilterBookingsByDepartureAirportPipe,
 } from "src/app/common/h/filter-bookings";
 // External code
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { async, ComponentFixture, TestBed, fakeAsync, tick } from "@angular/core/testing";
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { NgbModule, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrModule, ToastrService } from 'ngx-toastr';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
 //Mock modal reference class
 export class MockNgbModalRef {
@@ -48,6 +48,7 @@ describe("CancelBookingComponent", () => {
       imports: [FormsModule, NgbModule, HttpClientModule, HttpClientTestingModule, ToastrModule.forRoot()],
       providers: [AgentUtopiaService],
     }).compileComponents();
+    toastService = TestBed.get(ToastrService);
     service = new AgentUtopiaService(null);
     modalService = TestBed.get(NgbModal);
     component = new CancelBookingComponent(service, modalService, toastService);
@@ -106,6 +107,43 @@ describe("CancelBookingComponent", () => {
     }
     component.cancelBooking();
     expect(component.cancelledBooking).toEqual(true);
-
+    expect(component.loadBookings).toHaveBeenCalled();
   });
+
+  it("should try to cancel a booking and handle an error", fakeAsync(() => {
+    component.cancelledBooking = false;
+    spyOn(toastService, "error");
+    spyOn(service, "put").and.returnValue(throwError({status: 400}));
+    component.selectedBooking = {
+      travelerId: 1,
+      flightId: 1,
+      bookerId: 1,
+      active: true,
+      selectedBooking: 1,
+    }
+    component.cancelBooking();
+    expect(toastService.error).toHaveBeenCalled();
+  }));
+
+  it("should load bookings and fill the bookings array", fakeAsync(() => {
+    component.childInput.traveler.userId = 1;
+    component.childInput.traveler.name = "Trevor Huis in 't Veld";
+    component.childInput.agent.userId = 1;
+
+    component.airportsMap = mockAirportMap;
+    spyOn(service, "get").and.returnValue(of(mockFlights))
+    spyOn(component, "changePaginationCount");
+    component.loadBookings();
+    tick();
+    expect(component.changePaginationCount).toHaveBeenCalled();
+    expect(component.bookings).toEqual(mockBookings);
+  }));
+
+  it("should try to load bookings but handle an error", fakeAsync(() => {
+    spyOn(toastService, "error");
+    spyOn(service, "get").and.returnValue(throwError({status: 400}))
+    component.loadBookings();
+    tick();
+    expect(toastService.error).toHaveBeenCalled();
+  }));
 });

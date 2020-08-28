@@ -64,7 +64,6 @@ export class CancelBookingComponent implements OnInit {
             flight: flight
           }
           this.bookings.push(booking);
-          console.log(booking);
           this.changePaginationCount();
           
         });
