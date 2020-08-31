@@ -10,7 +10,11 @@ import { CounterHttpService } from "src/app/common/counter/service/counter-http.
 import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
 import { of, throwError } from "rxjs";
 import { environment } from "src/environments/environment";
-import { mockControl } from "src/app/common/counter/counter-mock-data";
+import {
+  mockControl,
+  mockTraveler,
+  mockPassword,
+} from "src/app/common/counter/counter-mock-data";
 
 describe("CounterCreateTravelerComponent", () => {
   let component: CounterCreateTravelerComponent;
@@ -117,5 +121,31 @@ describe("CounterCreateTravelerComponent", () => {
     expect(component.validatePasswordMatch(mockInvalidForm)).toEqual({
       validatePasswordMatch: true,
     });
+  });
+
+  it("should send the new traveler to the backend, store it in the service, navigate to the booking component, and not display an error toast", () => {
+    component.form = new FormGroup({
+      name: new FormControl(mockTraveler.name),
+      username: new FormControl(mockTraveler.username),
+      password: new FormControl(mockPassword),
+      confirmPassword: new FormControl(mockPassword),
+    });
+    spyOn(httpService, "post").and.returnValue(of({ body: mockTraveler }));
+    spyOn(router, "navigate");
+    spyOn(toastr, "error");
+    expect(dataService.getTraveler()).toBeFalsy();
+    component.createTraveler();
+    expect(httpService.post).toHaveBeenCalledWith(
+      environment.counterUrl + environment.counterCreateUserUri,
+      {
+        name: mockTraveler.name,
+        username: mockTraveler.username,
+        password: mockPassword,
+        role: "TRAVELER",
+      }
+    );
+    expect(dataService.getTraveler()).toEqual(mockTraveler);
+    expect(router.navigate).toHaveBeenCalledWith(["/counter/booking"]);
+    expect(toastr.error).not.toHaveBeenCalled();
   });
 });
