@@ -39,7 +39,6 @@ export class AgentDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    document.getElementById("nav-agent").classList.add("active");
     this.agent = {
       username: localStorage.getItem("username"),
     };
@@ -58,10 +57,6 @@ export class AgentDashboardComponent implements OnInit {
     this.cancelFlightPage = false;
 
     this.adjustForMobile(window.innerWidth);
-  }
-
-  ngOnDestroy() {
-    document.getElementById("nav-agent").classList.remove("active");
   }
 
   // RESPONSIVE DESIGN
