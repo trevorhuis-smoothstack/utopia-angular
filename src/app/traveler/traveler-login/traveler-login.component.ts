@@ -41,17 +41,15 @@ export class TravelerLoginComponent implements OnInit {
 
   ngOnInit() {
     // fetch current user.
-    this.traveler = {
-      username: localStorage.getItem('username'),
-      token: localStorage.getItem('token'),
-      expires: localStorage.getItem('expires_at')
-    };
+    // this.toggleCreateTraveler();
 
-    if (this.authService.isLoggedIn()) {
-      this.loadCurrentUser(this.traveler.username);
-      this.router.navigate(['/traveler/dashboard']);
-    }
+    // retrieve traveler information if it exist.
+    this.getTravelerFromStorage();
 
+    // check login status, and get user
+    this.checkLoginStatus();
+
+    // initialize forms, only if user is not present and logged in
     this.initializeFormGroups();
   }
 
@@ -101,6 +99,21 @@ export class TravelerLoginComponent implements OnInit {
     }
   }
 
+  getTravelerFromStorage() {
+    this.traveler = {
+      username: localStorage.getItem('username'),
+      token: localStorage.getItem('token'),
+      expires: localStorage.getItem('expires_at')
+    };
+  }
+
+  checkLoginStatus() {
+    if (this.authService.isLoggedIn()) {
+      this.loadCurrentUser(this.traveler.username);
+      this.router.navigate(['/traveler/dashboard']);
+    }
+  }
+
   initializeFormGroups() {
     this.travelerLoginForm = new FormGroup({
       username: new FormControl('', [Validators.required as any]),
@@ -142,7 +155,6 @@ export class TravelerLoginComponent implements OnInit {
     this.travelerService
     .get(`${environment.travelerBackendUrl}${environment.usernameUri}/${username}`)
     .subscribe((res) => {
-      this.toggleCreateTraveler();
       this.travelerDataService.setCurrentUser(res);
       this.traveler = res;
       this.router.navigate(['/traveler/dashboard']);
@@ -175,7 +187,7 @@ export class TravelerLoginComponent implements OnInit {
         this.travelerService.post(`${environment.travelerBackendUrl}${environment.userUri}`, travelerBody).subscribe(
           (result: any) => {
             this.traveler = result;
-            this.toggleCreateTraveler();
+            // this.toggleCreateTraveler();
             this.toastsService.showSuccess('Account created. Login with your new credentials', 'Yay!');
           }, (error => {
             this.toastsService.showError('Username taken', 'Error');

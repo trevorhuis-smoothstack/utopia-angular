@@ -15,7 +15,7 @@ export class TravelerAuthService {
     private httpService: TravelerService,
     private http: HttpClient,
     private travelerDataService: TravelerDataService,
-    private router: Router) {}
+    ) {}
 
   login(username: string, password: string) {
     return this.http.post(

@@ -12,6 +12,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastInjector, ToastrService, ToastrModule } from 'ngx-toastr';
+import { environment } from 'src/environments/environment';
+import { of } from 'rxjs/internal/observable/of';
 
 
 describe('TravelerLoginComponent', () => {
@@ -22,6 +24,7 @@ describe('TravelerLoginComponent', () => {
   let fb: FormBuilder;
   let authService: TravelerAuthService;
   let travelerService: TravelerService;
+  let router: Router;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -33,21 +36,24 @@ describe('TravelerLoginComponent', () => {
         HttpClientModule,
         NgbModule,
         ToastrModule.forRoot(),
+        RouterTestingModule.withRoutes([]),
       ],
       providers: [
         TravelerDataService,
         TravelerAuthService,
         ToastsService,
+        TravelerService,
       ]
 
     })
     .compileComponents();
     travelerDataService = new TravelerDataService();
-    travelerService = new TravelerService(null);
-    toastsService = new ToastsService(null);
-    authService = new TravelerAuthService(null, null, travelerDataService, null);
+    toastsService = TestBed.get(ToastsService);
+    authService = TestBed.get(TravelerAuthService);
+    travelerService = TestBed.get(TravelerService);
+    router = TestBed.get(Router);
     fb = new FormBuilder();
-    component = new TravelerLoginComponent(toastsService, travelerDataService, fb, authService, travelerService, null);
+    component = new TravelerLoginComponent(toastsService, travelerDataService, fb, authService, travelerService, router);
   }));
 
   beforeEach(() => {
@@ -61,18 +67,36 @@ describe('TravelerLoginComponent', () => {
   });
 
   it('should create a traveler', () => {
-    // const mockUser = {
-    //   username: 'username',
-    //   name: 'name',
-    //   userId: 1
-    // };
+    const mockUser = {
+      username: 'username',
+      name: 'name',
+      userId: 1
+    };
 
-    // spyOn(travelerService, 'get').and.returnValue(mockUser);
-    // spyOn(travelerService, 'post').and.returnValue(mockUser);
+    const getSpy = spyOn(travelerService, 'get').and.returnValue(of(null));
+    const postSpy = spyOn(travelerService, 'post').and.returnValue(of(mockUser));
+    spyOn(toastsService, 'showError').and.callFake(() => {});
+    spyOn(toastsService, 'showSuccess').and.callFake(() => {});
 
-    // component.createNewTraveler();
-    // expect(component.usernameTaken).toEqual(true);
-    // expect(component.traveler.username).toEqual(mockUser.username);
+    component.createNewTraveler();
+    expect(getSpy).toHaveBeenCalled();
+    expect(postSpy).toHaveBeenCalled();
+    expect(component.traveler).toEqual(mockUser);
+  });
+
+  it('should set username taken to false',  () => {
+    const mockUser = {
+      username: 'username',
+      name: 'name',
+      userId: 1
+    };
+
+    spyOn(toastsService, 'showError').and.callFake(() => {});
+    spyOn(toastsService, 'showSuccess').and.callFake(() => {});
+    const getSpy = spyOn(travelerService, 'get').and.returnValue(of(mockUser));
+
+    component.createNewTraveler();
+    expect(component.usernameTaken).toEqual(true);
   });
 
   it('should load Current User', () => {
@@ -82,15 +106,37 @@ describe('TravelerLoginComponent', () => {
       userId: 1
     };
 
-    spyOn(travelerService, 'get').and.returnValue(mockUser);
+    component.traveler = mockUser;
 
-    component.loadCurrentUser(mockUser.username);
-    expect(component.createTraveler).toEqual(true);
-    // expect(component.traveler).toEqual(mockUser);
+    const authSpy = spyOn(authService, 'isLoggedIn').and.returnValue(true);
+    const getSpy = spyOn(travelerService, 'get').and.returnValue(of(mockUser));
+    const navigateSpy = spyOn(router, 'navigate').and.callFake(() => {});
+
+    component.checkLoginStatus();
+    expect(authSpy).toHaveBeenCalled();
+    expect(getSpy).toHaveBeenCalled();
+    expect(navigateSpy).toHaveBeenCalled();
+    expect(component.traveler).toEqual(mockUser);
   });
 
   it('should login if the user is authenticated', () => {
+    const mockUser = {
+      username: 'username',
+      name: 'name',
+      userId: 1
+    };
 
+    component.traveler = mockUser;
+
+    const authSpy = spyOn(authService, 'isLoggedIn').and.returnValue(true);
+    const getSpy = spyOn(travelerService, 'get').and.returnValue(of(mockUser));
+    const navigateSpy = spyOn(router, 'navigate').and.callFake(() => {});
+
+    component.checkLoginStatus();
+    expect(authSpy).toHaveBeenCalled();
+    expect(getSpy).toHaveBeenCalled();
+    expect(navigateSpy).toHaveBeenCalled();
+    expect(navigateSpy).toHaveBeenCalledWith(['/traveler/dashboard']);
   });
 
   it('should toggle create traveler boolean', () => {
