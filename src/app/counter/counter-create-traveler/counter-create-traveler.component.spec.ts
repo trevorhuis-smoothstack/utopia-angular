@@ -15,6 +15,7 @@ import {
   mockTraveler,
   mockPassword,
 } from "src/app/common/counter/counter-mock-data";
+import { uncheckedErrorMessage } from "src/app/common/counter/counter-globals";
 
 describe("CounterCreateTravelerComponent", () => {
   let component: CounterCreateTravelerComponent;
@@ -147,5 +148,36 @@ describe("CounterCreateTravelerComponent", () => {
     expect(dataService.getTraveler()).toEqual(mockTraveler);
     expect(router.navigate).toHaveBeenCalledWith(["/counter/booking"]);
     expect(toastr.error).not.toHaveBeenCalled();
+  });
+
+  it("should send the new traveler to the backend, not store it in the service, display an error toast, and not navigate to another URI", () => {
+    const mockStatus = 418;
+    component.form = new FormGroup({
+      name: new FormControl(mockTraveler.name),
+      username: new FormControl(mockTraveler.username),
+      password: new FormControl(mockPassword),
+      confirmPassword: new FormControl(mockPassword),
+    });
+    spyOn(httpService, "post").and.returnValue(
+      throwError({ error: { status: mockStatus } })
+    );
+    spyOn(router, "navigate");
+    spyOn(toastr, "error");
+    component.createTraveler();
+    expect(httpService.post).toHaveBeenCalledWith(
+      environment.counterUrl + environment.counterCreateUserUri,
+      {
+        name: mockTraveler.name,
+        username: mockTraveler.username,
+        password: mockPassword,
+        role: "TRAVELER",
+      }
+    );
+    expect(toastr.error).toHaveBeenCalledWith(
+      uncheckedErrorMessage,
+      "Error creating traveler: Status " + mockStatus
+    );
+    expect(dataService.getTraveler()).toBeUndefined();
+    expect(router.navigate).not.toHaveBeenCalled();
   });
 });
