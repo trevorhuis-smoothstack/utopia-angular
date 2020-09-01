@@ -56,7 +56,7 @@ describe("AgentDashboardComponent", () => {
     toastService = TestBed.get(ToastrService);
     router = TestBed.get(Router);
     modalService = TestBed.get(NgbModal);
-    authService = new AgentAuthService(null, router);
+    authService = new AgentAuthService(null);
     component = new AgentDashboardComponent(
       agentService,
       authService,
