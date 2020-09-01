@@ -12,6 +12,7 @@ import { CounterDataService } from "src/app/common/counter/service/counter-data.
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { CounterAirportFilterPipe } from "src/app/common/counter/pipe/counter-airport-filter.pipe";
 import { CounterDateFilterPipe } from "src/app/common/counter/pipe/counter-date-filter.pipe";
+import { mockAirports, mockDepartAirport, mockArriveAirport } from "src/app/common/counter/counter-mock-data";
 
 describe("CounterCancellationComponent", () => {
   let component: CounterCancellationComponent;
@@ -63,5 +64,11 @@ describe("CounterCancellationComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("should get the name of the airport", () => {
+    component.airports = mockAirports;
+    expect(component.getAirportName(mockDepartAirport.airportId)).toBe(mockDepartAirport.name);
+    expect(component.getAirportName(mockArriveAirport.airportId)).toBe(mockArriveAirport.name);
   });
 });
