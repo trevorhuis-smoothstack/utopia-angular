@@ -25,4 +25,5 @@ export const mockToken = "Mock Token",
     airportId: 2,
     name: "Mock Arrive Airport",
   },
+  mockAirports = [mockDepartAirport, mockArriveAirport],
   mockControl = new FormControl("Mock Input");
