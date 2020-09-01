@@ -17,4 +17,12 @@ export const mockToken = "Mock Token",
     password: null,
     role: "TRAVELER",
   },
+  mockDepartAirport = {
+    airportId: 1,
+    name: "Mock Depart Airport",
+  },
+  mockArriveAirport = {
+    airportId: 2,
+    name: "Mock Arrive Airport",
+  },
   mockControl = new FormControl("Mock Input");
