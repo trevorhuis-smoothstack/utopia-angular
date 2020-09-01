@@ -69,6 +69,7 @@ describe("AgentDashboardComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(AgentDashboardComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it("should create", () => {
@@ -134,13 +135,14 @@ describe("AgentDashboardComponent", () => {
     expect(component.agent.userId).toEqual(1);
   }));
 
-  //   it("should try to load agent data and handle an error", fakeAsync(() => {
-  //     spyOn(agentService, "get").and.returnValue(throwError({status: 400}));
-  //     spyOn(toastService, "error");
-  //     component.loadAgent();
-  //     tick();
-  //     expect(toastService.error).toHaveBeenCalled();
-  //   }));
+    it("should try to load agent data and handle an error", fakeAsync(() => {
+      component.agent = {username: "fakeAgent"};
+      spyOn(agentService, "get").and.returnValue(throwError({status: 400}));
+      spyOn(toastService, "error");
+      component.loadAgent();
+      tick();
+      expect(toastService.error).toHaveBeenCalled();
+    }));
 
   it("should load the airport data", fakeAsync(() => {
     component.airportsMap = new Map();
@@ -151,33 +153,91 @@ describe("AgentDashboardComponent", () => {
     expect(component.airportsMap).toEqual(mockAirportMap);
   }));
 
-  //   it("should load the airport data", fakeAsync(() => {
-  //     spyOn(agentService, "get").and.returnValue(throwError({status: 400}));
-  //     spyOn(toastService, "error");
-  //     component.loadAirports();
-  //     tick();
-  //     expect(toastService.error).toHaveBeenCalled();
-  //   }));
+    it("should try to load the airport data and handle an error", fakeAsync(() => {
+      spyOn(agentService, "get").and.returnValue(throwError({status: 400}));
+      spyOn(toastService, "error");
+      component.loadAirports();
+      tick();
+      expect(toastService.error).toHaveBeenCalled();
+    }));
 
-//   it("should change the cancel flight class", fakeAsync(() => {
-//     spyOn(document, "getElementById").and.callFake(() => {});
-//     component.cancelFlightPage = true;
-//     component.changeCancelFlightClass();
-//     expect(component.cancelFlightPage).toEqual(false);
-//   }));
+  it("should return and do nothing after seeing book flight is open", fakeAsync(() => {
+    spyOn(component, "changeBookFlightClass");
+    spyOn(component, "changeCancelFlightClass");
+    component.openBookFlight();
+    expect(component.changeCancelFlightClass).not.toHaveBeenCalled();
+    expect(component.changeBookFlightClass).not.toHaveBeenCalled();
+  }));
 
-//   it("should change the cancel flight class", fakeAsync(() => {
-//     var HTMLElements = {};
-//     document.getElementById = jasmine
-//       .createSpy("HTML Element")
-//       .and.callFake(function (ID) {
-//         if (!HTMLElements[ID]) {
-//           var newElement = document.createElement("div");
-//           HTMLElements[ID] = newElement;
-//         }
-//         return HTMLElements[ID];
-//       });
+  it("should call changeBookFlightClass becaus neither is active", fakeAsync(() => {
+    spyOn(component, "changeBookFlightClass");
+    spyOn(component, "changeCancelFlightClass");
+    document.getElementById("agent-book-flight").classList.remove("side-link-active");
+    component.openBookFlight();
+    expect(component.changeCancelFlightClass).not.toHaveBeenCalled();
+    expect(component.changeBookFlightClass).toHaveBeenCalled();
+  }));
 
-//     component.changeCancelFlightClass();
-//   }));
+  it("should call changeCancelFlightClass because cancel-flight is active", fakeAsync(() => {
+    spyOn(component, "changeBookFlightClass");
+    spyOn(component, "changeCancelFlightClass");
+    document.getElementById("agent-book-flight").classList.remove("side-link-active");
+    document.getElementById("agent-cancel-flight").classList.add("side-link-active");
+    component.openBookFlight();
+    expect(component.changeCancelFlightClass).toHaveBeenCalled();
+    expect(component.changeBookFlightClass).toHaveBeenCalled();
+  }));
+
+  it("should return and do nothing after seeing cancel booking is open", fakeAsync(() => {
+    spyOn(component, "changeBookFlightClass");
+    spyOn(component, "changeCancelFlightClass");
+    document.getElementById("agent-book-flight").classList.remove("side-link-active");
+    document.getElementById("agent-cancel-flight").classList.add("side-link-active");
+    component.openCancelBooking();
+    expect(component.changeCancelFlightClass).not.toHaveBeenCalled();
+    expect(component.changeBookFlightClass).not.toHaveBeenCalled();
+  }));
+
+  it("should call changeCancelFlightClass becaus neither is active", fakeAsync(() => {
+    spyOn(component, "changeBookFlightClass");
+    spyOn(component, "changeCancelFlightClass");
+    document.getElementById("agent-book-flight").classList.remove("side-link-active");
+    component.openCancelBooking();
+    expect(component.changeCancelFlightClass).toHaveBeenCalled();
+    expect(component.changeBookFlightClass).not.toHaveBeenCalled();
+  }));
+
+  it("should call changeCancelFlightClass because book-flight is active", fakeAsync(() => {
+    spyOn(component, "changeBookFlightClass");
+    spyOn(component, "changeCancelFlightClass");
+    component.openCancelBooking();
+    expect(component.changeCancelFlightClass).toHaveBeenCalled();
+    expect(component.changeBookFlightClass).toHaveBeenCalled();
+  }));
+
+  it("should set cancelFlightPage to false with changeCancelFlightClass", () => {
+    component.cancelFlightPage = true;
+    component.changeCancelFlightClass();
+    expect(component.cancelFlightPage).toEqual(false);
+  });
+
+  it("should set cancelFlightPage to true with changeCancelFlightClass", () => {
+    component.cancelFlightPage = false;
+    component.changeCancelFlightClass();
+    expect(component.cancelFlightPage).toEqual(true);
+    expect(component.bookFlightPage).toEqual(false);
+  });
+
+  it("should set bookFlightPage to true with changeBookFlightClass", () => {
+    component.bookFlightPage  = true;
+    component.changeBookFlightClass();
+    expect(component.bookFlightPage).toEqual(true);
+  });
+
+  it("should set bookFlightPage  to true with changeBookFlightClass", () => {
+    component.bookFlightPage  = false;
+    component.changeBookFlightClass();
+    expect(component.bookFlightPage).toEqual(true);
+  });
+
 });

@@ -99,7 +99,7 @@ export class AgentDashboardComponent implements OnInit {
         this.agent.name = result.name;
         this.agent.userId = result.userId;
       },
-      (error) =>{
+      (error) => {
         this.toastService.error("We are having an error reading your information. Please try again later or call IT if the problem continues.", "Internal Error");
       });
   }
@@ -113,10 +113,11 @@ export class AgentDashboardComponent implements OnInit {
         this.childInput.airports.forEach((element) => {
           this.airportsMap.set(element.airportId, element.name);
         });
-      }),
+      },
       (error) => {
         this.toastService.error("We are having an error reading flight information. Please try again later or call IT if the problem continues.", "Internal Error");
-      };
+      }
+      );
   }
 
   openBookFlight() {
