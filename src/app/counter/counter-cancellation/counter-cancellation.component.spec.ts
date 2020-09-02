@@ -60,9 +60,6 @@ describe("CounterCancellationComponent", () => {
   }));
 
   beforeEach(() => {
-    documentSpy = spyOn(document, "getElementById").and.returnValue(
-      document.createElement("li")
-    );
     fixture = TestBed.createComponent(CounterCancellationComponent);
     fixture.detectChanges();
   });
@@ -84,7 +81,7 @@ describe("CounterCancellationComponent", () => {
   it("should remove the active class from the side link", () => {
     const mockElement = document.createElement("li");
     mockElement.id = "cancel";
-    documentSpy.and.returnValue(mockElement);
+    spyOn(document, "getElementById").and.returnValue(mockElement);
     mockElement.className = "side-link-active";
     expect(mockElement.className).toBe("side-link-active");
     component.ngOnDestroy();
