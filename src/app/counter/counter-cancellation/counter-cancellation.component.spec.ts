@@ -26,7 +26,6 @@ describe("CounterCancellationComponent", () => {
     modalService: NgbModal,
     httpService: CounterHttpService,
     dataService: CounterDataService,
-    documentSpy: any;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
