@@ -12,7 +12,11 @@ import { CounterDataService } from "src/app/common/counter/service/counter-data.
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { CounterAirportFilterPipe } from "src/app/common/counter/pipe/counter-airport-filter.pipe";
 import { CounterDateFilterPipe } from "src/app/common/counter/pipe/counter-date-filter.pipe";
-import { mockAirports, mockDepartAirport, mockArriveAirport } from "src/app/common/counter/counter-mock-data";
+import {
+  mockAirports,
+  mockDepartAirport,
+  mockArriveAirport,
+} from "src/app/common/counter/counter-mock-data";
 
 describe("CounterCancellationComponent", () => {
   let component: CounterCancellationComponent;
@@ -21,7 +25,8 @@ describe("CounterCancellationComponent", () => {
     toastr: ToastrService,
     modalService: NgbModal,
     httpService: CounterHttpService,
-    dataService: CounterDataService;
+    dataService: CounterDataService,
+    documentSpy: any;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -55,7 +60,7 @@ describe("CounterCancellationComponent", () => {
   }));
 
   beforeEach(() => {
-    spyOn(document, "getElementById").and.returnValue(
+    documentSpy = spyOn(document, "getElementById").and.returnValue(
       document.createElement("li")
     );
     fixture = TestBed.createComponent(CounterCancellationComponent);
@@ -68,7 +73,21 @@ describe("CounterCancellationComponent", () => {
 
   it("should get the name of the airport", () => {
     component.airports = mockAirports;
-    expect(component.getAirportName(mockDepartAirport.airportId)).toBe(mockDepartAirport.name);
-    expect(component.getAirportName(mockArriveAirport.airportId)).toBe(mockArriveAirport.name);
+    expect(component.getAirportName(mockDepartAirport.airportId)).toBe(
+      mockDepartAirport.name
+    );
+    expect(component.getAirportName(mockArriveAirport.airportId)).toBe(
+      mockArriveAirport.name
+    );
+  });
+
+  it("should remove the active class from the side link", () => {
+    const mockElement = document.createElement("li");
+    mockElement.id = "cancel";
+    documentSpy.and.returnValue(mockElement);
+    mockElement.className = "side-link-active";
+    expect(mockElement.className).toBe("side-link-active");
+    component.ngOnDestroy();
+    expect(mockElement.className).toBe("");
   });
 });
