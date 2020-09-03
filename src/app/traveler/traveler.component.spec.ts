@@ -91,6 +91,15 @@ describe('TravelerComponent', () => {
     expect(component.authorized).toEqual(true);
   });
 
+  it('should fail to refuse unauthorized users', () => {
+    const authSpy = spyOn(authService, 'checkAuth').and.returnValue(throwError({error: {status: 401}}));
+    const navSpy = spyOn(router, 'navigate').and.callFake(() => {});
+    component.authorizeUser();
+    expect(authSpy).toHaveBeenCalled();
+    expect(navSpy).toHaveBeenCalledWith(['/traveler/login']);
+    expect(errorSpy).toHaveBeenCalledWith('Error checking authorization: Status ' + 401, 'Login Error');
+  });
+
   it('should load current user', () => {
     const mockUser = {
       username: 'username',
@@ -103,12 +112,12 @@ describe('TravelerComponent', () => {
     expect(component.currentUser).toEqual(mockUser);
   });
 
-  // it('should show error if cannot find user', () => {
-  //   const getSpy = spyOn(travelerService, 'get').and.returnValue(of(throwError('some error')));
-  //   component.loadCurrentUser();
-  //   expect(getSpy).toHaveBeenCalled();
-  //   expect(errorSpy).toHaveBeenCalledWith('login error', 'Error');
-  // });
+  it('should show error if cannot find user', () => {
+    const getSpy = spyOn(travelerService, 'get').and.returnValue(throwError({error: {status: 404}}));
+    component.loadCurrentUser();
+    expect(getSpy).toHaveBeenCalled();
+    expect(errorSpy).toHaveBeenCalledWith('login error', 'Error');
+  });
 
   it('should load airports', () => {
     const mockAirports = [
@@ -125,6 +134,13 @@ describe('TravelerComponent', () => {
     const getSpy = spyOn(travelerService, 'get').and.returnValue(of(mockAirports));
     component.loadAirports();
     expect(component.airports).toEqual(mockAirports);
+  });
+
+  it('should error if flights not found', () => {
+    const getSpy = spyOn(travelerService, 'get').and.returnValue(throwError({error: {status: 404}}));
+    component.loadAirports();
+    expect(getSpy).toHaveBeenCalled();
+    expect(errorSpy).toHaveBeenCalledWith('problem loading airports', 'Database Error');
   });
 
   it('should toggle flights', () => {
