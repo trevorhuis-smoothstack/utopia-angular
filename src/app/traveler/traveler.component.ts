@@ -9,10 +9,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { TravelerAuthService } from '../common/s/service/traveler-auth-service.service';
 import { TravelerDataService } from '../common/s/service/traveler-data.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastsService } from '../common/s/service/toasts.service';
+import { TravelerAuthService } from '../common/s/service/traveler-auth-service.service';
 
 @Component({
   selector: 'app-traveler',
@@ -43,7 +43,6 @@ export class TravelerComponent implements OnInit {
     private travelerDataService: TravelerDataService,
     private authService: TravelerAuthService,
     private travelerService: TravelerService,
-    private travelerAuthService: TravelerAuthService,
     private router: Router
   ) {
     this.loadAirports();
@@ -127,7 +126,7 @@ export class TravelerComponent implements OnInit {
   }
 
   logout() {
-    this.travelerAuthService.logout();
+    this.authService.logout();
     this.router.navigate(['/traveler/login']);
   }
 
