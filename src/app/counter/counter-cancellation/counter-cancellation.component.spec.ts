@@ -20,8 +20,9 @@ import {
   mockTraveler,
   mockFlightTwo,
 } from "src/app/common/counter/counter-mock-data";
-import { of } from "rxjs";
+import { of, throwError } from "rxjs";
 import { environment } from "src/environments/environment";
+import { uncheckedErrorMessage } from "src/app/common/counter/counter-globals";
 
 describe("CounterCancellationComponent", () => {
   let component: CounterCancellationComponent;
@@ -150,5 +151,32 @@ describe("CounterCancellationComponent", () => {
     expect(toastr.success).toHaveBeenCalledWith("Ticket cancelled", "Success");
     expect(component.flights).toEqual([mockFlightTwo]);
     expect(toastr.error).not.toHaveBeenCalled();
+  });
+
+  it("should send the cancellation request to the backend, show an error toast, not dismiss the modal, not show a success toast, and not remove the flight", () => {
+    const mockStatus = 418,
+      mockFlights = [mockFlight, mockFlightTwo];
+    spyOn(httpService, "put").and.returnValue(
+      throwError({ error: { status: mockStatus } })
+    );
+    spyOn(modalService, "dismissAll");
+    spyOn(toastr, "success");
+    spyOn(toastr, "error");
+    component.traveler = mockTraveler;
+    component.flights = mockFlights;
+    component.flight = mockFlight;
+    expect(httpService.put).not.toHaveBeenCalled();
+    expect(toastr.error).not.toHaveBeenCalled();
+    component.cancel();
+    expect(httpService.put).toHaveBeenCalledWith(
+      `${environment.counterUrl}${environment.counterCancelUri}/traveler/${mockTraveler.userId}/flight/${mockFlight.flightId}`
+    );
+    expect(toastr.error).toHaveBeenCalledWith(
+      uncheckedErrorMessage,
+      "Error cancelling ticket: Status " + mockStatus
+    );
+    expect(modalService.dismissAll).not.toHaveBeenCalled();
+    expect(toastr.success).not.toHaveBeenCalled();
+    expect(component.flights).toEqual(mockFlights);
   });
 });
