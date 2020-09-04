@@ -16,6 +16,7 @@ import {
   mockAirports,
   mockDepartAirport,
   mockArriveAirport,
+  mockFlight,
 } from "src/app/common/counter/counter-mock-data";
 
 describe("CounterCancellationComponent", () => {
@@ -25,7 +26,7 @@ describe("CounterCancellationComponent", () => {
     toastr: ToastrService,
     modalService: NgbModal,
     httpService: CounterHttpService,
-    dataService: CounterDataService,
+    dataService: CounterDataService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -85,5 +86,15 @@ describe("CounterCancellationComponent", () => {
     expect(mockElement.className).toBe("side-link-active");
     component.ngOnDestroy();
     expect(mockElement.className).toBe("");
+  });
+
+  it("should set the flight and open the modal", () => {
+    const mockObject = { mockProperty: "Mock Property" };
+    spyOn(modalService, "open");
+    expect(component.flight).toBeFalsy();
+    expect(modalService.open).not.toHaveBeenCalled();
+    component.openCancellationModal(mockFlight, mockObject);
+    expect(component.flight).toEqual(mockFlight);
+    expect(modalService.open).toHaveBeenCalledWith(mockObject);
   });
 });
