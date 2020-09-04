@@ -17,7 +17,11 @@ import {
   mockDepartAirport,
   mockArriveAirport,
   mockFlight,
+  mockTraveler,
+  mockFlightTwo,
 } from "src/app/common/counter/counter-mock-data";
+import { of } from "rxjs";
+import { environment } from "src/environments/environment";
 
 describe("CounterCancellationComponent", () => {
   let component: CounterCancellationComponent;
@@ -113,7 +117,9 @@ describe("CounterCancellationComponent", () => {
 
   it("should return the current date as an NgbDate", () => {
     const mockDate = new Date(1999, 9, 31);
-    spyOn(Date.prototype, "getFullYear").and.returnValue(mockDate.getFullYear());
+    spyOn(Date.prototype, "getFullYear").and.returnValue(
+      mockDate.getFullYear()
+    );
     spyOn(Date.prototype, "getMonth").and.returnValue(mockDate.getMonth());
     spyOn(Date.prototype, "getDate").and.returnValue(mockDate.getDate());
     expect(component.getCurrentDate()).toEqual(
@@ -123,5 +129,26 @@ describe("CounterCancellationComponent", () => {
         mockDate.getDate()
       )
     );
+  });
+
+  it("should send the cancellation request to the backend, dismiss the modal, show a success toast, remove the cancelled flight, and not show an error toast", () => {
+    spyOn(httpService, "put").and.returnValue(of({}));
+    spyOn(modalService, "dismissAll");
+    spyOn(toastr, "success");
+    spyOn(toastr, "error");
+    component.traveler = mockTraveler;
+    component.flights = [mockFlight, mockFlightTwo];
+    component.flight = mockFlight;
+    expect(httpService.put).not.toHaveBeenCalled();
+    expect(modalService.dismissAll).not.toHaveBeenCalled();
+    expect(toastr.success).not.toHaveBeenCalled();
+    component.cancel();
+    expect(httpService.put).toHaveBeenCalledWith(
+      `${environment.counterUrl}${environment.counterCancelUri}/traveler/${mockTraveler.userId}/flight/${mockFlight.flightId}`
+    );
+    expect(modalService.dismissAll).toHaveBeenCalled();
+    expect(toastr.success).toHaveBeenCalledWith("Ticket cancelled", "Success");
+    expect(component.flights).toEqual([mockFlightTwo]);
+    expect(toastr.error).not.toHaveBeenCalled();
   });
 });
