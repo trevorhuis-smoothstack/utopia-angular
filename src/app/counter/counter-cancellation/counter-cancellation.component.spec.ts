@@ -111,7 +111,7 @@ describe("CounterCancellationComponent", () => {
     expect(cancel.className).toBe("side-link-active");
   });
 
-  it("should return the current date in the format used by NgbDateStruct", () => {
+  it("should return the current date as an NgbDate", () => {
     const mockDate = new Date(1999, 9, 31);
     spyOn(Date.prototype, "getFullYear").and.returnValue(mockDate.getFullYear());
     spyOn(Date.prototype, "getMonth").and.returnValue(mockDate.getMonth());
