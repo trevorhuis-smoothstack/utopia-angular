@@ -5,7 +5,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { HttpClientModule } from "@angular/common/http";
 import { RouterTestingModule } from "@angular/router/testing";
 import { ToastrModule, ToastrService } from "ngx-toastr";
-import { NgbModal, NgbModule } from "@ng-bootstrap/ng-bootstrap";
+import { NgbModal, NgbModule, NgbDate } from "@ng-bootstrap/ng-bootstrap";
 import { Router } from "@angular/router";
 import { CounterHttpService } from "src/app/common/counter/service/counter-http.service";
 import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
@@ -111,4 +111,17 @@ describe("CounterCancellationComponent", () => {
     expect(cancel.className).toBe("side-link-active");
   });
 
+  it("should return the current date in the format used by NgbDateStruct", () => {
+    const mockDate = new Date(1999, 9, 31);
+    spyOn(Date.prototype, "getFullYear").and.returnValue(mockDate.getFullYear());
+    spyOn(Date.prototype, "getMonth").and.returnValue(mockDate.getMonth());
+    spyOn(Date.prototype, "getDate").and.returnValue(mockDate.getDate());
+    expect(component.getCurrentDate()).toEqual(
+      new NgbDate(
+        mockDate.getFullYear(),
+        mockDate.getMonth() + 1,
+        mockDate.getDate()
+      )
+    );
+  });
 });
