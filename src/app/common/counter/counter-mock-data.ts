@@ -42,4 +42,5 @@ export const mockToken = "Mock Token",
     seatsAvailable: 20,
   },
   mockAirports = [mockDepartAirport, mockArriveAirport],
+  mockFlights = [mockFlight, mockFlightTwo],
   mockControl = new FormControl("Mock Input");
