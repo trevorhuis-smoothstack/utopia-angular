@@ -33,5 +33,13 @@ export const mockToken = "Mock Token",
     price: 100,
     seatsAvailable: 20,
   },
+  mockFlightTwo = {
+    departId: 2,
+    arriveId: 1,
+    departTime: "2021-11-23T14:00:00.000+00:00",
+    flightId: 2,
+    price: 100,
+    seatsAvailable: 20,
+  },
   mockAirports = [mockDepartAirport, mockArriveAirport],
   mockControl = new FormControl("Mock Input");
