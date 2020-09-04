@@ -80,7 +80,6 @@ describe("CounterCancellationComponent", () => {
 
   it("should remove the active class from the side link", () => {
     const mockElement = document.createElement("li");
-    mockElement.id = "cancel";
     spyOn(document, "getElementById").and.returnValue(mockElement);
     mockElement.className = "side-link-active";
     expect(mockElement.className).toBe("side-link-active");
