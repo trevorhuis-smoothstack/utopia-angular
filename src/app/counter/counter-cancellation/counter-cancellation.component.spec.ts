@@ -101,14 +101,15 @@ describe("CounterCancellationComponent", () => {
   it("should remove the active class from the book link and add it to the cancellation link", () => {
     const book = document.createElement("li"),
       cancel = document.createElement("li");
-    book.id = "book";
-    cancel.id = "cancel";
     book.className = "side-link-active";
-    document.body.append(book, cancel);
+    spyOn(document, "getElementById").and.callFake((id: string) =>
+      id == "book" ? book : id == "cancel" ? cancel : null
+    );
     expect(book.className).toBe("side-link-active");
     expect(cancel.className).toBeFalsy();
     component.ngAfterViewInit();
     expect(book.className).toBe("");
     expect(cancel.className).toBe("side-link-active");
   });
+
 });
