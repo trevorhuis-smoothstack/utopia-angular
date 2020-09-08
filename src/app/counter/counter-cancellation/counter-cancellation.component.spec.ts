@@ -19,6 +19,7 @@ import {
   mockFlight,
   mockTraveler,
   mockFlightTwo,
+  mockFlights,
 } from "src/app/common/counter/counter-mock-data";
 import { of, throwError } from "rxjs";
 import { environment } from "src/environments/environment";
@@ -181,15 +182,43 @@ describe("CounterCancellationComponent", () => {
   });
 
   it("should navigate to the traveler component, not subscribe to the traveler observable, not make a GET request, and not show an error toast", () => {
-    spyOn(dataService,'getTraveler').and.returnValue(null);
+    spyOn(dataService, "getTraveler").and.returnValue(null);
     spyOn(router, "navigate");
     spyOn(dataService.travelerObservable, "subscribe");
     spyOn(httpService, "get");
     spyOn(toastr, "error");
     component.ngOnInit();
-    expect(router.navigate).toHaveBeenCalledWith(["/counter/traveler"])
+    expect(router.navigate).toHaveBeenCalledWith(["/counter/traveler"]);
     expect(dataService.travelerObservable.subscribe).not.toHaveBeenCalled();
     expect(httpService.get).not.toHaveBeenCalled();
+    expect(toastr.error).not.toHaveBeenCalled();
+  });
+
+  it("should make two GET requests, load traveler & airports & flights, not navigate to another URI, and not show an error toast", () => {
+    spyOn(dataService, "getTraveler").and.returnValue(mockTraveler);
+    spyOn(router, "navigate");
+    spyOn(httpService, "get").and.callFake((url: string) => {
+      return url === environment.counterUrl + environment.counterAirportUri
+        ? of(mockAirports)
+        : url ===
+          environment.counterUrl +
+            environment.counterCancellablyBookedUri +
+            mockTraveler.userId
+        ? of(mockFlights)
+        : of(null);
+    });
+    expect(httpService.get).not.toHaveBeenCalled();
+    expect(component.traveler).toBeFalsy();
+    expect(component.airports).toBeFalsy();
+    expect(component.flights).toBeFalsy();
+    spyOn(toastr, "error");
+    console.log("test: " + dataService.travelerObservable);
+    component.ngOnInit();
+    expect(httpService.get).toHaveBeenCalledTimes(2);
+    expect(component.traveler).toEqual(mockTraveler);
+    expect(component.airports).toEqual(mockAirports);
+    expect(component.flights).toEqual(mockFlights);
+    expect(router.navigate).not.toHaveBeenCalled();
     expect(toastr.error).not.toHaveBeenCalled();
   });
 });
