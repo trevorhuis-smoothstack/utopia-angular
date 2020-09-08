@@ -195,9 +195,7 @@ describe("CounterCancellationComponent", () => {
   });
 
   it("should make two GET requests, load traveler & airports & flights, not navigate to another URI, and not show an error toast", () => {
-    spyOn(dataService, "getTraveler").and.returnValue(mockTraveler);
-    spyOn(router, "navigate");
-    spyOn(httpService, "get").and.callFake((url: string) => {
+    const httpSpy = spyOn(httpService, "get").and.callFake((url: string) => {
       return url === environment.counterUrl + environment.counterAirportUri
         ? of(mockAirports)
         : url ===
@@ -207,14 +205,22 @@ describe("CounterCancellationComponent", () => {
         ? of(mockFlights)
         : of(null);
     });
+    spyOn(dataService, "getTraveler").and.returnValue(mockTraveler);
+    spyOn(router, "navigate");
     expect(httpService.get).not.toHaveBeenCalled();
     expect(component.traveler).toBeFalsy();
     expect(component.airports).toBeFalsy();
     expect(component.flights).toBeFalsy();
     spyOn(toastr, "error");
-    console.log("test: " + dataService.travelerObservable);
     component.ngOnInit();
-    expect(httpService.get).toHaveBeenCalledTimes(2);
+    expect(httpSpy.calls.allArgs()).toEqual([
+      [environment.counterUrl + environment.counterAirportUri],
+      [
+        environment.counterUrl +
+          environment.counterCancellablyBookedUri +
+          mockTraveler.userId,
+      ],
+    ]);
     expect(component.traveler).toEqual(mockTraveler);
     expect(component.airports).toEqual(mockAirports);
     expect(component.flights).toEqual(mockFlights);
