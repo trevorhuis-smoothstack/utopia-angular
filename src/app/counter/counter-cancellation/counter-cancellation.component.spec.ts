@@ -221,4 +221,45 @@ describe("CounterCancellationComponent", () => {
     expect(router.navigate).not.toHaveBeenCalled();
     expect(toastr.error).not.toHaveBeenCalled();
   });
+
+  it("should load the traveler, make two GET requests, show two error toasts, not load airports or flights, and not navigate to another URI", () => {
+    const mockStatusOne = 418,
+      mockStatusTwo = 451,
+      httpSpy = spyOn(httpService, "get").and.callFake((url: string) => {
+        return url === environment.counterUrl + environment.counterAirportUri
+          ? throwError({ error: { status: mockStatusOne } })
+          : url ===
+            environment.counterUrl +
+              environment.counterCancellablyBookedUri +
+              mockTraveler.userId
+          ? throwError({ error: { status: mockStatusTwo } })
+          : of(null);
+      }),
+      toastrSpy = spyOn(toastr, "error");
+    spyOn(dataService, "getTraveler").and.returnValue(mockTraveler);
+    spyOn(router, "navigate");
+    expect(httpService.get).not.toHaveBeenCalled();
+    expect(toastr.error).not.toHaveBeenCalled();
+    expect(component.traveler).toBeFalsy();
+    component.ngOnInit();
+    expect(component.traveler).toEqual(mockTraveler);
+    expect(httpSpy.calls.allArgs()).toEqual([
+      [environment.counterUrl + environment.counterAirportUri],
+      [
+        environment.counterUrl +
+          environment.counterCancellablyBookedUri +
+          mockTraveler.userId,
+      ],
+    ]);
+    expect(toastrSpy.calls.allArgs()).toEqual([
+      [
+        uncheckedErrorMessage,
+        "Error getting airports: Status " + mockStatusOne,
+      ],
+      [uncheckedErrorMessage, "Error getting flights: Status " + mockStatusTwo],
+    ]);
+    expect(component.airports).toBeUndefined();
+    expect(component.flights).toBeUndefined();
+    expect(router.navigate).not.toHaveBeenCalled();
+  });
 });
