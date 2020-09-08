@@ -39,9 +39,6 @@ export class CounterCancellationComponent
       this.router.navigate(["/counter/traveler"]);
       return;
     }
-    this.dataService.travelerObservable.subscribe(
-      (traveler: any) => (this.traveler = traveler)
-    );
     this.httpService
       .get(environment.counterUrl + environment.counterAirportUri)
       .subscribe(
