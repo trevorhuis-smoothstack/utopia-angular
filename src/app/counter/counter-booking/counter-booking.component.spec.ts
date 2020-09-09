@@ -17,7 +17,10 @@ import {
   mockAirports,
   mockDepartAirport,
   mockArriveAirport,
+  mockFlight,
+  mockTraveler,
 } from "src/app/common/counter/counter-mock-data";
+import { of } from "rxjs";
 describe("CounterBookingComponent", () => {
   let component: CounterBookingComponent;
   let fixture: ComponentFixture<CounterBookingComponent>;
@@ -48,6 +51,7 @@ describe("CounterBookingComponent", () => {
     toastr = TestBed.get(ToastrService);
     router = TestBed.get(Router);
     modalService = TestBed.get(NgbModal);
+    stripe = TestBed.get(StripeService);
     httpService = TestBed.get(CounterHttpService);
     dataService = TestBed.get(CounterDataService);
     component = new CounterBookingComponent(
@@ -101,5 +105,34 @@ describe("CounterBookingComponent", () => {
         mockDate.getDate()
       )
     );
+  });
+
+  it("should remove the active class from the side link", () => {
+    const mockElement = document.createElement("li");
+    spyOn(document, "getElementById").and.returnValue(mockElement);
+    mockElement.className = "side-link-active";
+    expect(mockElement.className).toBe("side-link-active");
+    component.ngOnDestroy();
+    expect(mockElement.className).toBe("");
+  });
+
+  it("should set the flight, open the modal, and mount the Stripe Element", () => {
+    const mockObject = { mockProperty: "Mock Property" },
+      mockElement = { mount: null },
+      mockElements = { create: () => mockElement };
+    spyOn(dataService, "getTraveler").and.returnValue(mockTraveler);
+    spyOn(modalService, "open");
+    spyOn(mockElement, "mount");
+    spyOn(stripe, "setKey");
+    spyOn(httpService, "get").and.returnValue(of(null));
+    spyOn(stripe, "elements").and.returnValue(of(mockElements));
+    expect(component.flight).toBeFalsy();
+    expect(modalService.open).not.toHaveBeenCalled();
+    expect(mockElement.mount).not.toHaveBeenCalled();
+    component.ngOnInit();
+    component.openBookingModal(mockFlight, mockObject);
+    expect(component.flight).toEqual(mockFlight);
+    expect(modalService.open).toHaveBeenCalledWith(mockObject);
+    expect(mockElement.mount).toHaveBeenCalled();
   });
 });
