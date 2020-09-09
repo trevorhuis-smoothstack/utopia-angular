@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { CounterHttpService } from "src/app/common/counter/service/counter-http.service";
 import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
 import { environment } from "src/environments/environment";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { NgbModal, NgbDate } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrService } from "ngx-toastr";
 import { Elements, Element, StripeService } from "ngx-stripe";
 import { uncheckedErrorMessage } from "src/app/common/counter/counter-globals";
@@ -108,11 +108,7 @@ export class CounterBookingComponent
 
   getCurrentDate() {
     const now = new Date();
-    return {
-      year: now.getFullYear(),
-      month: now.getMonth() + 1,
-      day: now.getDate(),
-    };
+    return new NgbDate(now.getFullYear(), now.getMonth() + 1, now.getDate());
   }
 
   openBookingModal(flight: any, modal: any) {
