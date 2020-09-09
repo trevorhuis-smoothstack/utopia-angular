@@ -36,7 +36,6 @@ describe("CounterCancellationComponent", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [
         CounterCancellationComponent,
         CounterAirportFilterPipe,
@@ -44,7 +43,6 @@ describe("CounterCancellationComponent", () => {
       ],
       imports: [
         FormsModule,
-        ReactiveFormsModule,
         HttpClientModule,
         RouterTestingModule.withRoutes([{ path: "**", redirectTo: "" }]),
         NgbModule,
