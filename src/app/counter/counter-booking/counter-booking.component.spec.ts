@@ -65,4 +65,12 @@ describe("CounterBookingComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
+
+  it("should get flights if and only if the condition is true", () => {
+    spyOn(component, "getFlights");
+    component.getFlightsIf(false);
+    expect(component.getFlights).not.toHaveBeenCalled();
+    component.getFlightsIf(true);
+    expect(component.getFlights).toHaveBeenCalled();
+  });
 });
