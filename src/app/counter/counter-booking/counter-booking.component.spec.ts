@@ -132,17 +132,20 @@ describe("CounterBookingComponent", () => {
     expect(book.className).toBe("side-link-active");
   });
 
-  it("should make a GET request andd load flights", () => {
+  it("should make a GET request, load flights, and not show an error toast", () => {
     component.departAirport = mockDepartAirport;
     component.arriveAirport = mockArriveAirport;
     component.traveler = mockTraveler;
     spyOn(httpService, "get").and.returnValue(of(mockFlights));
+    spyOn(toastr, "error");
     expect(component.flights).toBeFalsy();
+    expect(httpService.get).not.toHaveBeenCalled();
     component.getFlights();
     expect(httpService.get).toHaveBeenCalledWith(
       `${environment.counterUrl}${environment.counterBookableUri}/departure/${component.departAirport.airportId}/arrival/${component.arriveAirport.airportId}/traveler/${component.traveler.userId}`
     );
     expect(component.flights).toEqual(mockFlights);
+    expect(toastr.error).not.toHaveBeenCalled();
   });
 
   it("should set the flight, open the modal, and mount the Stripe Element", () => {
