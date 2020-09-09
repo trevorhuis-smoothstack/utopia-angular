@@ -21,8 +21,9 @@ import {
   mockTraveler,
   mockFlights,
 } from "src/app/common/counter/counter-mock-data";
-import { of } from "rxjs";
+import { of, throwError } from "rxjs";
 import { environment } from "src/environments/environment";
+import { uncheckedErrorMessage } from "src/app/common/counter/counter-globals";
 describe("CounterBookingComponent", () => {
   let component: CounterBookingComponent;
   let fixture: ComponentFixture<CounterBookingComponent>;
@@ -146,6 +147,28 @@ describe("CounterBookingComponent", () => {
     );
     expect(component.flights).toEqual(mockFlights);
     expect(toastr.error).not.toHaveBeenCalled();
+  });
+
+  it("should make a GET request, show an error toast, and not load flights", () => {
+    const mockStatus = 418;
+    component.departAirport = mockDepartAirport;
+    component.arriveAirport = mockArriveAirport;
+    component.traveler = mockTraveler;
+    spyOn(httpService, "get").and.returnValue(
+      throwError({ error: { status: mockStatus } })
+    );
+    spyOn(toastr, "error");
+    expect(httpService.get).not.toHaveBeenCalled();
+    expect(toastr.error).not.toHaveBeenCalled();
+    component.getFlights();
+    expect(httpService.get).toHaveBeenCalledWith(
+      `${environment.counterUrl}${environment.counterBookableUri}/departure/${component.departAirport.airportId}/arrival/${component.arriveAirport.airportId}/traveler/${component.traveler.userId}`
+    );
+    expect(component.flights).toBeUndefined();
+    expect(toastr.error).toHaveBeenCalledWith(
+      uncheckedErrorMessage,
+      "Error getting flights: Status " + mockStatus
+    );
   });
 
   it("should set the flight, open the modal, and mount the Stripe Element", () => {
