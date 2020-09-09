@@ -6,7 +6,7 @@ import { CounterAirportFilterPipe } from "src/app/common/counter/pipe/counter-ai
 import { CounterDateFilterPipe } from "src/app/common/counter/pipe/counter-date-filter.pipe";
 import { HttpClientModule } from "@angular/common/http";
 import { RouterTestingModule } from "@angular/router/testing";
-import { NgbModule, NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { NgbModule, NgbModal, NgbDate } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrModule, ToastrService } from "ngx-toastr";
 import { Router } from "@angular/router";
 import { CounterHttpService } from "src/app/common/counter/service/counter-http.service";
@@ -72,5 +72,21 @@ describe("CounterBookingComponent", () => {
     expect(component.getFlights).not.toHaveBeenCalled();
     component.getFlightsIf(true);
     expect(component.getFlights).toHaveBeenCalled();
+  });
+
+  it("should return the current date as an NgbDate", () => {
+    const mockDate = new Date(1999, 9, 31);
+    spyOn(Date.prototype, "getFullYear").and.returnValue(
+      mockDate.getFullYear()
+    );
+    spyOn(Date.prototype, "getMonth").and.returnValue(mockDate.getMonth());
+    spyOn(Date.prototype, "getDate").and.returnValue(mockDate.getDate());
+    expect(component.getCurrentDate()).toEqual(
+      new NgbDate(
+        mockDate.getFullYear(),
+        mockDate.getMonth() + 1,
+        mockDate.getDate()
+      )
+    );
   });
 });
