@@ -19,8 +19,10 @@ import {
   mockArriveAirport,
   mockFlight,
   mockTraveler,
+  mockFlights,
 } from "src/app/common/counter/counter-mock-data";
 import { of } from "rxjs";
+import { environment } from "src/environments/environment";
 describe("CounterBookingComponent", () => {
   let component: CounterBookingComponent;
   let fixture: ComponentFixture<CounterBookingComponent>;
@@ -128,6 +130,19 @@ describe("CounterBookingComponent", () => {
     component.ngAfterViewInit();
     expect(cancel.className).toBe("");
     expect(book.className).toBe("side-link-active");
+  });
+
+  it("should make a GET request andd load flights", () => {
+    component.departAirport = mockDepartAirport;
+    component.arriveAirport = mockArriveAirport;
+    component.traveler = mockTraveler;
+    spyOn(httpService, "get").and.returnValue(of(mockFlights));
+    expect(component.flights).toBeFalsy();
+    component.getFlights();
+    expect(httpService.get).toHaveBeenCalledWith(
+      `${environment.counterUrl}${environment.counterBookableUri}/departure/${component.departAirport.airportId}/arrival/${component.arriveAirport.airportId}/traveler/${component.traveler.userId}`
+    );
+    expect(component.flights).toEqual(mockFlights);
   });
 
   it("should set the flight, open the modal, and mount the Stripe Element", () => {
