@@ -116,6 +116,20 @@ describe("CounterBookingComponent", () => {
     expect(mockElement.className).toBe("");
   });
 
+  it("should remove the active class from the cancellation link and add it to the booking link", () => {
+    const book = document.createElement("li"),
+      cancel = document.createElement("li");
+    cancel.className = "side-link-active";
+    spyOn(document, "getElementById").and.callFake((id: string) =>
+      id == "book" ? book : id == "cancel" ? cancel : null
+    );
+    expect(cancel.className).toBe("side-link-active");
+    expect(book.className).toBeFalsy();
+    component.ngAfterViewInit();
+    expect(cancel.className).toBe("");
+    expect(book.className).toBe("side-link-active");
+  });
+
   it("should set the flight, open the modal, and mount the Stripe Element", () => {
     const mockObject = { mockProperty: "Mock Property" },
       mockElement = { mount: null },
