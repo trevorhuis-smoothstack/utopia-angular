@@ -13,8 +13,11 @@ import { CounterHttpService } from "src/app/common/counter/service/counter-http.
 import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
 import { StripeService, NgxStripeModule } from "ngx-stripe";
 import { FormsModule } from "@angular/forms";
-import { InjectionToken } from "@angular/core";
-
+import {
+  mockAirports,
+  mockDepartAirport,
+  mockArriveAirport,
+} from "src/app/common/counter/counter-mock-data";
 describe("CounterBookingComponent", () => {
   let component: CounterBookingComponent;
   let fixture: ComponentFixture<CounterBookingComponent>;
@@ -72,6 +75,16 @@ describe("CounterBookingComponent", () => {
     expect(component.getFlights).not.toHaveBeenCalled();
     component.getFlightsIf(true);
     expect(component.getFlights).toHaveBeenCalled();
+  });
+
+  it("should get the name of the airport", () => {
+    component.airports = mockAirports;
+    expect(component.getAirportName(mockDepartAirport.airportId)).toBe(
+      mockDepartAirport.name
+    );
+    expect(component.getAirportName(mockArriveAirport.airportId)).toBe(
+      mockArriveAirport.name
+    );
   });
 
   it("should return the current date as an NgbDate", () => {
