@@ -179,7 +179,7 @@ describe("CounterCancellationComponent", () => {
     expect(component.flights).toEqual(mockFlights);
   });
 
-  it("should navigate to the traveler component, not subscribe to the traveler observable, not make a GET request, and not show an error toast", () => {
+  it("should navigate to the traveler component, not make a GET request, and not show an error toast", () => {
     spyOn(dataService, "getTraveler").and.returnValue(null);
     spyOn(router, "navigate");
     spyOn(httpService, "get");
