@@ -101,7 +101,7 @@ describe("CounterCancellationComponent", () => {
     expect(modalService.open).toHaveBeenCalledWith(mockObject);
   });
 
-  it("should remove the active class from the book link and add it to the cancellation link", () => {
+  it("should remove the active class from the booking link and add it to the cancellation link", () => {
     const book = document.createElement("li"),
       cancel = document.createElement("li");
     book.className = "side-link-active";
