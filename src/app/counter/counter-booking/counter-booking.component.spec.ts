@@ -190,4 +190,20 @@ describe("CounterBookingComponent", () => {
     expect(modalService.open).toHaveBeenCalledWith(mockObject);
     expect(mockElement.mount).toHaveBeenCalled();
   });
+
+  it("should navigate to the traveler component, not make a GET request, not set the Stripe key, not get a Stripe Elements, and not show an error toast", () => {
+    spyOn(dataService, "getTraveler").and.returnValue(null);
+    spyOn(router, "navigate");
+    spyOn(httpService, "get");
+    spyOn(toastr, "error");
+    spyOn(stripe,'setKey')
+    spyOn(stripe,'elements')
+    expect(router.navigate).not.toHaveBeenCalled();
+    component.ngOnInit();
+    expect(router.navigate).toHaveBeenCalledWith(["/counter/traveler"]);
+    expect(httpService.get).not.toHaveBeenCalled();
+    expect(toastr.error).not.toHaveBeenCalled();
+    expect(stripe.setKey).not.toHaveBeenCalled();
+    expect(stripe.elements).not.toHaveBeenCalled();
+  });
 });
