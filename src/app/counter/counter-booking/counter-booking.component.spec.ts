@@ -196,7 +196,7 @@ describe("CounterBookingComponent", () => {
     spyOn(router, "navigate");
     spyOn(httpService, "get");
     spyOn(toastr, "error");
-    spyOn(stripe,'setKey')
+    spyOn(stripe, "setKey");
     expect(router.navigate).not.toHaveBeenCalled();
     component.ngOnInit();
     expect(router.navigate).toHaveBeenCalledWith(["/counter/traveler"]);
@@ -206,4 +206,26 @@ describe("CounterBookingComponent", () => {
     expect(component.card).toBeUndefined();
   });
 
+  it("should set the traveler, make a GET request, and show an error toast", () => {
+    const mockStatus = 418;
+    spyOn(dataService, "getTraveler").and.returnValue(mockTraveler);
+    spyOn(httpService, "get").and.returnValue(
+      throwError({ error: { status: mockStatus } })
+    );
+    spyOn(toastr, "error");
+    spyOn(stripe, "setKey");
+    spyOn(stripe, "elements").and.returnValue(of({ create: () => null }));
+    expect(component.traveler).toBeFalsy();
+    expect(httpService.get).not.toHaveBeenCalled();
+    expect(toastr.error).not.toHaveBeenCalled();
+    component.ngOnInit();
+    expect(component.traveler).toBe(mockTraveler);
+    expect(httpService.get).toHaveBeenCalledWith(
+      environment.counterUrl + environment.counterAirportUri
+    );
+    expect(toastr.error).toHaveBeenCalledWith(
+      uncheckedErrorMessage,
+      "Error getting airports: Status " + mockStatus
+    );
+  });
 });
