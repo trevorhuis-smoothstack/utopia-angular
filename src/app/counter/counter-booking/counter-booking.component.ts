@@ -142,12 +142,16 @@ export class CounterBookingComponent
               );
             }
           );
-      } else if (result.error) {
+      } else if (result.error)
         this.toastr.error(
           uncheckedErrorMessage,
           "Error processing payment: Token creation failed."
         );
-      }
+      else
+        this.toastr.error(
+          uncheckedErrorMessage,
+          "Error processing payment: Unexpected error occurred."
+        );
     });
   }
 }
