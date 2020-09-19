@@ -230,7 +230,7 @@ describe("CounterBookingComponent", () => {
     );
   });
 
-  it("should set the traveler, load airports, set the Stripe key, mount the card Element, not navigate to another URI, and not show an error toast", () => {
+  it("should set the traveler, make a GET request, load airports, set the Stripe key, mount the card Element, not navigate to another URI, and not show an error toast", () => {
     const mockElements = { create: () => null };
     spyOn(dataService, "getTraveler").and.returnValue(mockTraveler);
     spyOn(httpService, "get").and.returnValue(of(mockAirports));
@@ -245,6 +245,9 @@ describe("CounterBookingComponent", () => {
     expect(mockElements.create).not.toHaveBeenCalled();
     component.ngOnInit();
     expect(component.traveler).toBe(mockTraveler);
+    expect(httpService.get).toHaveBeenCalledWith(
+      environment.counterUrl + environment.counterAirportUri
+    );
     expect(component.airports).toBe(mockAirports);
     expect(stripe.setKey).toHaveBeenCalledWith(
       "pk_test_51GwErbJwa8c7tq3ON61IURqOXTi3Lcqlyx7wBTUR0ClnuHPjOMhLZqJhxG0nFwq04Svaxa6p768cb1Mg8IF6NO2n00TlRmCn9i"
@@ -252,6 +255,26 @@ describe("CounterBookingComponent", () => {
     expect(mockElements.create).toHaveBeenCalledWith("card", {});
     expect(router.navigate).not.toHaveBeenCalled();
     expect(toastr.error).not.toHaveBeenCalled();
+  });
+
+  it("should show an error toast, not make a POST request, not dismiss the modal, not show a success toast, and not filter flights", () => {
+    component.flights = mockFlights;
+    spyOn(stripe, "createToken").and.returnValue(of({}));
+    spyOn(toastr, "error");
+    spyOn(httpService, "post");
+    spyOn(modalService, "dismissAll");
+    spyOn(toastr, "success");
+    spyOn(mockFlights, "filter");
+    expect(toastr.error).not.toHaveBeenCalled();
+    component.book();
+    expect(toastr.error).toHaveBeenCalledWith(
+      uncheckedErrorMessage,
+      "Error processing payment: Unexpected error occurred."
+    );
+    expect(httpService.post).not.toHaveBeenCalled();
+    expect(modalService.dismissAll).not.toHaveBeenCalled();
+    expect(toastr.success).not.toHaveBeenCalled();
+    expect(mockFlights.filter).not.toHaveBeenCalled();
   });
 
   it("should show an error toast, not make a POST request, not dismiss the modal, not show a success toast, and not filter flights", () => {
@@ -274,7 +297,7 @@ describe("CounterBookingComponent", () => {
     expect(mockFlights.filter).not.toHaveBeenCalled();
   });
 
-  it("should show an error toast, not dismiss the modal, not show a success toast, and not filter flights", () => {
+  it("should make a POST request, show an error toast, not dismiss the modal, not show a success toast, and not filter flights", () => {
     const mockStripeId = "Mock Stripe ID",
       mockStatus = 418;
     component.traveler = mockTraveler;
