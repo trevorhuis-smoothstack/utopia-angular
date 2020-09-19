@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
+import { environment } from "src/environments/environment";
 
 import * as moment from "moment";
 
@@ -9,11 +10,13 @@ export class AgentAuthService {
   constructor(private http: HttpClient, private router: Router) {}
 
   login(username: string, password: string) {
-    return this.http.post(
-      "http://3.135.107.110:8080/login",
-      { username, password },
-      { observe: "response" }
-    ).toPromise();
+    return this.http
+      .post(
+        `${environment.loginUrl}`,
+        { username, password },
+        { observe: "response" }
+      )
+      .toPromise();
   }
 
   logout() {
