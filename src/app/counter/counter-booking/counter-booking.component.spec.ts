@@ -20,6 +20,7 @@ import {
   mockFlight,
   mockTraveler,
   mockFlights,
+  mockCounter,
 } from "src/app/common/counter/counter-mock-data";
 import { of, throwError } from "rxjs";
 import { environment } from "src/environments/environment";
@@ -261,6 +262,7 @@ describe("CounterBookingComponent", () => {
     spyOn(modalService, "dismissAll");
     spyOn(toastr, "success");
     spyOn(mockFlights, "filter");
+    expect(toastr.error).not.toHaveBeenCalled();
     component.book();
     expect(toastr.error).toHaveBeenCalledWith(
       uncheckedErrorMessage,
