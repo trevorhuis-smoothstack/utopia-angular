@@ -21,6 +21,7 @@ import {
   mockTraveler,
   mockFlights,
   mockCounter,
+  mockFlightTwo,
 } from "src/app/common/counter/counter-mock-data";
 import { of, throwError } from "rxjs";
 import { environment } from "src/environments/environment";
@@ -335,5 +336,41 @@ describe("CounterBookingComponent", () => {
     expect(modalService.dismissAll).not.toHaveBeenCalled();
     expect(toastr.success).not.toHaveBeenCalled();
     expect(mockFlights.filter).not.toHaveBeenCalled();
+  });
+
+  it("should make a POST request, dismiss the modal, show a success toast, filter out the booked flight, and not show an error toast", () => {
+    const mockStripeId = "Mock Stripe ID",
+      mockStatus = 418,
+      mockBooking = {
+        travelerId: mockTraveler.userId,
+        flightId: mockFlight.flightId,
+        bookerId: mockCounter.userId,
+        active: true,
+        stripeId: mockStripeId,
+      };
+    component.traveler = mockTraveler;
+    component.counter = mockCounter;
+    component.flight = mockFlight;
+    component.flights = mockFlights;
+    spyOn(stripe, "createToken").and.returnValue(
+      of({ token: { id: mockStripeId } })
+    );
+    spyOn(httpService, "post").and.returnValue(of(null));
+    spyOn(modalService, "dismissAll");
+    spyOn(toastr, "success");
+    spyOn(toastr, "error");
+    expect(httpService.post).not.toHaveBeenCalled();
+    expect(modalService.dismissAll).not.toHaveBeenCalled();
+    expect(toastr.success).not.toHaveBeenCalled();
+    expect(component.flights).toContain(mockFlight);
+    component.book();
+    expect(httpService.post).toHaveBeenCalledWith(
+      environment.counterUrl + environment.counterBookUri,
+      mockBooking
+    );
+    expect(modalService.dismissAll).toHaveBeenCalled();
+    expect(toastr.success).toHaveBeenCalledWith("Ticket booked", "Success");
+    expect(component.flights).toEqual([mockFlightTwo]);
+    expect(toastr.error).not.toHaveBeenCalled();
   });
 });
