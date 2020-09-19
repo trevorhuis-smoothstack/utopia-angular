@@ -252,4 +252,21 @@ describe("CounterBookingComponent", () => {
     expect(router.navigate).not.toHaveBeenCalled();
     expect(toastr.error).not.toHaveBeenCalled();
   });
+
+  it("should show an error toast, not make a POST request, not dismiss the modal, and not filter flights", () => {
+    component.flights = mockFlights;
+    spyOn(stripe, "createToken").and.returnValue(of({ error: {} }));
+    spyOn(toastr, "error");
+    spyOn(httpService, "post");
+    spyOn(modalService, "dismissAll");
+    spyOn(mockFlights, "filter");
+    component.book();
+    expect(toastr.error).toHaveBeenCalledWith(
+      uncheckedErrorMessage,
+      "Error processing payment: Token creation failed."
+    );
+    expect(httpService.post).not.toHaveBeenCalled();
+    expect(modalService.dismissAll).not.toHaveBeenCalled();
+    expect(mockFlights.filter).not.toHaveBeenCalled();
+  });
 });
