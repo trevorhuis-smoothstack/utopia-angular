@@ -228,4 +228,28 @@ describe("CounterBookingComponent", () => {
       "Error getting airports: Status " + mockStatus
     );
   });
+
+  it("should set the traveler, load airports, set the Stripe key, mount the card Element, not navigate to another URI, and not show an error toast", () => {
+    const mockElements = { create: () => null };
+    spyOn(dataService, "getTraveler").and.returnValue(mockTraveler);
+    spyOn(httpService, "get").and.returnValue(of(mockAirports));
+    spyOn(stripe, "setKey");
+    spyOn(stripe, "elements").and.returnValue(of(mockElements));
+    spyOn(mockElements, "create");
+    spyOn(router, "navigate");
+    spyOn(toastr, "error");
+    expect(component.traveler).toBeFalsy();
+    expect(component.airports).toBeFalsy();
+    expect(httpService.get).not.toHaveBeenCalled();
+    expect(mockElements.create).not.toHaveBeenCalled();
+    component.ngOnInit();
+    expect(component.traveler).toBe(mockTraveler);
+    expect(component.airports).toBe(mockAirports);
+    expect(stripe.setKey).toHaveBeenCalledWith(
+      "pk_test_51GwErbJwa8c7tq3ON61IURqOXTi3Lcqlyx7wBTUR0ClnuHPjOMhLZqJhxG0nFwq04Svaxa6p768cb1Mg8IF6NO2n00TlRmCn9i"
+    );
+    expect(mockElements.create).toHaveBeenCalledWith("card", {});
+    expect(router.navigate).not.toHaveBeenCalled();
+    expect(toastr.error).not.toHaveBeenCalled();
+  });
 });
