@@ -255,7 +255,7 @@ describe("CounterBookingComponent", () => {
 
   it("should show an error toast, not make a POST request, not dismiss the modal, not show a success toast, and not filter flights", () => {
     component.flights = mockFlights;
-    spyOn(stripe, "createToken").and.returnValue(of({ error: {} }));
+    spyOn(stripe, "createToken").and.returnValue(of({ error: true }));
     spyOn(toastr, "error");
     spyOn(httpService, "post");
     spyOn(modalService, "dismissAll");
