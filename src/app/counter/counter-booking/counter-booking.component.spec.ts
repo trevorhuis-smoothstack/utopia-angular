@@ -299,12 +299,13 @@ describe("CounterBookingComponent", () => {
 
   it("should make a POST request, show an error toast, not dismiss the modal, not show a success toast, and not filter flights", () => {
     const mockStripeId = "Mock Stripe ID",
-      mockStatus = 418, mockBooking = {
+      mockStatus = 418,
+      mockBooking = {
         travelerId: mockTraveler.userId,
         flightId: mockFlight.flightId,
         bookerId: mockCounter.userId,
         active: true,
-        stripeId: mockStripeId
+        stripeId: mockStripeId,
       };
     component.traveler = mockTraveler;
     component.counter = mockCounter;
@@ -321,8 +322,12 @@ describe("CounterBookingComponent", () => {
     spyOn(toastr, "success");
     spyOn(mockFlights, "filter");
     expect(toastr.error).not.toHaveBeenCalled();
+    expect(httpService.post).not.toHaveBeenCalled();
     component.book();
-    expect(httpService.post).toHaveBeenCalledWith(environment.counterUrl + environment.counterBookUri, mockBooking)
+    expect(httpService.post).toHaveBeenCalledWith(
+      environment.counterUrl + environment.counterBookUri,
+      mockBooking
+    );
     expect(toastr.error).toHaveBeenCalledWith(
       uncheckedErrorMessage,
       "Error booking ticket: Status " + mockStatus
