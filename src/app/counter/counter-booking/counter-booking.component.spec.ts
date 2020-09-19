@@ -273,4 +273,32 @@ describe("CounterBookingComponent", () => {
     expect(toastr.success).not.toHaveBeenCalled();
     expect(mockFlights.filter).not.toHaveBeenCalled();
   });
+
+  it("should show an error toast, not dismiss the modal, not show a success toast, and not filter flights", () => {
+    const mockStripeId = "Mock Stripe ID",
+      mockStatus = 418;
+    component.traveler = mockTraveler;
+    component.counter = mockCounter;
+    component.flight = mockFlight;
+    component.flights = mockFlights;
+    spyOn(stripe, "createToken").and.returnValue(
+      of({ token: { id: mockStripeId } })
+    );
+    spyOn(toastr, "error");
+    spyOn(httpService, "post").and.returnValue(
+      throwError({ error: { status: mockStatus } })
+    );
+    spyOn(modalService, "dismissAll");
+    spyOn(toastr, "success");
+    spyOn(mockFlights, "filter");
+    expect(toastr.error).not.toHaveBeenCalled();
+    component.book();
+    expect(toastr.error).toHaveBeenCalledWith(
+      uncheckedErrorMessage,
+      "Error booking ticket: Status " + mockStatus
+    );
+    expect(modalService.dismissAll).not.toHaveBeenCalled();
+    expect(toastr.success).not.toHaveBeenCalled();
+    expect(mockFlights.filter).not.toHaveBeenCalled();
+  });
 });
