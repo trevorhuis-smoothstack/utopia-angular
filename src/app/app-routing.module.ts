@@ -10,8 +10,10 @@ import { CounterComponent } from "./counter/counter/counter.component";
 import { CounterTravelerComponent } from "./counter/counter-traveler/counter-traveler.component";
 import { CounterCancellationComponent } from "./counter/counter-cancellation/counter-cancellation.component";
 import { CounterBookingComponent } from "./counter/counter-booking/counter-booking.component";
+import { HomeComponent } from "./home/home.component";
 
 const routes: Routes = [
+  { path: "home", component: HomeComponent},
   { path: "agent/login", component: AgentLoginComponent },
   { path: "agent/dashboard", component: AgentDashboardComponent },
   { path: "counter/login", component: CounterLoginComponent },
@@ -27,6 +29,7 @@ const routes: Routes = [
       { path: "booking", component: CounterBookingComponent },
     ],
   },
+  { path: '',   redirectTo: '/home', pathMatch: 'full' }
 ];
 
 @NgModule({
