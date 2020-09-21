@@ -39,7 +39,6 @@ export class AgentDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    document.getElementById("nav-agent").classList.add("active");
     this.agent = {
       username: localStorage.getItem("username"),
     };
@@ -58,10 +57,6 @@ export class AgentDashboardComponent implements OnInit {
     this.cancelFlightPage = false;
 
     this.adjustForMobile(window.innerWidth);
-  }
-
-  ngOnDestroy() {
-    document.getElementById("nav-agent").classList.remove("active");
   }
 
   // RESPONSIVE DESIGN
@@ -104,7 +99,7 @@ export class AgentDashboardComponent implements OnInit {
         this.agent.name = result.name;
         this.agent.userId = result.userId;
       },
-      (error) =>{
+      (error) => {
         this.toastService.error("We are having an error reading your information. Please try again later or call IT if the problem continues.", "Internal Error");
       });
   }
@@ -118,10 +113,11 @@ export class AgentDashboardComponent implements OnInit {
         this.childInput.airports.forEach((element) => {
           this.airportsMap.set(element.airportId, element.name);
         });
-      }),
+      },
       (error) => {
         this.toastService.error("We are having an error reading flight information. Please try again later or call IT if the problem continues.", "Internal Error");
-      };
+      }
+      );
   }
 
   openBookFlight() {
