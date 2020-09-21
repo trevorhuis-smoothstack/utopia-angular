@@ -23,10 +23,10 @@ export class CancelBookingComponent implements OnInit {
   selectedBooking: any;
   cancelledBooking: boolean;
 
-    // Pagination
-    page = 1;
-    pageSize = 10;
-    filterMetadata = { count: 0 };
+  // Pagination
+  page = 1;
+  pageSize = 10;
+  filterMetadata = { count: 0 };
 
   constructor(private service: AgentUtopiaService,
     private modalService: NgbModal,
@@ -38,13 +38,14 @@ export class CancelBookingComponent implements OnInit {
     this.childInput.airports.forEach((element) => {
       this.airportsMap.set(element.airportId, element.name);
     });
+  }
 
+  ngAfterViewInit() {
     this.loadBookings();
   }
 
   loadBookings() {
     this.bookings = new Array();
-    this.selectedTravelerBookings = new Array();
     this.service
       .get(
         `${environment.agentBackendUrl}${environment.agentFlightsUri}/${this.childInput.agent.userId}${environment.agentTravelerUri}/${this.childInput.traveler.userId}`
@@ -53,7 +54,6 @@ export class CancelBookingComponent implements OnInit {
         result.forEach((flight: Flight) => {
           flight.arriveAirport = this.airportsMap.get(flight.arriveId);
           flight.departAirport = this.airportsMap.get(flight.departId);
-
           let booking: Booking = {
             travelerId: this.childInput.traveler.userId,
             flightId: flight.flightId,
