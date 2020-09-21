@@ -25,7 +25,7 @@ import {
   FilterBookingsByDepartureAirportPipe,
   FilterBookingsByTravelerPipe,
   FilterByDepartureDatePipe,
-} from "./common/h/filter-bookings";
+} from "./common/h/filter-bookings.pipe";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ToastrModule } from 'ngx-toastr';
 import { CancelBookingComponent } from "./agent/agent-dashboard/cancel-booking/cancel-booking.component";

@@ -10,7 +10,7 @@ import {
   FilterBookingsByTravelerPipe,
   FilterByDepartureDatePipe,
   FilterBookingsByDepartureAirportPipe,
-} from "src/app/common/h/filter-bookings";
+} from "src/app/common/h/filter-bookings.pipe";
 // External code
 import { async, ComponentFixture, TestBed, fakeAsync, tick } from "@angular/core/testing";
 import { HttpClientModule } from '@angular/common/http';
