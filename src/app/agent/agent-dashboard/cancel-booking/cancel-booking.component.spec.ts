@@ -80,7 +80,7 @@ describe("CancelBookingComponent", () => {
     expect(component.filterMetadata.count).toEqual(11);
   });
 
-  it("should load components and call life cycle methods", () => {
+  it("should call loadBookings afterViewInit", () => {
     spyOn(component, "loadBookings");
     component.ngAfterViewInit();
     expect(component.loadBookings).toHaveBeenCalled;

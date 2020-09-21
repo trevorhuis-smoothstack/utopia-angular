@@ -54,6 +54,34 @@ export const mockFlights: Flight[] = [
     }
 ]
 
+export const mockFlightsPreFormat: Flight[] = [{
+    departTime: " ",
+    arriveId: 1,
+    departId: 2,
+    arriveAirport: "",
+    departAirport: "",
+    price: 10.0,
+    flightId: 1
+},
+{
+    departTime: " ",
+    arriveId: 2,
+    departId: 3,
+    arriveAirport: "",
+    departAirport: "",
+    price: 15.0,
+    flightId: 2
+},
+{
+    departTime: " ",
+    arriveId: 3,
+    departId: 1,
+    arriveAirport: "",
+    departAirport: "",
+    price: 20.0,
+    flightId: 3
+}]
+
 export const mockBookings: Booking[] = [
     {
         travelerId: 1,
