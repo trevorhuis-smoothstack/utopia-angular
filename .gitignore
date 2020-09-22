@@ -45,3 +45,4 @@ testem.log
 .DS_Store
 Thumbs.db
 report.20200827.110429.21152.0.001.json
+debug.log

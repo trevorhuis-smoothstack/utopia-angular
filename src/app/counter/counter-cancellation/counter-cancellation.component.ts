@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, OnDestroy } from "@angular/core";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { NgbModal, NgbDate } from "@ng-bootstrap/ng-bootstrap";
 import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { CounterHttpService } from "src/app/common/counter/service/counter-http.service";
@@ -39,9 +39,6 @@ export class CounterCancellationComponent
       this.router.navigate(["/counter/traveler"]);
       return;
     }
-    this.dataService.travelerObservable.subscribe(
-      (traveler: any) => (this.traveler = traveler)
-    );
     this.httpService
       .get(environment.counterUrl + environment.counterAirportUri)
       .subscribe(
@@ -89,11 +86,7 @@ export class CounterCancellationComponent
 
   getCurrentDate() {
     const now = new Date();
-    return {
-      year: now.getFullYear(),
-      month: now.getMonth() + 1,
-      day: now.getDate(),
-    };
+    return new NgbDate(now.getFullYear(), now.getMonth() + 1, now.getDate());
   }
 
   openCancellationModal(flight: any, modal: any) {
