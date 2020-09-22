@@ -68,6 +68,7 @@ export class CounterLoginComponent implements OnInit {
             .subscribe(
               (response: any) => {
                 this.dataService.setCounter(response);
+                this.dataService.setTraveler(null);
                 this.router.navigate(["/counter/traveler"]);
               },
               (getUserError) => {

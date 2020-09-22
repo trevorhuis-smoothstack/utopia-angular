@@ -1,8 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Input,
-} from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 import { Flight } from "../../../common/entities/Flight";
 import { AgentUtopiaService } from "src/app/common/h/agent-utopia.service";
 import { environment } from "src/environments/environment";
@@ -13,7 +9,7 @@ import { Traveler } from "../../../common/entities/Traveler";
 import { Elements, Element, StripeService } from "ngx-stripe";
 import { ToastrService } from "ngx-toastr";
 import { FlightQuery } from "src/app/common/entities/FlightQuery";
-import * as moment from 'moment';
+import * as moment from "moment";
 @Component({
   selector: "app-agent-create-booking",
   templateUrl: "./create-booking.component.html",
@@ -21,7 +17,6 @@ import * as moment from 'moment';
 })
 export class CreateBookingComponent implements OnInit {
   @Input() childInput: any;
-
   airportsMap: Map<Number, string>;
   card: Element;
   elements: Elements;
@@ -34,7 +29,7 @@ export class CreateBookingComponent implements OnInit {
 
   // Slider
   minValue: number;
-  maxValue: number;
+  maxValue: number = 1;
   customPrice: number;
 
   // Pagination
@@ -82,7 +77,10 @@ export class CreateBookingComponent implements OnInit {
         this.card = elements.create("card", {});
       },
       (error) => {
-        this.toastService.error("We are having an error processing credit charges at the moment. You will not be able to book a flight. Please try again later or contact IT if the problem continues.", "Internal Error");
+        this.toastService.error(
+          "We are having an error processing credit charges at the moment. You will not be able to book a flight. Please try again later or contact IT if the problem continues.",
+          "Internal Error"
+        );
       }
     );
   }
@@ -94,46 +92,68 @@ export class CreateBookingComponent implements OnInit {
         arriveId: "",
         departId: "",
         dateBegin: "",
-        dateEnd: ""
+        dateEnd: "",
       },
     };
-    if(this.selectedArrival != undefined && this.selectedArrival != "All Airports") {
+    if (
+      this.selectedArrival != undefined &&
+      this.selectedArrival != "All Airports"
+    ) {
       params.params.arriveId = (parseInt(this.selectedArrival) + 1).toString();
     }
-    if(this.selectedDeparture != undefined && this.selectedDeparture != "All Airports") {
-      params.params.departId = (parseInt(this.selectedDeparture) + 1).toString();
+    if (
+      this.selectedDeparture != undefined &&
+      this.selectedDeparture != "All Airports"
+    ) {
+      params.params.departId = (
+        parseInt(this.selectedDeparture) + 1
+      ).toString();
     }
-    if(this.date != undefined) {
-      let dateBegin = moment(`${this.date.year}-${this.date.month}-${this.date.day}`, "YYYY-MM-DD");
+    if (this.date != undefined) {
+      let dateBegin = moment(
+        `${this.date.year}-${this.date.month}-${this.date.day}`,
+        "YYYY-MM-DD"
+      );
       if (this.flexibleDeparture) {
-        dateBegin.add(-2, 'days');
+        dateBegin.add(-2, "days");
       }
-      params.params.dateBegin = `${dateBegin.year()}-${(dateBegin.month() + 1)}-${dateBegin.date()}`;
+      params.params.dateBegin = `${dateBegin.year()}-${
+        dateBegin.month() + 1
+      }-${dateBegin.date()}`;
     }
-    if(this.date != undefined) {
-      let dateEnd = moment(`${this.date.year}-${this.date.month}-${this.date.day}`, "YYYY-MM-DD")
-      if (this.flexibleDeparture)
-        dateEnd.add(3, 'days');
-      else
-        dateEnd.add(1, 'days');
-      params.params.dateEnd = `${dateEnd.year()}-${(dateEnd.month() + 1)}-${dateEnd.date()}`;
+    if (this.date != undefined) {
+      let dateEnd = moment(
+        `${this.date.year}-${this.date.month}-${this.date.day}`,
+        "YYYY-MM-DD"
+      );
+      if (this.flexibleDeparture) dateEnd.add(3, "days");
+      else dateEnd.add(1, "days");
+      params.params.dateEnd = `${dateEnd.year()}-${
+        dateEnd.month() + 1
+      }-${dateEnd.date()}`;
     }
     this.loadFlights(params);
   }
 
   loadPremierFlights() {
-    this.service.get(`${environment.agentBackendUrl}${environment.agentFlightsUri}${environment.agentPremierUri}`,).subscribe(
-      (result: any) => {
-        this.flights = result;
-        
-        
-        this.formatFlights();
-        this.changePaginationCount();
-      },
-      (error) => {
-        this.toastService.error("There is an error connecting to our data. Please try again or contact IT if the problem continues.", "No Flights Found");
-      }
-    );
+    this.service
+      .get(
+        `${environment.agentBackendUrl}${environment.agentFlightsUri}${environment.agentPremierUri}`
+      )
+      .subscribe(
+        (result: any) => {
+          this.flights = result;
+
+          this.formatFlights();
+          this.changePaginationCount();
+        },
+        (error) => {
+          this.toastService.error(
+            "There is an error connecting to our data. Please try again or contact IT if the problem continues.",
+            "No Flights Found"
+          );
+        }
+      );
   }
 
   loadFlights(params) {
@@ -145,7 +165,7 @@ export class CreateBookingComponent implements OnInit {
       .subscribe(
         (result: any) => {
           this.flights = result;
-          
+
           if (this.flights == null) {
             // Turn into a toast
             return;
@@ -154,7 +174,10 @@ export class CreateBookingComponent implements OnInit {
           this.changePaginationCount();
         },
         (error) => {
-          this.toastService.error("There is an error connecting to our data. Please try again or contact IT if the problem continues.", "No Flights Found");
+          this.toastService.error(
+            "There is an error connecting to our data. Please try again or contact IT if the problem continues.",
+            "No Flights Found"
+          );
         }
       );
   }
@@ -200,12 +223,18 @@ export class CreateBookingComponent implements OnInit {
             },
             (error) => {
               this.modalService.dismissAll();
-              this.toastService.error("There was an error booking your flight. Please try again or contact IT if the problem continues.", "Flight not booked.")
+              this.toastService.error(
+                "There was an error booking your flight. Please try again or contact IT if the problem continues.",
+                "Flight not booked."
+              );
             }
           );
       } else if (result.error) {
         this.modalService.dismissAll();
-        this.toastService.error("There was an error confirming your credit card, check your card and try to book your flight again.", "Credit Card Not Accepted");
+        this.toastService.error(
+          "There was an error confirming your credit card, check your card and try to book your flight again.",
+          "Credit Card Not Accepted"
+        );
       }
     });
   }
