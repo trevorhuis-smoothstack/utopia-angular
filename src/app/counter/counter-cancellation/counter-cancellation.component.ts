@@ -66,12 +66,17 @@ export class CounterCancellationComponent
   }
 
   ngAfterViewInit() {
-    document.getElementById("book").classList.remove("side-link-active");
-    document.getElementById("cancel").classList.add("side-link-active");
+    let sideLink: HTMLElement;
+    if ((sideLink = document.getElementById("book")))
+      sideLink.classList.remove("side-link-active");
+    if ((sideLink = document.getElementById("cancel")))
+      sideLink.classList.add("side-link-active");
   }
 
   ngOnDestroy() {
-    document.getElementById("cancel").classList.remove("side-link-active");
+    let sideLink: HTMLElement;
+    if ((sideLink = document.getElementById("cancel")))
+      sideLink.classList.remove("side-link-active");
   }
 
   getAirportName(airportId: number) {
