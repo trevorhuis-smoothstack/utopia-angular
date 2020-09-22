@@ -19,9 +19,9 @@ export class CounterBookingComponent
   rowsPerPage = 10;
   minDate: any;
   maxDate: any;
-  minPrice = 0;
-  maxPrice = 10000;
-  customPrice = 10000;
+  minPrice: number;
+  maxPrice: number;
+  customPrice: number;
   elements: Elements;
   card: Element;
   counter = this.dataService.getCounter();
@@ -80,12 +80,19 @@ export class CounterBookingComponent
   }
 
   getFlights() {
+    let prices;
     this.httpService
       .get(
         `${environment.counterUrl}${environment.counterBookableUri}/departure/${this.departAirport.airportId}/arrival/${this.arriveAirport.airportId}/traveler/${this.traveler.userId}`
       )
       .subscribe(
-        (result: any[]) => (this.flights = result),
+        (result: any[]) => {
+          this.flights = result;
+          prices = this.flights.map((flight) => flight.price);
+          this.minPrice = Math.min(...prices);
+          this.maxPrice = Math.max(...prices);
+          this.customPrice = this.maxPrice;
+        },
         (error: any) =>
           this.toastr.error(
             uncheckedErrorMessage,
