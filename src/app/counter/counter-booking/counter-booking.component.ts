@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { CounterHttpService } from "src/app/common/counter/service/counter-http.service";
 import { CounterDataService } from "src/app/common/counter/service/counter-data.service";
 import { environment } from "src/environments/environment";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { NgbModal, NgbDate } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrService } from "ngx-toastr";
 import { Elements, Element, StripeService } from "ngx-stripe";
 import { uncheckedErrorMessage } from "src/app/common/counter/counter-globals";
@@ -47,9 +47,6 @@ export class CounterBookingComponent
       this.router.navigate(["/counter/traveler"]);
       return;
     }
-    this.dataService.travelerObservable.subscribe(
-      (traveler: any) => (this.traveler = traveler)
-    );
     this.httpService
       .get(environment.counterUrl + environment.counterAirportUri)
       .subscribe(
@@ -69,12 +66,17 @@ export class CounterBookingComponent
   }
 
   ngAfterViewInit() {
-    document.getElementById("cancel").classList.remove("side-link-active");
-    document.getElementById("book").classList.add("side-link-active");
+    let sideLink: HTMLElement;
+    if ((sideLink = document.getElementById("cancel")))
+      sideLink.classList.remove("side-link-active");
+    if ((sideLink = document.getElementById("book")))
+      sideLink.classList.add("side-link-active");
   }
 
   ngOnDestroy() {
-    document.getElementById("book").classList.remove("side-link-active");
+    let sideLink: HTMLElement;
+    if ((sideLink = document.getElementById("book")))
+      sideLink.classList.remove("side-link-active");
   }
 
   getFlights() {
@@ -103,11 +105,7 @@ export class CounterBookingComponent
 
   getCurrentDate() {
     const now = new Date();
-    return {
-      year: now.getFullYear(),
-      month: now.getMonth() + 1,
-      day: now.getDate(),
-    };
+    return new NgbDate(now.getFullYear(), now.getMonth() + 1, now.getDate());
   }
 
   openBookingModal(flight: any, modal: any) {
@@ -144,12 +142,16 @@ export class CounterBookingComponent
               );
             }
           );
-      } else if (result.error) {
+      } else if (result.error)
         this.toastr.error(
           uncheckedErrorMessage,
           "Error processing payment: Token creation failed."
         );
-      }
+      else
+        this.toastr.error(
+          uncheckedErrorMessage,
+          "Error processing payment: Unexpected error occurred."
+        );
     });
   }
 }
