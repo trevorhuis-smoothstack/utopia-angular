@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, OnDestroy } from "@angular/core";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { NgbModal, NgbDate } from "@ng-bootstrap/ng-bootstrap";
 import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { CounterHttpService } from "src/app/common/counter/service/counter-http.service";
@@ -39,9 +39,6 @@ export class CounterCancellationComponent
       this.router.navigate(["/counter/traveler"]);
       return;
     }
-    this.dataService.travelerObservable.subscribe(
-      (traveler: any) => (this.traveler = traveler)
-    );
     this.httpService
       .get(environment.counterUrl + environment.counterAirportUri)
       .subscribe(
@@ -69,12 +66,17 @@ export class CounterCancellationComponent
   }
 
   ngAfterViewInit() {
-    document.getElementById("book").classList.remove("side-link-active");
-    document.getElementById("cancel").classList.add("side-link-active");
+    let sideLink: HTMLElement;
+    if ((sideLink = document.getElementById("book")))
+      sideLink.classList.remove("side-link-active");
+    if ((sideLink = document.getElementById("cancel")))
+      sideLink.classList.add("side-link-active");
   }
 
   ngOnDestroy() {
-    document.getElementById("cancel").classList.remove("side-link-active");
+    let sideLink: HTMLElement;
+    if ((sideLink = document.getElementById("cancel")))
+      sideLink.classList.remove("side-link-active");
   }
 
   getAirportName(airportId: number) {
@@ -84,11 +86,7 @@ export class CounterCancellationComponent
 
   getCurrentDate() {
     const now = new Date();
-    return {
-      year: now.getFullYear(),
-      month: now.getMonth() + 1,
-      day: now.getDate(),
-    };
+    return new NgbDate(now.getFullYear(), now.getMonth() + 1, now.getDate());
   }
 
   openCancellationModal(flight: any, modal: any) {
