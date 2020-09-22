@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TravelerService } from '../common/s/service/traveler.service';
 import { environment } from 'src/environments/environment';
-import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import {
   FormBuilder,
   FormGroup,
