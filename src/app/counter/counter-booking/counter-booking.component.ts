@@ -47,9 +47,6 @@ export class CounterBookingComponent
       this.router.navigate(["/counter/traveler"]);
       return;
     }
-    this.dataService.travelerObservable.subscribe(
-      (traveler: any) => (this.traveler = traveler)
-    );
     this.httpService
       .get(environment.counterUrl + environment.counterAirportUri)
       .subscribe(
@@ -69,12 +66,17 @@ export class CounterBookingComponent
   }
 
   ngAfterViewInit() {
-    document.getElementById("cancel").classList.remove("side-link-active");
-    document.getElementById("book").classList.add("side-link-active");
+    let sideLink: HTMLElement;
+    if ((sideLink = document.getElementById("cancel")))
+      sideLink.classList.remove("side-link-active");
+    if ((sideLink = document.getElementById("book")))
+      sideLink.classList.add("side-link-active");
   }
 
   ngOnDestroy() {
-    document.getElementById("book").classList.remove("side-link-active");
+    let sideLink: HTMLElement;
+    if ((sideLink = document.getElementById("book")))
+      sideLink.classList.remove("side-link-active");
   }
 
   getFlights() {
@@ -140,12 +142,16 @@ export class CounterBookingComponent
               );
             }
           );
-      } else if (result.error) {
+      } else if (result.error)
         this.toastr.error(
           uncheckedErrorMessage,
           "Error processing payment: Token creation failed."
         );
-      }
+      else
+        this.toastr.error(
+          uncheckedErrorMessage,
+          "Error processing payment: Unexpected error occurred."
+        );
     });
   }
 }

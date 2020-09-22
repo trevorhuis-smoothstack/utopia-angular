@@ -1,0 +1,8 @@
+.link-cards {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.jumbotron{
+    margin-top: 1rem;
+}
