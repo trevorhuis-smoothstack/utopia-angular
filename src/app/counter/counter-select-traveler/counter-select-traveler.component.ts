@@ -24,7 +24,13 @@ import { map, catchError } from "rxjs/operators";
 })
 export class CounterSelectTravelerComponent implements OnInit {
   maxLength = maxLength;
-  form: FormGroup;
+  form = new FormGroup({
+    username: new FormControl(
+      null,
+      [Validators.required, Validators.maxLength(maxLength)],
+      [this.validateTraveler.bind(this)]
+    ),
+  });
 
   constructor(
     private router: Router,
@@ -33,15 +39,7 @@ export class CounterSelectTravelerComponent implements OnInit {
     private dataService: CounterDataService
   ) {}
 
-  ngOnInit() {
-    this.form = new FormGroup({
-      username: new FormControl(
-        null,
-        [Validators.required, Validators.maxLength(maxLength)],
-        [this.validateTraveler.bind(this)]
-      ),
-    });
-  }
+  ngOnInit() {}
 
   validateTraveler(control: AbstractControl) {
     return this.httpService

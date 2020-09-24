@@ -42,7 +42,6 @@ import { CounterCancellationComponent } from "./counter/counter-cancellation/cou
 import { CounterBookingComponent } from "./counter/counter-booking/counter-booking.component";
 import { TravelerComponent } from './traveler/traveler.component';
 import { TravelerService } from './common/s/service/traveler.service';
-import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { TravelerLoginComponent } from './traveler/traveler-login/traveler-login.component';
 import { FlightsComponent } from './traveler/flights/flights.component';
 import { BookingsComponent } from './traveler/bookings/bookings.component';
@@ -54,6 +53,7 @@ import { ToastsService } from './common/s/service/toasts.service';
 import { CounterDateFilterPipe } from "./common/counter/pipe/counter-date-filter.pipe";
 import { CounterPriceFilterPipe } from "./common/counter/pipe/counter-price-filter.pipe";
 import { CounterAirportFilterPipe } from "./common/counter/pipe/counter-airport-filter.pipe";
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -89,6 +89,7 @@ import { CounterAirportFilterPipe } from "./common/counter/pipe/counter-airport-
     CounterAirportFilterPipe,
     CounterDateFilterPipe,
     CounterPriceFilterPipe,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
@@ -100,7 +101,6 @@ import { CounterAirportFilterPipe } from "./common/counter/pipe/counter-airport-
     BrowserAnimationsModule,
     ToastrModule.forRoot({positionClass:'toast-bottom-right'}),
     NgxStripeModule.forRoot(),
-    NgMultiSelectDropDownModule,
     ToastrModule.forRoot()
   ],
   providers: [

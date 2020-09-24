@@ -16,12 +16,10 @@ export class CounterInterceptionService implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     const token = localStorage.getItem("token");
-
     if (token) {
       const requestClone = request.clone({
         headers: request.headers.set("Authorization", "Bearer " + token),
       });
-
       return next.handle(requestClone);
     } else {
       return next.handle(request);
