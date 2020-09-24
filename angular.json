@@ -85,7 +85,11 @@
             "styles": ["src/styles.css", "node_modules/ngx-toastr/toastr.css"],
             "scripts": [],
             "assets": ["src/favicon.ico", "src/assets"],
-            "codeCoverage": true
+            "codeCoverage": true,
+            "codeCoverageExclude": [
+              "src/app/common/counter/service/counter-http.service.ts",
+              "src/app/common/counter/service/counter-auth.service.ts"
+            ]
           }
         },
         "lint": {
