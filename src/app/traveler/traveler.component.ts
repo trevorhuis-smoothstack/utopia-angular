@@ -8,10 +8,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { TravelerAuthService } from '../common/s/service/traveler-auth-service.service';
 import { TravelerDataService } from '../common/s/service/traveler-data.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastsService } from '../common/s/service/toasts.service';
+import { TravelerAuthService } from '../common/s/service/traveler-auth-service.service';
 
 @Component({
   selector: 'app-traveler',
@@ -42,7 +42,6 @@ export class TravelerComponent implements OnInit {
     private travelerDataService: TravelerDataService,
     private authService: TravelerAuthService,
     private travelerService: TravelerService,
-    private travelerAuthService: TravelerAuthService,
     private router: Router
   ) {
     this.loadAirports();
@@ -73,7 +72,7 @@ export class TravelerComponent implements OnInit {
     this.authService.checkAuth().subscribe(
       () => (this.authorized = true),
       (error) => {
-        if (![401, 403, 500].includes(error.error.status)) {
+        if ([401, 403, 500].includes(error.error.status)) {
           this.toastsService.showError('Error checking authorization: Status ' + error.error.status, 'Login Error');
         }
         this.router.navigate(['/traveler/login']);
@@ -126,7 +125,7 @@ export class TravelerComponent implements OnInit {
   }
 
   logout() {
-    this.travelerAuthService.logout();
+    this.authService.logout();
     this.router.navigate(['/traveler/login']);
   }
 

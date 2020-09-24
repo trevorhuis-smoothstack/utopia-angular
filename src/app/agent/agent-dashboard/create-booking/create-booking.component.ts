@@ -20,13 +20,9 @@ import * as moment from 'moment';
   styleUrls: ["./create-booking.component.css"],
 })
 export class CreateBookingComponent implements OnInit {
-  @Input() agent: Agent;
-  @Input() traveler: Traveler;
-  @Input() airports: Airport[];
-  @Input() mobile: boolean;
+  @Input() childInput: any;
 
   airportsMap: Map<Number, string>;
-
   card: Element;
   elements: Elements;
   flightBooked: boolean;
@@ -49,6 +45,9 @@ export class CreateBookingComponent implements OnInit {
   // Date Picker
   date: NgbDateStruct;
 
+  // Ads on or off
+  ads: boolean;
+
   constructor(
     private service: AgentUtopiaService,
     private modalService: NgbModal,
@@ -57,6 +56,8 @@ export class CreateBookingComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.ads = false;
+
     this.flexibleDeparture = false;
     this.flights = new Array();
 
@@ -69,7 +70,7 @@ export class CreateBookingComponent implements OnInit {
 
     this.loadPremierFlights();
 
-    this.airports.forEach((element) => {
+    this.childInput.airports.forEach((element) => {
       this.airportsMap.set(element.airportId, element.name);
     });
 
@@ -179,9 +180,9 @@ export class CreateBookingComponent implements OnInit {
     this.stripe.createToken(this.card, {}).subscribe((result) => {
       if (result.token) {
         booking = {
-          travelerId: this.traveler.userId,
+          travelerId: this.childInput.traveler.userId,
           flightId: this.selectedFlight.flightId,
-          bookerId: this.agent.userId,
+          bookerId: this.childInput.agent.userId,
           active: true,
           stripeId: result.token.id,
         };
