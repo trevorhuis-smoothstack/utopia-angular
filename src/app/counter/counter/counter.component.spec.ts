@@ -27,6 +27,7 @@ describe("CounterComponent", () => {
     toastr: ToastrService,
     authService: CounterAuthService,
     dataService: CounterDataService;
+  let authSpy: any, counterSpy: any;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -43,6 +44,8 @@ describe("CounterComponent", () => {
     authService = TestBed.get(CounterAuthService);
     dataService = TestBed.get(CounterDataService);
     component = new CounterComponent(router, toastr, dataService, authService);
+    authSpy = spyOn(authService, "checkAuth").and.returnValue(of(null));
+    counterSpy = spyOn(dataService, "getCounter").and.returnValue(mockCounter);
   }));
 
   beforeEach(() => {
@@ -55,6 +58,7 @@ describe("CounterComponent", () => {
   });
 
   it("should clear data on logout", fakeAsync(() => {
+    counterSpy.and.callThrough()
     dataService.setCounter(mockCounter);
     dataService.setTraveler(mockTraveler);
     localStorage.setItem("token", "Mock Token");
@@ -68,8 +72,7 @@ describe("CounterComponent", () => {
   }));
 
   it("should authorize the user, initialize the counter subscribe to the traveler observable, not display an error toast, and not redirect", () => {
-    spyOn(authService, "checkAuth").and.returnValue(of({}));
-    spyOn(dataService, "getCounter").and.returnValue(mockCounter);
+    authSpy.and.returnValue(of({}));
     spyOn(router, "navigate");
     spyOn(toastr, "error");
     expect(component.authorized).toBeFalsy();
@@ -85,7 +88,7 @@ describe("CounterComponent", () => {
   });
 
   it("should navigate to the login page, not display an error toast, and not authorize the user", () => {
-    spyOn(authService, "checkAuth").and.returnValues(
+    authSpy.and.returnValues(
       throwError({ error: { status: 401 } }),
       throwError({ error: { status: 403 } }),
       throwError({ error: { status: 500 } })
@@ -102,7 +105,7 @@ describe("CounterComponent", () => {
   });
 
   it("should navigate to the login page, display an error toast and not authorize the user", () => {
-    spyOn(authService, "checkAuth").and.returnValue(
+    authSpy.and.returnValue(
       throwError({ error: { status: 400 } })
     );
     spyOn(router, "navigate");
