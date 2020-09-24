@@ -16,7 +16,7 @@ export class CounterComponent implements OnInit {
   traveler: any;
 
   constructor(
-    public router: Router,
+    private router: Router,
     private toastr: ToastrService,
     private dataService: CounterDataService,
     private authService: CounterAuthService
