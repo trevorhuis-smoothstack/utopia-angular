@@ -68,6 +68,7 @@ describe('FlightsComponent', () => {
     stripe = TestBed.get(StripeService);
     errorSpy = spyOn(toastsService, 'showError');
     successSpy = spyOn(toastsService, 'showSuccess');
+    // spyOn(stripe, "elements")
     component = new FlightsComponent(travelerDataService, toastsService, travelerService, formBuilder, modalService, stripe);
   }));
 
@@ -81,19 +82,19 @@ describe('FlightsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should set up stripe elements', () => {
-    const mockElements = {
-      elements: 1,
-      create: (card: string, options: any) => {
-        let element: Element;
-        element = new Element();
-        return element;
-      },
-    };
-    const stripeSpy = spyOn(stripe, 'elements').and.returnValue(of(mockElements));
-    component.setUpStripeConnection();
-    expect(stripeSpy).toHaveBeenCalled();
-  });
+  // it('should set up stripe elements', () => {
+  //   const mockElements = {
+  //     elements: 1,
+  //     create: (card: string, options: any) => {
+  //       let element: Element;
+  //       element = new Element();
+  //       return element;
+  //     },
+  //   };
+  //   const stripeSpy = spyOn(stripe, 'elements').and.returnValue(of(mockElements));
+  //   component.setUpStripeConnection();
+  //   expect(stripeSpy).toHaveBeenCalled();
+  // });
 
   it('should show error toast on stripe error', () => {
     const stripeSpy = spyOn(stripe, 'elements').and.returnValue(throwError({error: {status: 401}}));
@@ -164,7 +165,7 @@ describe('FlightsComponent', () => {
     expect(errorSpy).toHaveBeenCalledWith('problem loading flights', 'Error');
   });
 
-  it('should book a flihgt', () => {
+  it('should book a flight', () => {
     const mockUser = {
       userId: 1,
     };
@@ -202,31 +203,6 @@ describe('FlightsComponent', () => {
     expect(component.flights).toEqual(mockFlights);
   });
 
-  // it('should fail to book flight', () => {
-  //   const mockUser = {
-  //     userId: 1,
-  //   };
-
-  //   const mockFlight = {
-  //     flightId: 1,
-  //   };
-
-  //   const mockStripeResult = {
-  //     token: {id: 1}
-  //   };
-
-  //   const mockFlights = [
-  //     mockFlight,
-  //     {flightId: 2},
-  //   ];
-
-  //   component.user = mockUser;
-  //   component.flights = mockFlights;
-  //   const stripeSpy = spyOn(stripe, 'createToken').and.returnValue(of(mockStripeResult));
-  //   spyOn(travelerService, 'post').and.returnValue(throwError({error: {status: 400}}));
-  //   component.bookFlight();
-  //   expect(errorSpy).toHaveBeenCalledWith('Something went wrong booking flight', 'Error');
-  // });
   it('should adjust pagination', () => {
     expect(component.filterMetadata.count).toEqual(0);
     const mockFlights = [
@@ -259,4 +235,31 @@ describe('FlightsComponent', () => {
     component.changePaginationCount();
     expect(component.filterMetadata.count).toEqual(24);
   });
+
+
+  // it('should fail to book flight', () => {
+  //   const mockUser = {
+  //     userId: 1,
+  //   };
+
+  //   const mockFlight = {
+  //     flightId: 1,
+  //   };
+
+  //   const result = {
+  //     token: {id: 1}
+  //   };
+
+  //   const mockFlights = [
+  //     mockFlight,
+  //     {flightId: 2},
+  //   ];
+
+  //   component.user = mockUser;
+  //   component.flights = mockFlights;
+  //   const stripeSpy = spyOn(stripe, 'createToken').and.returnValue(of(result));
+  //   spyOn(travelerService, 'post').and.returnValue(throwError({error: {status: 400}}));
+  //   component.bookFlight();
+  //   expect(errorSpy).toHaveBeenCalledWith('Something went wrong booking flight', 'Error');
+  // });
 });
