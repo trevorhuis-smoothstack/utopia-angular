@@ -22,14 +22,13 @@ export class AgentDashboardComponent implements OnInit {
   agent: any;
   username: any;
   mobile: boolean;
-  childInput: any;
 
-  // childInput: any = {
-  //   agent: this.agent,
-  //   traveler: this.traveler,
-  //   airports: this.airports,
-  //   mobile: this.mobile,
-  // };
+  childInput: any = {
+    agent: this.agent,
+    traveler: this.traveler,
+    airports: this.airports,
+    mobile: this.mobile,
+  };
 
   constructor(
     private service: AgentUtopiaService,
@@ -118,19 +117,22 @@ export class AgentDashboardComponent implements OnInit {
   loadAirports() {
     this.service
       .get(`${environment.agentBackendUrl}${environment.agentAirportsUri}`)
-      .subscribe((result) => {
-        this.childInput.airports = result;
+      .subscribe(
+        (result) => {
+          this.childInput.airports = result;
 
-        this.childInput.airports.forEach((element) => {
-          this.airportsMap.set(element.airportId, element.name);
-        });
-      },
-      (error) => {
-        this.toastService.error(
-          "We are having an error reading flight information. Please try again later or call IT if the problem continues.",
-          "Internal Error"
-        );
-      };
+          this.childInput.airports.forEach((element) => {
+            this.airportsMap.set(element.airportId, element.name);
+          });
+        },
+        (error) => {
+          this.toastService.error(
+            "We are having an error reading flight information. Please try again later or call IT if the problem continues.",
+            "Internal Error"
+          );
+        }
+      );
+  }
 
   openBookFlight() {
     if (

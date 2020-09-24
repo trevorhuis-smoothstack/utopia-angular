@@ -95,12 +95,12 @@ describe("AgentDashboardComponent", () => {
 
   it("should set mobile display to true", () => {
     component.adjustForMobile(100);
-    expect(component.mobile).toEqual(true);
+    expect(component.childInput.mobile).toEqual(true);
   });
 
   it("should set mobile display to false", () => {
     component.adjustForMobile(1000);
-    expect(component.mobile).toEqual(false);
+    expect(component.childInput.mobile).toEqual(false);
   });
 
   it("should set traveler to null", () => {
@@ -135,14 +135,14 @@ describe("AgentDashboardComponent", () => {
     expect(component.agent.userId).toEqual(1);
   }));
 
-    it("should try to load agent data and handle an error", fakeAsync(() => {
-      component.agent = {username: "fakeAgent"};
-      spyOn(agentService, "get").and.returnValue(throwError({status: 400}));
-      spyOn(toastService, "error");
-      component.loadAgent();
-      tick();
-      expect(toastService.error).toHaveBeenCalled();
-    }));
+  it("should try to load agent data and handle an error", fakeAsync(() => {
+    component.agent = { username: "fakeAgent" };
+    spyOn(agentService, "get").and.returnValue(throwError({ status: 400 }));
+    spyOn(toastService, "error");
+    component.loadAgent();
+    tick();
+    expect(toastService.error).toHaveBeenCalled();
+  }));
 
   it("should load the airport data", fakeAsync(() => {
     component.airportsMap = new Map();
@@ -153,13 +153,13 @@ describe("AgentDashboardComponent", () => {
     expect(component.airportsMap).toEqual(mockAirportMap);
   }));
 
-    it("should try to load the airport data and handle an error", fakeAsync(() => {
-      spyOn(agentService, "get").and.returnValue(throwError({status: 400}));
-      spyOn(toastService, "error");
-      component.loadAirports();
-      tick();
-      expect(toastService.error).toHaveBeenCalled();
-    }));
+  it("should try to load the airport data and handle an error", fakeAsync(() => {
+    spyOn(agentService, "get").and.returnValue(throwError({ status: 400 }));
+    spyOn(toastService, "error");
+    component.loadAirports();
+    tick();
+    expect(toastService.error).toHaveBeenCalled();
+  }));
 
   it("should return and do nothing after seeing book flight is open", fakeAsync(() => {
     spyOn(component, "changeBookFlightClass");
@@ -172,7 +172,9 @@ describe("AgentDashboardComponent", () => {
   it("should call changeBookFlightClass becaus neither is active", fakeAsync(() => {
     spyOn(component, "changeBookFlightClass");
     spyOn(component, "changeCancelFlightClass");
-    document.getElementById("agent-book-flight").classList.remove("side-link-active");
+    document
+      .getElementById("agent-book-flight")
+      .classList.remove("side-link-active");
     component.openBookFlight();
     expect(component.changeCancelFlightClass).not.toHaveBeenCalled();
     expect(component.changeBookFlightClass).toHaveBeenCalled();
@@ -181,8 +183,12 @@ describe("AgentDashboardComponent", () => {
   it("should call changeCancelFlightClass because cancel-flight is active", fakeAsync(() => {
     spyOn(component, "changeBookFlightClass");
     spyOn(component, "changeCancelFlightClass");
-    document.getElementById("agent-book-flight").classList.remove("side-link-active");
-    document.getElementById("agent-cancel-flight").classList.add("side-link-active");
+    document
+      .getElementById("agent-book-flight")
+      .classList.remove("side-link-active");
+    document
+      .getElementById("agent-cancel-flight")
+      .classList.add("side-link-active");
     component.openBookFlight();
     expect(component.changeCancelFlightClass).toHaveBeenCalled();
     expect(component.changeBookFlightClass).toHaveBeenCalled();
@@ -191,8 +197,12 @@ describe("AgentDashboardComponent", () => {
   it("should return and do nothing after seeing cancel booking is open", fakeAsync(() => {
     spyOn(component, "changeBookFlightClass");
     spyOn(component, "changeCancelFlightClass");
-    document.getElementById("agent-book-flight").classList.remove("side-link-active");
-    document.getElementById("agent-cancel-flight").classList.add("side-link-active");
+    document
+      .getElementById("agent-book-flight")
+      .classList.remove("side-link-active");
+    document
+      .getElementById("agent-cancel-flight")
+      .classList.add("side-link-active");
     component.openCancelBooking();
     expect(component.changeCancelFlightClass).not.toHaveBeenCalled();
     expect(component.changeBookFlightClass).not.toHaveBeenCalled();
@@ -201,7 +211,9 @@ describe("AgentDashboardComponent", () => {
   it("should call changeCancelFlightClass becaus neither is active", fakeAsync(() => {
     spyOn(component, "changeBookFlightClass");
     spyOn(component, "changeCancelFlightClass");
-    document.getElementById("agent-book-flight").classList.remove("side-link-active");
+    document
+      .getElementById("agent-book-flight")
+      .classList.remove("side-link-active");
     component.openCancelBooking();
     expect(component.changeCancelFlightClass).toHaveBeenCalled();
     expect(component.changeBookFlightClass).not.toHaveBeenCalled();
@@ -229,15 +241,14 @@ describe("AgentDashboardComponent", () => {
   });
 
   it("should set bookFlightPage to true with changeBookFlightClass", () => {
-    component.bookFlightPage  = true;
+    component.bookFlightPage = true;
     component.changeBookFlightClass();
     expect(component.bookFlightPage).toEqual(true);
   });
 
   it("should set bookFlightPage  to true with changeBookFlightClass", () => {
-    component.bookFlightPage  = false;
+    component.bookFlightPage = false;
     component.changeBookFlightClass();
     expect(component.bookFlightPage).toEqual(true);
   });
-
 });
