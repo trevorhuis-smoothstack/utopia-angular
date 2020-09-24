@@ -1,13 +1,12 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Router } from "@angular/router";
 import { environment } from "src/environments/environment";
 
 import * as moment from "moment";
 
 @Injectable()
 export class AgentAuthService {
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient) {}
 
   login(username: string, password: string) {
     return this.http

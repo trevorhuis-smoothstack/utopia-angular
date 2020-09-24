@@ -36,14 +36,20 @@ export class SelectTravelerComponent implements OnInit {
 
   ngOnInit() {
     this.createTraveler = false;
-    
+    this.setupSelectTravelerForm();
+    this.setupCreateTravelerForm();
+  }
+
+  setupSelectTravelerForm() {
     this.selectTravelerForm = new FormGroup({
       username: new FormControl(null, [
         Validators.required,
         Validators.maxLength(45),
       ]),
     });
+  }
 
+  setupCreateTravelerForm() {
     this.createTravelerForm = new FormGroup({
       name: new FormControl(null, [
         Validators.required,
@@ -92,7 +98,7 @@ export class SelectTravelerComponent implements OnInit {
       );
   }
 
-  setupCreateTraveler() {
+  setCreateTraveler() {
     this.createTraveler = true;
   }
 
@@ -115,7 +121,16 @@ export class SelectTravelerComponent implements OnInit {
             return;
           }
 
-          this.service
+          this.createNewTravelerHelper(travelerBody);
+        },
+        (error) => {
+          this.toastService.error("We are having an error reading traveler information. Please try again later or call IT if the problem continues.", "Internal Error");
+        }
+      );
+  }
+
+  createNewTravelerHelper(travelerBody: any) {
+    this.service
             .post(
               `${environment.agentBackendUrl}${environment.agentUserUri}`,
               travelerBody
@@ -130,11 +145,6 @@ export class SelectTravelerComponent implements OnInit {
                 this.toastService.error("We are having an error creating a new traveler. Please try again later or call IT if the problem continues.", "Internal Error");
               }
             );
-        },
-        (error) => {
-          this.toastService.error("We are having an error reading traveler information. Please try again later or call IT if the problem continues.", "Internal Error");
-        }
-      );
   }
 
  

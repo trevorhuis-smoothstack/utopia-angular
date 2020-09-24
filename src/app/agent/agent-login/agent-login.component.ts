@@ -12,7 +12,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./agent-login.component.css']
 })
 export class AgentLoginComponent implements OnInit {
-  form:FormGroup;
+  loginForm: FormGroup;
   invalidLogin: boolean;
   invalidAttempt: boolean;
 
@@ -21,25 +21,21 @@ export class AgentLoginComponent implements OnInit {
     private router: Router,
     private toastService: ToastrService) {
 
-  this.form = this.fb.group({
+  this.loginForm = this.fb.group({
   username: ['',Validators.required],
   password: ['',Validators.required]
   });
   }
 
   ngOnInit() {
-    document.getElementById("nav-agent").classList.add("active");
     if(this.authService.isLoggedIn()) {
       this.router.navigate(['/agent/dashboard']);
     }
   }
 
-  ngOnDestroy() {
-    document.getElementById("nav-agent").classList.remove("active");
-  }
 
   login() {
-    const val = this.form.value;
+    const val = this.loginForm.value;
 
     if (val.username && val.password) {
       this.invalidAttempt = false;
