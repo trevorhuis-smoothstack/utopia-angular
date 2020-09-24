@@ -29,6 +29,7 @@ describe("CounterLoginComponent", () => {
     httpService: CounterHttpService,
     authService: CounterAuthService,
     dataService: CounterDataService;
+  let authSpy: any;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -54,6 +55,7 @@ describe("CounterLoginComponent", () => {
       authService,
       dataService
     );
+    authSpy = spyOn(authService, "checkAuth").and.returnValue(of(null));
   }));
 
   beforeEach(() => {
@@ -71,7 +73,8 @@ describe("CounterLoginComponent", () => {
   });
 
   it("should recognize the user is authorized and navigate to the counter dashboard", () => {
-    spyOn(authService, "checkAuth").and.returnValue(of({}));
+    authSpy.and.returnValue(of({}));
+    authSpy.calls.reset()
     spyOn(router, "navigate");
     spyOn(toastr, "error");
     expect(authService.checkAuth).not.toHaveBeenCalled();
@@ -84,7 +87,7 @@ describe("CounterLoginComponent", () => {
   });
 
   it("should not authorize the user nor navigate to another URI nor display an error toast", () => {
-    spyOn(authService, "checkAuth").and.returnValues(
+    authSpy.and.returnValues(
       throwError({ error: { status: 401 } }),
       throwError({ error: { status: 403 } }),
       throwError({ error: { status: 500 } })
@@ -101,9 +104,7 @@ describe("CounterLoginComponent", () => {
 
   it("should display an error toast, and not authorize the user nor navigate to another URI", () => {
     const mockStatus = 400;
-    spyOn(authService, "checkAuth").and.returnValue(
-      throwError({ error: { status: mockStatus } })
-    );
+    authSpy.and.returnValue(throwError({ error: { status: mockStatus } }));
     spyOn(router, "navigate");
     spyOn(toastr, "error");
     component.ngOnInit();
