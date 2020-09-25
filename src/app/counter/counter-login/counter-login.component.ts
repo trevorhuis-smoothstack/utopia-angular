@@ -67,20 +67,19 @@ export class CounterLoginComponent implements OnInit {
             )
             .subscribe(
               (response: any) => {
-                localStorage.setItem("name", response.name);
-                localStorage.setItem("userId", response.userId);
                 this.dataService.setCounter(response);
+                this.dataService.setTraveler(null);
                 this.router.navigate(["/counter/traveler"]);
               },
               (getUserError) => {
                 if (getUserError.error.status === 403) {
                   this.badCreds = true;
-                  localStorage.removeItem("token");
                 } else
                   this.toastr.error(
                     uncheckedErrorMessage,
-                    "Error getting user: Stauts " + getUserError.error.status
+                    "Error getting user: Status " + getUserError.error.status
                   );
+                localStorage.removeItem("token");
               }
             );
         },

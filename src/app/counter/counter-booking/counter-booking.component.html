@@ -88,9 +88,9 @@
       </div>
     </form>
   </span>
-  <div class="price-slider">
+  <div class="price-slider" *ngIf="flights">
     <fieldset class="form-group">
-      <label for="customRange1"
+      <label for="custom-price"
         >Max Price: {{ customPrice | currency: "USD" }}</label
       >
       <input
@@ -164,8 +164,23 @@
   </tbody>
 </table>
 <ngb-pagination
-  *ngIf="flights && flights.length"
-  [collectionSize]="flights ? flights.length : 0"
+  *ngIf="
+    flights &&
+    (
+      flights
+      | counterDateFilter: minDate:maxDate
+      | counterPriceFilter: customPrice
+    ).length
+  "
+  [collectionSize]="
+    flights
+      ? (
+          flights
+          | counterDateFilter: minDate:maxDate
+          | counterPriceFilter: customPrice
+        ).length
+      : 0
+  "
   [(page)]="currentPage"
   [pageSize]="rowsPerPage"
 >

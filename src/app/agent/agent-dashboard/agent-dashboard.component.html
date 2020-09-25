@@ -40,7 +40,7 @@
   </ul>
 </div>
 
-<div class="container mobile-nav" *ngIf="mobile">
+<div class="container mobile-nav" *ngIf="childInput.mobile">
   <ul class="nav nav-tabs">
     <li class="nav-item">
       <a class="nav-link active" data-toggle="tab" (click)="openBookFlight()"
@@ -65,7 +65,7 @@
 
 <div class="container agent-container" *ngIf="bookFlightPage">
   <h2 *ngIf="!mobile" class="text-center">Book Flights</h2>
-  <div class="container traveler-header" *ngIf="mobile">
+  <div class="container traveler-header" *ngIf="childInput.mobile">
     <h5 class="text-center" *ngIf="traveler">
       Book for {{ traveler.name }} or
     </h5>
@@ -88,10 +88,7 @@
 
   <div *ngIf="traveler">
     <app-agent-create-booking
-      [agent]="agent"
-      [airports]="airports"
-      [traveler]="traveler"
-      [mobile]="mobile"
+      [childInput]="childInput"
     ></app-agent-create-booking>
   </div>
 </div>
@@ -99,7 +96,7 @@
 <div class="container agent-container" *ngIf="cancelFlightPage">
   <h2 *ngIf="!mobile" class="text-center">Cancel Traveler Bookings</h2>
 
-  <div class="container traveler-header" *ngIf="mobile">
+  <div class="container traveler-header" *ngIf="childInput.mobile">
     <h5 class="text-center" *ngIf="traveler">
       Cancel for {{ traveler.name }} or
     </h5>
@@ -122,10 +119,7 @@
 
   <div *ngIf="traveler">
     <app-agent-cancel-booking
-      [agent]="agent"
-      [airports]="airports"
-      [traveler]="traveler"
-      [mobile]="mobile"
+      [childInput]="childInput"
     ></app-agent-cancel-booking>
   </div>
 </div>
@@ -141,9 +135,7 @@
       </div>
 
       <div class="modal-body">
-        <h5 class="text-center">
-          Are you sure you want to logout?
-        </h5>
+        <h5 class="text-center">Are you sure you want to logout?</h5>
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" type="button" (click)="close()">

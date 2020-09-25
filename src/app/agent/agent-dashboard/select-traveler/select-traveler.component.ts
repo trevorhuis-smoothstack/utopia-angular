@@ -59,6 +59,10 @@ export class SelectTravelerComponent implements OnInit {
     });
   }
 
+  changeTraveler(traveler: Traveler) {
+    this.travelerChanged.emit(traveler);
+  }
+
   checkTraveler() {
     let travelerBody = {
       name: " ",
@@ -133,10 +137,7 @@ export class SelectTravelerComponent implements OnInit {
       );
   }
 
-  changeTraveler(traveler: Traveler) {
-    this.travelerChanged.emit(traveler);
-  }
-
+ 
   errorsDirtySelectTraveler(field: string) {
     return this.selectTravelerForm.controls[field].errors && this.selectTravelerForm.controls[field].dirty;
   }

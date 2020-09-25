@@ -15,10 +15,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ["./cancel-booking.component.css"],
 })
 export class CancelBookingComponent implements OnInit {
-  @Input() agent: Agent;
-  @Input() traveler: Traveler;
-  @Input() airports: Airport[];
-  @Input() mobile: boolean;
+  @Input() childInput: any;
   selectedTravelerBookings: Booking[];
   bookings: Booking[];
   airportsMap: Map<Number, string>;
@@ -42,7 +39,7 @@ export class CancelBookingComponent implements OnInit {
   ngOnInit() {
     this.airportsMap = new Map();
 
-    this.airports.forEach((element) => {
+    this.childInput.airports.forEach((element) => {
       this.airportsMap.set(element.airportId, element.name);
     });
 
@@ -54,7 +51,7 @@ export class CancelBookingComponent implements OnInit {
     this.selectedTravelerBookings = new Array();
     this.service
       .get(
-        `${environment.agentBackendUrl}${environment.agentFlightsUri}/${this.agent.userId}${environment.agentTravelerUri}/${this.traveler.userId}`
+        `${environment.agentBackendUrl}${environment.agentFlightsUri}/${this.childInput.agent.userId}${environment.agentTravelerUri}/${this.childInput.traveler.userId}`
       )
       .subscribe((result: Flight[]) => {
         result.forEach((flight: Flight) => {
@@ -62,15 +59,16 @@ export class CancelBookingComponent implements OnInit {
           flight.departAirport = this.airportsMap.get(flight.departId);
 
           let booking: Booking = {
-            travelerId: this.traveler.userId,
+            travelerId: this.childInput.traveler.userId,
             flightId: flight.flightId,
             active: true,
             stripeId: "secret",
-            bookerId: this.agent.userId,
-            name: this.traveler.name,
+            bookerId: this.childInput.agent.userId,
+            name: this.childInput.traveler.name,
             flight: flight
           }
           this.bookings.push(booking);
+          console.log(booking);
           this.changePaginationCount();
           
         });
