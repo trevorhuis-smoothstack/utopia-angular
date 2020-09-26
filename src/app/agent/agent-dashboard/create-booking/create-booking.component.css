@@ -1,0 +1,105 @@
+/* Flight Filters */
+
+.form-group.hidden {
+    width: 0;
+    margin: 0;
+    border: none;
+    padding: 0;
+  }
+  .custom-day {
+    text-align: center;
+    padding: 0.185rem 0.25rem;
+    display: inline-block;
+    height: 2rem;
+    width: 2rem;
+  }
+  .custom-day.focused {
+    background-color: #ecf0f1;
+  }
+  .custom-day.range, .custom-day:hover {
+    background-color: #18bc9c;
+    color: white;
+  }
+  .custom-day.faded {
+    background-color: rgba(24,188,156, 0.5);
+  }
+  
+  .reset-date {
+    margin-left: 10px;
+  }
+  
+  .flight-filters {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .arrive-select, .departure-select, .airport-select, .price-slider, .date-picker, .price-date-select {
+    margin: 0px 10px;
+    /* grid-row: 2; */
+  }
+
+  .arrive-select, .departure-select {
+    width: 150px
+  }
+  
+  .date-picker {
+    display: block;
+    width: 150px;
+  }
+
+  .date-input {
+    width: 150px;
+  }
+
+  .date-picker {
+    width: 150px;
+  }
+
+  .price-slider {
+    width: 150px;
+  }
+
+  .btn-update {
+    margin: 15px;
+    flex-basis: 100%;
+  }
+  
+  @media (max-width: 992px) {
+    .price-slider {
+      margin: 0px 10px;
+    }
+  
+    .agent-container {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+/* Tooltip text */
+.custom-switch .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+
+  /* Position the tooltip text */
+  position: absolute;
+  z-index: 1;
+  bottom: -125%;
+  left: 50%;
+  margin-left: -60px;
+
+  /* Fade in tooltip */
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.custom-switch:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}

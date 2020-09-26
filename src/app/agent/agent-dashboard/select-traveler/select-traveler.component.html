@@ -1,0 +1,136 @@
+<div class="select-traveler">
+  <div class="select-existing-traveler">
+    <form [formGroup]="selectTravelerForm" *ngIf="!createTraveler">
+      <fieldset>
+        <legend>Select a Traveler</legend>
+        <p>
+          You can book flights for a traveler with their username.
+        </p>
+        <div class="form-group">
+          <label>Username</label>
+          <input name="username" class="form-control" formControlName="username" />
+          <div class="form-requirement" *ngIf="invalidLogin">
+            Traveler username not found.
+          </div>
+          <span
+              *ngIf="
+              errorsDirtySelectTraveler('username') &&
+                selectTravelerForm.controls.username.errors?.maxlength
+              "
+            >
+              Maximum length is 45 characters
+            </span>
+        </div>
+      </fieldset>
+      <div class="form-buttons">
+        <button class="btn btn-primary btn-block" (click)="checkTraveler()" [disabled]="selectTravelerForm.invalid">
+          Get Traveler
+        </button>
+      </div>
+      <hr />
+      <legend>Need a new traveler?</legend>
+      <div class="form-buttons">
+        <button
+          class="btn btn-success btn-block"
+          (click)="setupCreateTraveler()"
+        >
+          Create New Traveler
+        </button>
+      </div>
+    </form>
+
+    <form [formGroup]="createTravelerForm" *ngIf="createTraveler">
+      <fieldset>
+        <legend>Create a Traveler</legend>
+        <p>
+          Upon completion of this form the traveler will receive an email to complete the account creation process. You can still book flights for a traveler before they complete this step.
+        </p>
+        <div class="form-group">
+          <label>Traveler Name</label>
+          <input name="name" class="form-control" formControlName="name" />
+          <span
+              *ngIf="
+              errorsDirtyCreateTraveler('name') &&
+                createTravelerForm.controls.name.errors?.maxlength
+              "
+            >
+              Maximum length is 45 characters
+            </span>
+            <span
+              *ngIf="
+              errorsDirtyCreateTraveler('name') &&
+                createTravelerForm.controls.name.errors?.required
+              "
+            >
+              Traveler name is required
+            </span>
+        </div>
+        <div class="form-group">
+          <label>Account Username</label>
+          <input name="username" class="form-control" formControlName="username" (change)="usernameTaken=false"/>
+          <span
+              *ngIf="
+              errorsDirtyCreateTraveler('username') &&
+                createTravelerForm.controls.username.errors?.maxlength
+              "
+            >
+              Maximum length is 45 characters
+            </span>
+            <span
+              *ngIf="
+              errorsDirtyCreateTraveler('username') &&
+                createTravelerForm.controls.username.errors?.required
+              "
+            >
+              Username is required
+            </span>
+          <div class="form-requirement" *ngIf="usernameTaken">
+            Username taken
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Email</label>
+          <input
+            name="email"
+            class="form-control"
+            formControlName="email"
+            type="email"
+            ngModel email="true"
+          />
+          <span
+              *ngIf="
+              errorsDirtyCreateTraveler('email') &&
+                createTravelerForm.controls.email.errors?.pattern
+              "
+            >
+              Not a valid email
+            </span>
+            <span
+              *ngIf="
+              errorsDirtyCreateTraveler('email') &&
+                createTravelerForm.controls.email.errors?.required
+              "
+            >
+              Email is required
+            </span>
+        </div>
+      </fieldset>
+      <div class="form-buttons">
+        <button class="btn btn-primary btn-block" (click)="createNewTraveler()" [disabled]="createTravelerForm.invalid">
+          Create Traveler
+        </button>
+      </div>
+      <hr />
+      <legend>Do you have your traveler's login?</legend>
+      <div class="form-buttons">
+        <button
+          class="btn btn-success btn-block"
+          (click)="createTraveler = false"
+        >
+          Select Existing Traveler
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
