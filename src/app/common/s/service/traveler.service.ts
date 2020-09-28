@@ -13,11 +13,11 @@ export class TravelerService {
   }
 
   post(url, body) {
-    return this.http.post(url,body);
+    return this.http.post(url, body);
   }
 
   put(url, body) {
-    return this.http.put(url,body);
+    return this.http.put(url, body);
   }
 
   delete(url) {

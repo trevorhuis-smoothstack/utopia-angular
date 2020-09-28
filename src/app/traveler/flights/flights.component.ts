@@ -50,15 +50,7 @@ export class FlightsComponent implements OnInit {
 
   ngOnInit() {
     this.stripe.setKey('pk_test_51GvUChBYMFlMJbBRvrWM7yZJHJhVExdReQ2A5K0uaKTidkmqRcnY48fr6VmnK9csVNOwkiH0xetgz36Gcvql6IF20098oe4tpg');
-    this.stripe.elements().subscribe(
-      (elements) => {
-        this.card = elements.create('card', {});
-      },
-
-      (error) => {
-        this.toastsService.showError('There was a problem connecting to the payment service', 'Unknown Error!');
-      }
-    );
+    this.setUpStripeConnection();
     this.flights = new Array();
 
     this.airportsMap = new Map();
@@ -68,6 +60,18 @@ export class FlightsComponent implements OnInit {
     } else {
       this.loadFlights();
     }
+  }
+
+  setUpStripeConnection() {
+    this.stripe.elements().subscribe(
+      (elements) => {
+        this.card = elements.create('card', {});
+      },
+
+      (error) => {
+        this.toastsService.showError('There was a problem connecting to the payment service', 'Unknown Error!');
+      }
+    );
   }
 
   loadCurrentUser() {
@@ -120,7 +124,6 @@ export class FlightsComponent implements OnInit {
   }
 
   bookFlight() {
-    console.log('booking()');
     let booking: any;
     this.stripe.createToken(this.card, {}).subscribe((result) => {
       if (result.token) {
