@@ -3,10 +3,10 @@ import { AgentUtopiaService } from "src/app/common/h/agent-utopia.service";
 import { AgentAuthService } from "src/app/common/h/service/AgentAuthService";
 import { Router } from "@angular/router";
 import { environment } from "src/environments/environment";
-import {  NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Agent } from "../../common/entities/Agent";
 import { Traveler } from "../../common/entities/Traveler";
-import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: "app-agent-dashboard",
@@ -39,7 +39,6 @@ export class AgentDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    document.getElementById("nav-agent").classList.add("active");
     this.agent = {
       username: localStorage.getItem("username"),
     };
@@ -50,6 +49,7 @@ export class AgentDashboardComponent implements OnInit {
     }
 
     this.airportsMap = new Map();
+    this.childInput = {};
 
     this.loadAirports();
     this.loadAgent();
@@ -60,24 +60,20 @@ export class AgentDashboardComponent implements OnInit {
     this.adjustForMobile(window.innerWidth);
   }
 
-  ngOnDestroy() {
-    document.getElementById("nav-agent").classList.remove("active");
-  }
-
   // RESPONSIVE DESIGN
   @HostListener("window:resize", ["$event"])
   onResize(event) {
     this.adjustForMobile(event.target.innerWidth);
-  } 
+  }
 
   adjustForMobile(width) {
-    if(width < 992) {
-      this.mobile = true;
-    } else if (width > 992){
-      this.mobile = false;
+    if (width < 992) {
+      this.childInput.mobile = true;
+    } else if (width > 992) {
+      this.childInput.mobile = false;
     }
   }
-  
+
   logout() {
     this.authService.logout();
     this.router.navigate(["/agent/login"]);
@@ -89,10 +85,12 @@ export class AgentDashboardComponent implements OnInit {
 
   newTraveler() {
     this.traveler = null;
+    this.childInput.traveler = null;
   }
 
   onTravelerChange(traveler: Traveler) {
     this.traveler = traveler;
+    this.childInput.traveler = traveler;
   }
 
   loadAgent() {
@@ -100,28 +98,40 @@ export class AgentDashboardComponent implements OnInit {
       .get(
         `${environment.agentBackendUrl}${environment.agentUsernameUri}/${this.agent.username}`
       )
-      .subscribe((result: Agent) => {
-        this.agent.name = result.name;
-        this.agent.userId = result.userId;
-      },
-      (error) =>{
-        this.toastService.error("We are having an error reading your information. Please try again later or call IT if the problem continues.", "Internal Error");
-      });
+      .subscribe(
+        (result: Agent) => {
+          this.agent.name = result.name;
+          this.agent.userId = result.userId;
+
+          this.childInput.agent = this.agent;
+        },
+        (error) => {
+          this.toastService.error(
+            "We are having an error reading your information. Please try again later or call IT if the problem continues.",
+            "Internal Error"
+          );
+        }
+      );
   }
 
   loadAirports() {
     this.service
       .get(`${environment.agentBackendUrl}${environment.agentAirportsUri}`)
-      .subscribe((result) => {
-        this.childInput.airports = result;
+      .subscribe(
+        (result) => {
+          this.childInput.airports = result;
 
-        this.childInput.airports.forEach((element) => {
-          this.airportsMap.set(element.airportId, element.name);
-        });
-      }),
-      (error) => {
-        this.toastService.error("We are having an error reading flight information. Please try again later or call IT if the problem continues.", "Internal Error");
-      };
+          this.childInput.airports.forEach((element) => {
+            this.airportsMap.set(element.airportId, element.name);
+          });
+        },
+        (error) => {
+          this.toastService.error(
+            "We are having an error reading flight information. Please try again later or call IT if the problem continues.",
+            "Internal Error"
+          );
+        }
+      );
   }
 
   openBookFlight() {

@@ -25,8 +25,8 @@ import {
   FilterBookingsByDepartureAirportPipe,
   FilterBookingsByTravelerPipe,
   FilterByDepartureDatePipe,
-} from './common/h/filter-bookings';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+} from "./common/h/filter-bookings.pipe";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ToastrModule } from 'ngx-toastr';
 import { CancelBookingComponent } from './agent/agent-dashboard/cancel-booking/cancel-booking.component';
 import { CreateBookingComponent } from './agent/agent-dashboard/create-booking/create-booking.component';
@@ -50,9 +50,10 @@ import { TravelerAuthInterceptor } from './common/s/service/TravelerAuthIntercep
 import { TravelerDataService } from './common/s/service/traveler-data.service';
 import { TravelerAuthService } from './common/s/service/traveler-auth-service.service';
 import { ToastsService } from './common/s/service/toasts.service';
-import { CounterDateFilterPipe } from './common/counter/pipe/counter-date-filter.pipe';
-import { CounterPriceFilterPipe } from './common/counter/pipe/counter-price-filter.pipe';
-import { CounterAirportFilterPipe } from './common/counter/pipe/counter-airport-filter.pipe';
+import { CounterDateFilterPipe } from "./common/counter/pipe/counter-date-filter.pipe";
+import { CounterPriceFilterPipe } from "./common/counter/pipe/counter-price-filter.pipe";
+import { CounterAirportFilterPipe } from "./common/counter/pipe/counter-airport-filter.pipe";
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -88,6 +89,7 @@ import { CounterAirportFilterPipe } from './common/counter/pipe/counter-airport-
     CounterAirportFilterPipe,
     CounterDateFilterPipe,
     CounterPriceFilterPipe,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,

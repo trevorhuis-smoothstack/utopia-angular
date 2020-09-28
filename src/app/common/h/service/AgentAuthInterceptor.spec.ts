@@ -5,33 +5,33 @@ import {
   TestRequest,
 } from "@angular/common/http/testing";
 
-import { CounterInterceptionService } from "./counter-interception.service";
-import { CounterHttpService } from "./counter-http.service";
 import { HTTP_INTERCEPTORS } from "@angular/common/http";
+import { AgentUtopiaService } from '../agent-utopia.service';
+import { AgentAuthInterceptor } from './AgentAuthInterceptor';
 
-describe("CounterInterceptionService", () => {
-  let service: CounterHttpService;
+describe("AgentAuthInterceptor", () => {
+  let service: AgentUtopiaService;
   let mockHttp: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
-        CounterHttpService,
+        AgentUtopiaService,
         {
           provide: HTTP_INTERCEPTORS,
-          useClass: CounterInterceptionService,
+          useClass: AgentAuthInterceptor,
           multi: true,
         },
       ],
     });
-    service = TestBed.get(CounterHttpService);
+    service = TestBed.get(AgentUtopiaService);
     mockHttp = TestBed.get(HttpTestingController);
   });
 
   it("should be created", () => {
-    const service: CounterInterceptionService = TestBed.get(
-      CounterInterceptionService
+    const service: AgentAuthInterceptor = TestBed.get(
+      AgentAuthInterceptor
     );
     expect(service).toBeTruthy();
   });

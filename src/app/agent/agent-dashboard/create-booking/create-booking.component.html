@@ -1,9 +1,7 @@
 <div class="flight-filters">
   <div class="price-date-select row">
     <div class="date-picker">
-      <label class="col-form-label" for="inputDefault">
-        Departure Date
-      </label>
+      <label class="col-form-label" for="inputDefault"> Departure Date </label>
       <form class="form-inline">
         <div class="form-group date-input">
           <div class="input-group">
@@ -95,29 +93,35 @@
         (change)="page = 1"
       >
         <option>All Airports</option>
-        <option *ngFor="let airport of childInput.airports; let i = index" [value]="i">
+        <option
+          *ngFor="let airport of childInput.airports; let i = index"
+          [value]="i"
+        >
           {{ airport.name }}
         </option>
       </select>
     </div>
     <div class="arrive-select">
-      <label class="col-form-label" for="inputDefault">
-        Arrival Airport
-      </label>
+      <label class="col-form-label" for="inputDefault"> Arrival Airport </label>
       <select
         class="custom-select"
         [(ngModel)]="selectedArrival"
         (change)="page = 1"
       >
         <option>All Airports</option>
-        <option *ngFor="let airport of airports; let i = index" [value]="i">
+        <option
+          *ngFor="let airport of childInput.airports; let i = index"
+          [value]="i"
+        >
           {{ airport.name }}
         </option>
       </select>
     </div>
   </div>
   <div class="btn-update">
-    <button class="btn btn-primary" (click)="updateButton()">Search Flights</button>
+    <button class="btn btn-primary" (click)="updateButton()">
+      Search Flights
+    </button>
   </div>
 </div>
 
@@ -128,10 +132,10 @@
       <th scope="col">Arrive Airport</th>
       <th scope="col">Depart Time</th>
       <th scope="col">Price</th>
-      <th scope="col" *ngIf="!mobile">Book</th>
+      <th scope="col" *ngIf="!childInput.mobile">Book</th>
     </tr>
   </thead>
-  <tbody *ngIf="!mobile">
+  <tbody *ngIf="!childInput.mobile">
     <tr
       *ngFor="
         let f of flights
@@ -153,14 +157,10 @@
       </td>
     </tr>
   </tbody>
-  <tbody *ngIf="mobile">
+  <tbody *ngIf="childInput.mobile">
     <tr
       *ngFor="
         let f of flights
-          | filterFlightsByDepartureAirport: selectedDeparture:filterMetadata
-          | filterFlightsByArrivalAirport: selectedArrival:filterMetadata
-          | filterByFlightPrice: customPrice:filterMetadata
-          | filterByDepartureDate: date:filterMetadata
           | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize
       "
       (click)="openBookFlightModal(bookFlightModal, f)"
@@ -207,7 +207,7 @@
           <table class="table table-hover">
             <tr class="table-dark">
               <th scope="row">Traveler Name:</th>
-              <td>{{ traveler.name }}</td>
+              <td>{{ childInput.traveler.name }}</td>
             </tr>
             <tr class="table-dark">
               <th scope="row">Flight Id:</th>
